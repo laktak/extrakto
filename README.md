@@ -12,10 +12,14 @@ For now simply clone the repository and link to the tool somewhere in your path:
 ```
 git clone https://github.com/laktak/extrakto
 cd extrakto
+# assuming you `export PATH=$PATH:~/.local/bin` in your `.bashrc`:
 ln -s $PWD/extrakto.py ~/.local/bin/extrakto
+ln -s $PWD/tmux-extrakto ~/.local/bin/tmux-extrakto
 ```
 
 Requires Python 3 and optionally [fzf](https://github.com/junegunn/fzf).
+
+Supports Linux and macOS.
 
 ### tmux
 
@@ -30,10 +34,10 @@ This sample (for tmux 2.4+) defines a `extract-mode` that you enter with `X` and
 
 ```
 bind-key X switch-client -Textract-mode
-bind-key -Textract-mode p send -X cancel \; split-window -v -l 6 "tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|extrakto -p|fzf`"
-bind-key -Textract-mode P send -X cancel \; split-window -v -l 6 "tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|extrakto -p|fzf` && tmux paste-buffer -t !"
-bind-key -Textract-mode u send -X cancel \; split-window -v -l 6 "tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|extrakto -u|fzf`"
-bind-key -Textract-mode U send -X cancel \; split-window -v -l 6 "tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|extrakto -u|fzf` && tmux paste-buffer -t !"
+bind-key -Textract-mode p send -X cancel \; split-window -v -l 6 "tmux-extrakto -p clip"
+bind-key -Textract-mode P send -X cancel \; split-window -v -l 6 "tmux-extrakto -p insert"
+bind-key -Textract-mode u send -X cancel \; split-window -v -l 6 "tmux-extrakto -u clip"
+bind-key -Textract-mode U send -X cancel \; split-window -v -l 6 "tmux-extrakto -u insert"
 ```
 
 ## CLI Usage
