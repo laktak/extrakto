@@ -34,10 +34,10 @@ This sample (for tmux 2.4+) defines a `extract-mode` that you enter with `X` and
 
 ```
 bind-key X switch-client -Textract-mode
-bind-key -Textract-mode p send -X cancel \; split-window -v -l 6 "tmux-extrakto -p clip"
-bind-key -Textract-mode P send -X cancel \; split-window -v -l 6 "tmux-extrakto -p insert"
-bind-key -Textract-mode u send -X cancel \; split-window -v -l 6 "tmux-extrakto -u clip"
-bind-key -Textract-mode U send -X cancel \; split-window -v -l 6 "tmux-extrakto -u insert"
+bind-key -Textract-mode p split-window -v -l 6 "tmux-extrakto -p clip"
+bind-key -Textract-mode P split-window -v -l 6 "tmux-extrakto -p insert"
+bind-key -Textract-mode u split-window -v -l 6 "tmux-extrakto -u clip"
+bind-key -Textract-mode U split-window -v -l 6 "tmux-extrakto -u insert"
 ```
 
 ## CLI Usage
