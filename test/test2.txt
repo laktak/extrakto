@@ -1,0 +1,17 @@
+
+[/path/in_brackets]
+[path/in_brackets]
+(/path/in-parantheses)
+(path/in-parantheses)
+"/path/in/quotes"
+"path/in/quotes"
+'/path/in-single'
+'path/in-single'
+
+prompt:~/dot$ git status
+        modified:   home/.tmux.conf
+        deleted:    home/tools/bin/hello
+        new file:   home/.laktakrc
+
+non path: 100 k/s  50m/s 10k/s
+non path: page 1/2

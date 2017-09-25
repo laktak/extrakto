@@ -1,0 +1,706 @@
+
+Text from [teaching.idallen.com](http://teaching.idallen.com/cst8207/12f/notes/160_pathnames.html)
+
+Unix/Linux File System and Pathnames (ROOT, absolute, relative, dot, dot dot)
+Ian! D. Allen – idallen@idallen.ca – www.idallen.com
+Fall 2012 - September to December 2012 - Updated 2017-02-25 06:30 EST
+
+    Course Home Page Course Outline All Weeks Plain Text 
+
+Updated: 2017-02-25 06:30 EST
+
+    1 The Unix/Linux File System Structure
+        1.1 One file system ROOT
+        1.2 No loops or cycles
+    2 Name components can contain any character except slash
+    3 Pathnames ("path of names") separated by slashes
+        3.1 Destination object may be file, directory, or other
+        3.2 Only one name doesn’t need any slashes as separators
+    4 Slashes separate name components
+        4.1 The ROOT directory precedes the leftmost slash
+    5 The topmost ROOT directory / has no name
+        5.1 By convention, we call the ROOT directory "slash" or /
+    6 Only directories lead to other names
+        6.1 Pathnames ending in directories followed by slashes (ok)
+        6.2 Pathnames ending in files followed by slashes (wrong)
+    7 Definition of basename
+    8 Absolute and Relative pathnames
+        8.1 Absolute pathnames start with a slash /
+            8.1.1 Absolute pathnames always start at the system ROOT
+        8.2 Relative pathnames do not start with a slash
+            8.2.1 Relative pathnames start in the current working directory
+            8.2.2 Using relative pathnames saves typing
+        8.3 Differences between absolute and relative
+            8.3.1 Examples of different relative pathnames
+            8.3.2 Current Directory + Relative Pathname = Absolute Pathname
+        8.4 Pathnames such as ~, ~user, and $HOME may become Absolute
+            8.4.1 Leading tilde may mean absolute
+            8.4.2 leading $HOME variable may mean absolute
+        8.5 Rule for absolute pathnames in the shell
+    9 Relative Pathnames Exercise
+        9.1 Using absolute pathnames
+        9.2 Six slashes means seven names
+        9.3 Current directory /home/user/lab/foo/bar
+        9.4 Current directory /home/user/lab/foo
+        9.5 Current directory /home/user/lab
+        9.6 Current directory /home/user
+        9.7 Current directory /home
+        9.8 Current directory / (ROOT)
+    10 Dot and Dot Dot – . and ..
+        10.1 Using ls -a to show hidden dot files
+        10.2 Example: /tmp/. and /./tmp
+        10.3 Example: /tmp/..
+        10.4 Example: /home/idallen/bin/../..
+        10.5 ROOT is its own parent directory
+            10.5.1 Examples: /../tmp and /../../../../../tmp
+        10.6 Using .. for shorter pathnames
+    11 Redundant but useful ./ prefix
+        11.1 Removing a file that looks like an option (e.g. -r)
+        11.2 Don’t put ./ in front of relative pathnames
+    12 Understanding Pathnames Exercises
+        12.1 Relative pathnames exercise
+        12.2 Absolute pathnames exercise
+        12.3 Relative pathnames exercise with dir1
+        12.4 Absolute pathnames exercise with dir1
+        12.5 Pathnames exercises involving ROOT
+        12.6 Copy exercise: two pathnames
+
+1 The Unix/Linux File System Structure
+
+Unix/Linux files are organized within a single-tree hierarchical file system structure made up of files containing data (e.g. documents, programs), and directories (folders) that may contain other sub-directories and files.
+1.1 One file system ROOT
+
+Unlike Windows with separate multiple drive letters (A:, B:, C:, etc.) for each disk partition, the Unix/Linux file system hides the physical disk structure and has a single tree root, no matter how many disks or partitions are actually in use. There is no way to tell on what disk partition a Unix/Linux file resides by looking at its name.
+1.2 No loops or cycles
+
+The directory structure in the file system is "acyclic" – following a path of directories down from the tree root into sub-directories will never lead you back toward the tree root into a "cycle" or loop.
+
+Each file and directory has its own name.
+2 Name components can contain any character except slash
+
+The name of some object in the file system may contain any characters except the NUL character and forward slashes (/). The name may contain spaces, newlines, unprintable control characters, and characters from non-English languages.
+
+Yes, you can have a file or directory name that is entirely made of blanks or backspace characters!
+
+A single Linux name component is typically limited to 255 characters. Older Unix systems may have smaller limits.
+3 Pathnames ("path of names") separated by slashes
+
+A Unix/Linux pathname is a text string made up of one or more names separated by slashes. The pathname indicates how to find something in the hierarchical file system tree. Here are some examples of pathnames:
+
+ /home
+ /etc/passwd
+ /usr/bin/wc
+ /var/log/ntpstats/loopstats
+ /home/abcd0001/CST8207-16W/Assignments/assignment02
+
+A pathname is literally a "path of names" through the hierarchy. A pathname specifies how to traverse (navigate) the hierarchical directory names in the file system to reach some destination object.
+
+The pathname text string will contain, in order, the directories you need to go through to arrive at the destination. To do this, the pathname text string lists one or more name components separated by forward slashes, e.g. /etc/passwd, /usr/bin/wc. This is why individual file and directory names cannot themselves contain slashes – slashes are used to separate the names in pathname text strings.
+3.1 Destination object may be file, directory, or other
+
+The destination object identified by the name at the far right end of a pathname text string might be a file, a directory, or some other thing such as system memory, a disk partition, or a terminal device. (Unix/Linux also uses the file system to name many things that are not ordinary files or directories.)
+3.2 Only one name doesn’t need any slashes as separators
+
+A pathname with only one name component doesn’t need to have any slashes to separate it from other name components, e.g. resume, cal.txt, dir.exe.
+
+Slashes are only used to separate name components in a pathname; an individual name component can never itself contain a slash. Slashes are never part of a name component; they separate the names in a pathname.
+
+A Linux pathname text string has an overall limit of 4,096 characters including all the individual names and all the separating slashes. Older Unix systems have a smaller limit.
+
+    Unlike Windows, Unix/Linux file system name components are separated by forward slashes (/), not backslashes (\). You can blame Microsoft for this annoying difference: Unix came first and Microsoft deliberately chose a different separator character, likely to avoid being sued by AT&T for copying the Unix file system naming.
+
+    You will note that Internet World-Wide-Web URL pathnames use the Unix forward slash separator (e.g. http://teaching.idallen.com/, because the web was invented and grew up on Unix machines.
+
+4 Slashes separate name components
+
+Consider the following Unix/Linux pathname text string, composed of several individual name components separated by forward slashes:
+
+/home/idallen/bin/file.txt
+
+Since slashes always separate name components, a pathname with four slashes in it must contain and separate five name components. In this example above, those five name components are:
+
+    "" (the nameless "ROOT" directory, to the left of the leftmost slash)
+    home
+    idallen
+    bin
+    file.txt
+
+4.1 The ROOT directory precedes the leftmost slash
+
+Yes, there is actually an implied directory to the left of the leftmost slash in a pathname that starts with a slash! It is the nameless "ROOT" directory, the unique tree root of the whole hierarchical file system tree, where all pathnames originate.
+5 The topmost ROOT directory / has no name
+
+Slashes always separate name components. If a pathname starts with a slash, e.g. /etc/passwd, the nameless "ROOT" directory is what begins the pathname at the far left end. This top-most ROOT directory itself has no name. It is the starting point or the tree root of the entire hierarchical Unix/Linux file system tree.
+
+A pathname starting with a slash is called an absolute pathname. It always starts at the unique topmost file system ROOT directory.
+5.1 By convention, we call the ROOT directory "slash" or /
+
+Because it is difficult to talk about a directory that has no name, we usually (incorrectly) use the name / (slash) for the ROOT directory. This is technically wrong, because name components of a pathname can’t contain slashes – the slashes separate the name components. So nothing can have an actual name of /. Still, we often call the topmost ROOT directory slash (/).
+
+Understand that when we use the name slash (/) for ROOT, we really mean "the nameless topmost ROOT directory that is to the left of the separating slash", not the slash itself.
+
+    NOTE! Do not confuse the topmost file system ROOT directory, that has no name, with an actual directory named /root that is usually the HOME directory of the system account named root. In these notes we use upper-case ROOT to refer to the root of the file system, and just root to refer to a directory named root.
+
+6 Only directories lead to other names
+
+To be a valid pathname ("path of names") in the file system, every name component that is to the left of the rightmost slash in a pathname must either be a directory or be a symbolic link to a directory.
+
+Only directories can have substructure that may lead to other names.
+
+If the pathname /home/idallen/bin/file.txt is to be a valid path of names through the file system hierarchy, the first four name components (the ROOT, home, idallen, and bin) must name existing directories. Only directories can contain and lead to other names. The four name components to the left of the rightmost slash must be names for existing directories (or be symbolic links to existing directories).
+
+In /home/idallen/bin/file.txt, the final component name file.txt (the name to the right of the rightmost slash) is the name of the file system object itself. It might be a file or directory or anything else, though the name file.txt suggests that it is a text file name.
+
+The final named component in the pathname, after the rightmost slash, can name anything – a file, directory, symbolic link, or other special file.
+6.1 Pathnames ending in directories followed by slashes (ok)
+
+If a pathname ends in a directory name followed by a slash at the right end, e.g. /usr/bin/ or dir/, the self-referential name . (dot, or period) is assumed after the ending slash. In a directory, . refers to the directory itself. For example, all these are equivalent:
+
+$ ls /bin
+...many names print here...
+$ ls /bin/
+...same names print here...
+$ ls /bin/.
+...same names print here...
+
+Putting one or more slashes at the right end of a directory pathname makes almost no difference – it usually refers to the same directory:
+
+$ ls /bin
+...many names print here...
+$ ls /bin/
+...same names print here...
+$ ls /bin//
+...same names print here...
+$ ls /bin////////////////////////////////
+...same names print here...
+
+In most pathnames ending in a directory name dir, all the names dir and dir/ and dir/. refer to the same dir directory. The trailing slash or slash-plus-dot don’t make any difference.
+
+    If the last name component in a pathname is a symbolic link to a directory, e.g. /dir/symlink, trailing slashes may result in different behaviour with some commands. More on symbolic links later.
+
+By convention, multiple adjacent slashes are treated as one slash and do not create additional implied names. The pathnames /etc/passwd and ///etc///////passwd are equivalent.
+6.2 Pathnames ending in files followed by slashes (wrong)
+
+A name component that names a file cannot be followed by a slash in a valid pathname. Only a directory name can have a slash to its right, because only directories can contain and lead to other names.
+
+Putting a slash to the right of a non-directory (e.g. a file) results in an invalid pathname. Here is an example using the file pathname /etc/passwd:
+
+$ wc /etc/passwd
+  37      89    1802 /etc/passwd          # expected command output
+$ wc /etc/passwd/
+wc: /etc/passwd/: Not a directory         # error message!
+$ wc /etc/passwd/.
+wc: /etc/passwd/.: Not a directory        # error message!
+$ wc /etc/passwd/..
+wc: /etc/passwd/..: Not a directory       # error message!
+
+In a directory named /tmp/dir, the pathname /tmp/dir/../dir is the same as /tmp/dir, but if /tmp/f is a file name, the pathname /tmp/f/../f is invalid: Not a directory.
+
+You can’t put a slash after a file name component, because the file name component isn’t a directory that leads to other names. You can’t use a file name as if it were a directory. The error message tells you this.
+7 Definition of basename
+
+Definition of basename: The basename of any pathname is its right-most name component, to the right of its right-most slash.
+
+    pathname /home/user/file has a basename of file
+    pathname /usr/lib/file has a basename of file
+    pathname /etc/file has a basename of file
+    pathname /bin/grep has a basename of grep
+    pathname bin/grep has a basename of grep
+    pathname ./grep has a basename of grep
+    pathname grep has a basename of grep
+    pathname bin/. has a basename of .
+    pathname /etc/.. has a basename of ..
+    pathname lib/ has an empty basename
+
+Several different files with the same basename can exist on a Unix/Linux system, in different directories (as in the example above of /home/user/file and /usr/lib/file that have the same basename but reside in different directories).
+8 Absolute and Relative pathnames
+
+Pathnames come in two flavours: absolute and relative:
+
+    Absolute pathnames start with a slash on the left, e.g. /etc/passwd
+    Relative pathnames do not start with a slash, e.g. etc/passwd
+
+8.1 Absolute pathnames start with a slash /
+
+A pathname that starts with a leading slash on the left is called an absolute pathname, e.g. /etc/passwd, /root/.bashrc, /bin, /, etc.
+
+The leading slash on the left indicates that the pathname starts at the topmost nameless ROOT directory in the file system.
+8.1.1 Absolute pathnames always start at the system ROOT
+
+An absolute pathname traverses the file system hierarchy tree from the very top, always starting at the topmost ROOT directory of the file system hierarchy. The topmost ROOT directory is signalled by the leading "slash" character (/) at the start of an absolute pathname.
+
+Absolute pathnames always start with this topmost ROOT directory slash and descend through every directory name that leads down to the destination, e.g. /home/user/file or /usr/bin/grep or /bin/ls or /etc/passwd.
+
+The slash must always be at the start (left) of an absolute pathname.
+8.2 Relative pathnames do not start with a slash
+
+Pathnames with no leading slash on the left are called relative pathnames.
+
+A relative pathname never starts with a slash on the left, but it may contain slashes anywhere else: /bar is not relative (it is an absolute pathname) but bar and bar/ and ./bar and ../bar and foo/bar are all relative pathnames.
+
+A relative pathname is used along with the current working directory to avoid typing long pathnames.
+8.2.1 Relative pathnames start in the current working directory
+
+To save typing long pathnames all the time, many operating systems (including Unix/Linux and DOS) have the concept of a saved current working directory, also called current directory or working directory.
+
+Every process in Linux can save one absolute directory pathname to be its current working directory. This working directory can be set and changed in shells using the built-in cd (change directory) command, e.g. cd /home/idallen. The current working directory can be displayed in shells using the pwd (print working directory) command.
+
+If a process refers to a pathname that is relative (does not start with a slash), the saved current directory is always automatically prefixed to ("inserted in front of") the beginning of the pathname.
+
+For example, if the current working directory of a process is the absolute pathname /usr/bin then all relative pathnames used by the process have /usr/bin prefixed in front of them:
+
+    In /usr/bin relative pathname foo is the same as as:   /usr/bin/foo
+    In /usr/bin relative pathname ../etc is the same as as:   /usr/bin/../etc
+    In /usr/bin relative pathname ./hello is the same as as:   /usr/bin/./hello
+    In /usr/bin relative pathname . (dot) is the same as as:   /usr/bin/.
+    In /usr/bin absolute pathname /bin is unchanged, since it is not a relative pathname.
+
+If you then change the current working directory of the process to be the absolute pathname /home then all relative pathnames used by the process now have /home prefixed in front of them instead:
+
+    In /home relative pathname foo is the same as:   /home/foo
+    In /home relative pathname ../etc is the same as:   /home/../etc
+    In /home relative pathname ./hello is the same as:   /home/./hello
+    In /home relative pathname . (dot) is the same as:   /home/.
+    In /home absolute pathname /bin is unchanged, since it is not a relative pathname.
+
+The saved current directory of a process is only prefixed to relative pathname references – pathnames that do not start with a slash. Absolute pathnames (starting with a slash) are not affected.
+
+Changing the saved current directory of a process changes the meaning of relative pathnames used by the process. You don’t know what relative path foo means until you know what saved current directory is going to be prefixed in front of it.
+
+    The saved current working directory of a process has no effect on an absolute pathname. An absolute pathname always starts at the ROOT and doesn’t depend on the saved current directory of a process. The current directory is not used when evaluating absolute pathnames. Absolute pathname /etc/passwd always always refers to the same file, no matter what the current directory of a process might be.
+
+8.2.2 Using relative pathnames saves typing
+
+Shells have change directory commands that let you change the saved current working directory of the shell, and of all the commands run by the shell, so that you can then type shorter relative pathnames, instead of always using long absolute pathnames. The shell change directory command is often named cd, e.g.: cd /usr/bin
+
+Saving an appropriate current working directory prefix and using relative pathnames can make using pathnames in shell command lines much shorter to type. For example, to copy file /usr/bin/foo to /usr/bin/bar looks like this when using absolute pathnames in a shell command line:
+
+$ cp /usr/bin/foo /usr/bin/bar     # using two absolute pathnames
+
+Setting an appropriate current working directory with cd and switching to using relative pathnames in the copy command makes the command much simpler to type:
+
+$ cd /usr/bin
+$ cp foo bar        # two relative pathnames each use current directory
+
+The relative pathname foo automatically becomes /usr/bin/foo and the relative pathname bar automatically becomes /usr/bin/bar thanks to the saved current working directory /usr/bin being prefixed to each pathname.
+
+The saved current working directory is only prefixed to relative pathnames. Absolute pathnames remain unchanged.
+8.3 Differences between absolute and relative
+
+Absolute pathnames always refer to the same, unique destination, since absolute pathnames always start with the topmost ROOT slash and don’t depend on the current directory of a process. Every process using an absolute pathname refers to the same, unique file system object, no matter what the current directory of the process is. For example, the absolute pathname /etc/passwd (starting with the topmost ROOT slash) always means the same file anywhere it is used, ignoring the current directory. The current directory is ignored for absolute pathnames.
+
+Relative pathnames always start in the saved current directory of a process, so the final destination changes depending on the current directory of the process. The same relative pathname may refer to different things in processes that have different current directories. Changing the current directory changes the final destination of the relative pathname.
+8.3.1 Examples of different relative pathnames
+
+If the saved current working directory of a process is /home/user, and the absolute pathname of a file is /home/user/file, then a relative pathname to that file (using the saved current directory prefix) is simply file (no leading slash):
+
+$ cd /home/user
+$ cat file               # relative path is same as /home/user/file
+
+If the saved current working directory is changed to /home, then a relative pathname to that same file (using the saved current directory prefix) must be user/file:
+
+$ cd /home
+$ cat user/file          # relative path is same as /home/user/file
+
+If the current directory is changed to / (the topmost ROOT), then the relative pathname to that same file (using the saved current directory prefix) must be home/user/file:
+
+$ cd /
+$ cat home/user/file     # relative path is same as /home/user/file
+
+If your saved current working directory is the topmost ROOT directory, then absolute and relative pathnames look almost the same. The only difference is the leading slash on the absolute pathname:
+
+$ cd /
+$ cat home/user/file     # relative path is same as /home/user/file
+$ cat /home/user/file    # equivalent absolute pathname
+
+8.3.2 Current Directory + Relative Pathname = Absolute Pathname
+
+The saved current directory is prefixed to a relative pathname, resulting in an absolute pathname. A current directory of /home/user plus a relative pathname of bin/script equals an absolute pathname of /home/user/bin/script.
+
+To take an absolute pathname and turn it into a shorter relative pathname, using the saved current directory, take the absolute pathname and remove the current directory from the start, leaving a relative pathname (no leading slash). A current directory of /home/user removed from the start of an absolute pathname /home/user/bin/script leaves a relative pathname of bin/script:
+
+$ cat /home/user/bin/script    # (too) long absolute pathname
+$ cd /home/user                # set working directory
+$ cat bin/script               # use shorter relative pathname!
+$ cd /home/user/bin            # set better working directory
+$ cat script                   # use even shorter relative pathname!
+
+One of the major reasons we use relative pathnames is because they are usually much shorter to type than absolute pathnames. Choose a good working directory to make your relative pathnames short.
+8.4 Pathnames such as ~, ~user, and $HOME may become Absolute
+
+Most Unix/Linux shells have short-cuts that let you specify short versions of absolute pathnames but where the syntax of the short-cut doesn’t start with a slash and so the short-cut doesn’t appear to be an absolute path, even though it is.
+
+Here are some examples:
+8.4.1 Leading tilde may mean absolute
+
+Shells may expand a leading tilde (~) on a token (command argument) to be the absolute pathname to the user’s home directory:
+
+$ echo ~
+/home/user
+$ echo ~/bar
+/home/user/bar
+$ cat ~/bar          # same as cat /home/user/bar
+
+If the tilde stands alone or is immediately followed by a slash, the home directory substituted is the home directory found in the shell variable $HOME, which is usually set to the home directory of the user who is logged in (but can be changed).
+
+Try this command line to see how the shell expands the tilde pathnames:
+
+$ whoami
+idallen
+$ echo  ~  ~/bin
+/home/idallen /home/idallen/bin
+
+If the tilde is followed by a valid account name, e.g. ~idallen, the shell replaces the tilde and account name with the absolute pathname of the home directory of that account, e.g. idallen may have home /home/idallen.
+
+Try this command line to see how the shell expands the tilde pathnames for different account names:
+
+$ echo  ~mail  ~uucp  ~games  ~root  ~nosuch
+/var/mail /var/spool/uucp /usr/games /root ~nosuch
+
+Thus, ls ~idallen/bin secretly expands to and uses an absolute pathname, because, ~idallen is actually expanded (by the shell) to be the absolute path /home/idallen. Be aware of this!
+8.4.2 leading $HOME variable may mean absolute
+
+Absolute pathnames may also hide inside shell variables, e.g. $HOME/foo could be expanded by the shell to be /home/idallen/foo, an absolute pathname:
+
+$ echo  "$HOME"  "$HOME/bin"
+/home/idallen /home/idallen/bin
+
+Thus, ls "$HOME/bin" secretly expands to and uses an absolute pathname, because, $HOME is actually expanded (by the shell) to be the absolute path /home/idallen. Be aware of this!
+8.5 Rule for absolute pathnames in the shell
+
+The shells modify your command line before they call the command to be executed. These modifications can turn what look like relative pathnames (e.g. ~/bin) into absolute pathnames (e.g. /home/idallen/bin):
+
+    A pathname is absolute if and only if it starts with a leading slash after all shell expansions are finished. If the expanded pathname starts with a slash, the nameless ROOT directory is always the first directory in the pathname. Otherwise, without a starting slash, the pathname is relative to the current working directory and the current working directory is prefixed to the pathname.
+
+Watch for hidden leading slashes inserted by your shell when expanding short-cuts such as ~, ~userid, and $HOME.
+9 Relative Pathnames Exercise
+
+Given this absolute pathname to the file file.txt:
+
+/home/user/lab/foo/bar/file.txt
+
+Show how to rename file.txt to be file2.txt in the same directory, using relative pathnames, using as a starting point (a current directory) every directory from the bar directory up the tree to the topmost ROOT directory (giving six different answers, one for each different current working directory).
+
+Show how the relative pathnames change depending on each of the six different current working directories.
+9.1 Using absolute pathnames
+
+If we were using absolute pathnames, the command to rename the file would be very long:
+
+$ mv /home/user/lab/foo/bar/file.txt /home/user/lab/foo/bar/file2.txt
+
+Below, we show how different saved current working directories make the pathname shorter.
+9.2 Six slashes means seven names
+
+The absolute file pathname /home/user/lab/foo/bar/file.txt contains six slashes, so it must have seven name components. The six name components to the left of the rightmost slash must be existing directories. There are six directories to the left of the final slash: ROOT, home, user, lab, foo, and bar.
+
+We will start our answer in the bar directory and work our way up to the ROOT directory, giving six different answers:
+9.3 Current directory /home/user/lab/foo/bar
+
+    If the current working directory is bar (actually /home/user/lab/foo/bar), then a relative path to file.txt from the bar directory is simply file.txt, e.g.
+
+    $ cd /home/user/lab/foo/bar
+    $ mv file.txt file2.txt
+
+    The file.txt relative pathname, used with a current working directory of /home/user/lab/foo/bar, means /home/user/lab/foo/bar/file.txt.
+
+    The file2.txt relative pathname, used with a current working directory of /home/user/lab/foo/bar, means /home/user/lab/foo/bar/file2.txt.
+
+Now, go up one directory, from bar to its parent directory foo:
+9.4 Current directory /home/user/lab/foo
+
+    If the current working directory is foo (actually /home/user/lab/foo), then a relative path to file.txt from the foo directory is bar/file.txt, e.g.
+
+    $ cd /home/user/lab/foo        # or use the parent directory: cd ..
+    $ mv bar/file.txt bar/file2.txt
+
+    The bar/file.txt relative pathname, used with a current working directory of /home/user/lab/foo, means /home/user/lab/foo/bar/file.txt.
+
+    The bar/file2.txt relative pathname, used with a current working directory of /home/user/lab/foo, means /home/user/lab/foo/bar/file2.txt.
+
+Now, go up one directory, from foo to its parent directory lab:
+9.5 Current directory /home/user/lab
+
+    If the current directory is lab (actually /home/user/lab), then a relative path to file.txt from lab is foo/bar/file.txt, e.g.
+
+    $ cd /home/user/lab            # or use the parent directory: cd ..
+    $ mv foo/bar/file.txt foo/bar/file2.txt
+
+    The foo/bar/file.txt relative pathname, used with a current working directory of /home/user/lab, means /home/user/lab/foo/bar/file.txt. Similar for foo/bar/file2.txt.
+
+Now, go up one directory, from lab to its parent directory user:
+9.6 Current directory /home/user
+
+    If the current directory is user, then a relative path to file.txt from user is lab/foo/bar/file.txt, e.g.
+
+    $ cd /home/user                # or use the parent directory: cd ..
+    $ mv lab/foo/bar/file.txt lab/foo/bar/file2.txt
+
+    As with the previous examples, to find out the full pathname, concatenate the relative path to the end of the current working directory.
+
+Now, go up one directory, from user to its parent directory home:
+9.7 Current directory /home
+
+    If the current directory is home, then a relative path to file.txt from home is user/lab/foo/bar/file.txt, e.g.
+
+    $ cd /home                      # or use the parent directory: cd ..
+    $ mv user/lab/foo/bar/file.txt user/lab/foo/bar/file2.txt
+
+Now, go up one directory, from home to its parent directory the ROOT:
+9.8 Current directory / (ROOT)
+
+    If the current directory is the ROOT then a relative path to file.txt from the ROOT is home/user/lab/foo/bar/file.txt, e.g.
+
+    $ cd /                          # or use the parent directory: cd ..
+    $ mv home/user/lab/foo/bar/file.txt home/user/lab/foo/bar/file2.txt
+
+The home/user/lab/foo/bar/file.txt relative pathname, used with a current working directory of / (ROOT), means /home/user/lab/foo/bar/file.txt.
+
+Note that in every case above, the saved current directory when prefixed to the beginning of the relative path, gives the absolute path, e.g. in #5 above, the current directory /home prefixed to the relative pathname user/foo/bar/file.txt gives the absolute path /home/user/lab/foo/bar/file.txt – this is how current directories let us write shorter relative pathnames.
+
+Your current working directory is NOT prefixed to absolute pathnames (that start with a slash). Absolute pathnames always start at the ROOT and are always independent of your current working directory.
+
+Your current working directory is ONLY prefixed to relative pathnames (names that do not start with a slash).
+10 Dot and Dot Dot – . and ..
+
+Every Unix directory contains two special names that you can’t change and can’t remove:
+
+    Every Unix directory contains the name . (dot), which is a name that leads right back to the directory in which it is found.
+
+    Every directory contains the name .. (dot dot), which is a name that leads to the unique parent directory of the directory in which it is found.
+
+10.1 Using ls -a to show hidden dot files
+
+The two directory names . and .. are in every Unix/Linux directory, but are not normally shown by the ls command unless you use the -a (all) option to display names that begin with a leading dot (period):
+
+$ ls
+
+$ ls -a
+.  ..
+
+$ ls -a -l
+drwx------  2 idallen idallen   40 Sep 12 01:32 .
+drwxr-xr-x 26 root    root    1600 Sep 12 01:33 ..
+
+The ls command does not normally display any names that begin with a leading dot (period). Use the -a option to show them.
+10.2 Example: /tmp/. and /./tmp
+
+The directory pathname /tmp contains two directories: the leading topmost ROOT directory and tmp. The pathname /tmp/. contains three directories, ROOT, tmp, and .. The . is searched for in the tmp directory in which it is contained, and leads right back to tmp; so, /tmp and /tmp/. are equivalent.
+
+The directory pathname /./tmp contains three directories: ROOT, ., and tmp. The . is searched for in the ROOT directory in which it is contained, and leads right back to ROOT; so, /./tmp and /tmp are equivalent.
+
+The directory pathname /./tmp/. contains four directories: ROOT, ., tmp, and .. The first (leftmost) . is searched for in the ROOT directory; the last (rightmost) . is searched for in the tmp directory. Thus, /./tmp/. is equivalent to just: /tmp
+10.3 Example: /tmp/..
+
+The directory pathname /tmp/.. contains three directories: ROOT, tmp, and ... The .. is searched for in the tmp directory in which it is contained, and leads to the parent of the tmp directory (which is always ROOT, unless tmp is a symbolic link); so, /tmp/.. and / (ROOT) are usually equivalent.
+
+    We won’t deal with symbolic links in this document. If /tmp is a symbolic link to a directory, not an actual directory, then /tmp/.. may not be the same as /. More on that later.
+
+10.4 Example: /home/idallen/bin/../..
+
+The directory pathname /home/idallen/bin/../.. contains six directories: ROOT, home, idallen, bin, .., and ... The first .. is searched for in the bin directory in which it is contained and leads to the parent of the bin directory, which is idallen. The second .. is therefore searched for in the idallen directory in which it is contained, and leads to the parent of the idallen directory, which is home. Thus, /home/idallen/bin/../.. is equivalent to /home (unless there are symbolic links involved).
+
+Each .. in a pathname backs up one directory level.
+
+If any of the pathname components are symbolic links to directories, not real directories, then the actions of . and .. are not so well behaved and the answers may differ from those given above. (We won’t cover symbolic links here.) The ROOT directory can never be a symbolic link; so, /. and /.. (and /./. and /../../.., etc.) are always the same as / all by itself.
+10.5 ROOT is its own parent directory
+
+The topmost ROOT directory is the only directory that is its own parent: both . and .. are the same in the ROOT directory. If you go to the parent of the ROOT directory, you are still in the ROOT directory.
+10.5.1 Examples: /../tmp and /../../../../../tmp
+
+The directory pathname /../tmp contains three directories: ROOT, .., and tmp. The .. is searched for in the ROOT directory in which it is contained, and leads to the parent of the ROOT directory, which is (special case) also ROOT. ROOT is the only directory that is its own parent. Thus, /../tmp is the same as /tmp. Similarly, the pathname /../../../../../tmp is also the same as /tmp.
+10.6 Using .. for shorter pathnames
+
+You can use .. to make shorter pathnames when typing. Here are three examples using the cp (copy) command:
+
+$ cp /usr/local/foo /usr/local/bin/     # 1. using absolute pathnames
+
+$ cd /usr/local                         # 2. set current directory; use
+$ cp foo bin/                           #    short relative pathnames
+
+$ cd /usr/local/bin                     # 3. set current directory; use
+$ cp ../foo .                           #    short relative pathnames
+
+From the current directory /usr/local/bin, the pathname ../foo is a relative path that goes up one level to /usr/local and then down to foo inside /usr/local giving /usr/local/foo. That file is copied into the current directory (/usr/local/bin) using the relative pathname . (/usr/local/bin/.).
+
+Using .. and . can shorten your pathnames considerably if you choose your current directory carefully.
+11 Redundant but useful ./ prefix
+
+Putting ./ in front of any relative pathname does not change what the pathname refers to; the pathname is still relative to the current directory and still refers to the same thing. Don’t do it.
+
+Given directory dir1, these pathname arguments are all valid and all refer to the same directory dir1, so don’t add the ./ because it isn’t needed:
+
+$ ls dir1                     # use this
+$ ls ./dir1                   # same, but unnecessary
+$ ls ././dir1                 # same, but more unnecessary
+$ ls ./././dir1               # same, but even more unnecessary
+
+Given file name file1, these pathname arguments are also valid and all refer to the same file file1, so don’t add the ./ because it isn’t needed:
+
+$ ls file1                    # use this
+$ ls ./file1                  # same, but unnecessary
+$ ls ././file1                # same, but more unnecessary
+$ ls ./././file1              # same, but even more unnecessary
+
+11.1 Removing a file that looks like an option (e.g. -r)
+
+If you create a file (or directory) with a name starting with a dash, e.g. named -r, the file name cannot be removed without some trickery, because the name looks like an option to the rm (or rmdir) command:
+
+$ ls                          # show the files in the current directory
+-r                            # a problem file named "-r" !
+
+$ rm -r                       # WRONG: does not remove file named "-r"
+rm: missing operand
+Try 'rm --help' for more information.
+
+$ rmdir -r                    # WRONG: does not remove directory named "-r"
+rmdir: invalid option -- 'r'
+Try 'rmdir --help' for more information.
+
+The trick is: You can put the superfluous ./ in front of the relative pathname to make the name stop looking like an option letter:
+
+$ rm ./ -r                    # this works to remove a file named -r
+-OR-
+$ rmdir ./ -r                 # this works to remove a directory named -r
+
+Of course, you can also use the full absolute pathname that starts with a slash, since that doesn’t look like an option letter either.
+
+$ rm /home/idallen/ -r        # this works! but it's long!
+$ rmdir /home/idallen/ -r     # this works! but it's long!
+
+11.2 Don’t put ./ in front of relative pathnames
+
+The above option hiding tricks are the only reason to add ./ in front of a relative pathname. Don’t use ./ in front of a relative pathname unless you need to. This is superfluous:
+
+$ touch ./foo                 # WRONG: ./ is not needed
+$ touch foo                   # RIGHT
+
+Relative pathnames do not start with a slash. Putting ./ in front of a pathname that does not start with a slash is unnecessary.
+12 Understanding Pathnames Exercises
+
+Below are some pathname exercises given this current working directory:
+
+$ pwd
+/tmp/idallen
+
+and this sub-structure in the current directory:
+
+$ ls -l
+drwxr-xr-x    2 idallen  idallen      4096 Feb  3 20:33 dir1
+-rw-r--r--    1 idallen  idallen         0 Feb  3 20:33 file1
+
+Note that I have created name dir1 as a directory and name file1 as a file for all the examples below, though I could have called them any names.
+
+    For the exercises below, assume none of the names are symbolic links (which could change the answers).
+
+12.1 Relative pathnames exercise
+
+All the relative pathnames below give the same output, because all these relative pathnames refer to the same (current) directory /tmp/idallen:
+
+$ pwd
+/tmp/idallen
+$ ls               # with no pathname arguments, ls lists the current directory
+$ ls .
+$ ls ./.
+$ ls ././././././.
+$ ls dir1/..       # the parent directory of dir1 is the current directory
+$ ls ./dir1/..
+$ ls dir1/../.
+$ ls dir1/../././././.
+$ ls ../idallen    # go up to the parent, then back down into idallen
+$ ls ./../idallen/./././.
+$ ls ../../tmp/idallen
+$ ls ../idallen/dir1/..
+$ ls ../idallen/dir1/.././././.
+$ ls dir1/../../idallen
+$ ls ./dir1/../../idallen/.
+
+12.2 Absolute pathnames exercise
+
+All the absolute pathnames below also give the same output, because all these absolute pathnames refer to the same /tmp/idallen directory:
+
+$ ls /tmp/idallen
+$ ls /tmp/idallen/././.
+$ ls /tmp/idallen/dir1/..
+$ ls /tmp/../tmp/idallen/../idallen/dir1/..
+$ ls /././tmp/./././../tmp/./././idallen/./././../././idallen/./dir1/./..
+
+12.3 Relative pathnames exercise with dir1
+
+All the relative pathnames below give the same output, because all these relative pathnames refer to the same sub-directory /tmp/idallen/dir1:
+
+$ pwd
+/tmp/idallen
+$ ls dir1
+$ ls dir1/.
+$ ls ./dir1
+$ ls ./dir1/.
+$ ls ././././dir1/././././.
+$ ls ../idallen/dir1
+$ ls ../idallen/dir1/../dir1/.
+$ ls ../../tmp/idallen/dir1/../../idallen/dir1/.
+
+12.4 Absolute pathnames exercise with dir1
+
+All the absolute pathnames below give the same output, because all these absolute pathnames refer to the same sub-directory /tmp/idallen/dir1:
+
+$ ls /tmp/idallen/dir1
+$ ls /tmp/../tmp/idallen/dir1
+$ ls /tmp/../tmp/idallen/../idallen/dir1
+$ ls /tmp/../tmp/idallen/../idallen/dir1/../dir1
+$ ls /././tmp/./././idallen/./././dir1/./.
+
+12.5 Pathnames exercises involving ROOT
+
+All the relative pathnames below give the same output, because all these relative pathnames refer to the ROOT directory (from /tmp/idallen):
+
+$ pwd
+/tmp/idallen
+$ ls ../..
+$ ls ../../../../..
+$ ls dir1/../../..
+$ ls dir1/../dir1/../../..
+$ ls ../idallen/../..
+$ ls ../../tmp/..
+$ ls ../../tmp/idallen/../..
+$ ls ../../tmp/idallen/../../tmp/idallen/../../././././.
+
+All the absolute pathnames below give the same output, because all these absolute pathnames below refer to the ROOT directory:
+
+$ ls /
+$ ls /.
+$ ls /./././.
+$ ls /tmp/..
+$ ls /tmp/idallen/../..
+$ ls /tmp/../tmp/idallen/../..
+$ ls /tmp/idallen/dir1/../../..
+
+12.6 Copy exercise: two pathnames
+
+All these commands copy the file file1 into file2 in the same (current) directory of /tmp/idallen:
+
+$ pwd
+/tmp/idallen
+$ cp file1 file2
+$ cp ./file1 ./file2
+$ cp ././././././file1 ././././././file2
+$ cp file1 ../idallen/file2
+$ cp ../idallen/file1 file2
+$ cp ../idallen/file1 ../idallen/file2
+$ cp ../../tmp/idallen/file1 file2
+$ cp file1 ../../tmp/idallen/file2
+$ cp ../../tmp/idallen/file1 ../../tmp/idallen/file2
+$ cp ./././././../../tmp/idallen/file1 ./././././../../tmp/idallen/file2
+$ cp /tmp/idallen/file1 /tmp/idallen/file2
+$ cp /tmp/../tmp/idallen/file1 /tmp/idallen/../idallen/file2
+$ cp file1 /tmp/idallen/../../tmp/idallen/file2
+
+Author: 
+| Ian! D. Allen, BA, MMath  -  idallen@idallen.ca  -  Ottawa, Ontario, Canada
+| Home Page: http://idallen.com/   Contact Improv: http://contactimprov.ca/
+| College professor (Free/Libre GNU+Linux) at: http://teaching.idallen.com/
+| Defend digital freedom:  http://eff.org/  and have fun:  http://fools.ca/
+
+Plain Text - plain text version of this page in Pandoc Markdown format
+
+Campaign for non-browser-specific HTML   Valid XHTML 1.0 Transitional   Valid CSS!   Creative Commons by nc sa 3.0   Hacker Ideals Emblem   Author Ian! D. Allen
+
