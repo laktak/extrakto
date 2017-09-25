@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR="$(dirname "$(realpath "$0")")"
+
 if [ -z "$2" ]; then
   echo "tmux-extrakto EXTRAKTO-OPT {clip|insert} [CLIP-TOOL]"
   exit 1
@@ -14,7 +16,7 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
-tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|./extrakto $1|fzf`
+tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|$DIR/extrakto.py $1|fzf`
 
 case $2 in
   clip)
