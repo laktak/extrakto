@@ -14,11 +14,13 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
-tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|extrakto $1|fzf`
+tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|./extrakto $1|fzf`
 
 case $2 in
-  # run in background as xclip won't work otherwise
-  clip) tmux run-shell -b "tmux show-buffer|$CLIP" ;;
-  insert) tmux paste-buffer -t ! ;;
+  clip)
+    # run in background as xclip won't work otherwise
+    tmux run-shell -b "tmux show-buffer|$CLIP" ;;
+  insert)
+    tmux paste-buffer -t ! ;;
 esac
 

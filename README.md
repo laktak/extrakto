@@ -5,7 +5,48 @@ Extracts path and url tokens from plaintext.
 
 Can be used with tmux and fzf as a replacement for tmux-copycat.
 
-## Installation
+## tmux
+
+In tmux press `prefix + X` to enter extract mode. Now you can
+
+- press `p` to extract paths
+- press `u` to extract urls
+- you can also use an uppercase version of the character to immediately pass in the selected value.
+
+Extrakto will parse the current buffer and push everything into fzf. The item you select in fzf will then be copied or inserted.
+
+Requires Python 3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip) and macOS (pbcopy) clipboards.
+
+### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
+
+Add plugin to the list of TPM plugins in `.tmux.conf`:
+
+    set -g @plugin 'laktak/extrakto'
+
+Hit `prefix + I` to fetch the plugin and source it.
+
+You should now have all `extrakto` key bindings defined.
+
+### Manual Installation
+
+Clone the repo:
+
+    $ git clone https://github.com/laktak/extrakto ~/clone/path
+
+Add this line to the bottom of `.tmux.conf`:
+
+    run-shell ~/clone/path/extrakto.tmux
+
+Reload TMUX environment:
+
+    # type this in terminal
+    $ tmux source-file ~/.tmux.conf
+
+You should now have all `extrakto` key bindings defined.
+
+## CLI
+
+### Installation
 
 For now simply clone the repository and link to the tool somewhere in your path:
 
@@ -14,33 +55,11 @@ git clone https://github.com/laktak/extrakto
 cd extrakto
 # assuming you `export PATH=$PATH:~/.local/bin` in your `.bashrc`:
 ln -s $PWD/extrakto.py ~/.local/bin/extrakto
-ln -s $PWD/tmux-extrakto ~/.local/bin/tmux-extrakto
 ```
 
-Requires Python 3 and optionally [fzf](https://github.com/junegunn/fzf).
+Requires Python 3.
 
-Supports Linux and macOS.
-
-### tmux
-
-To use this tool with tmux you would
-
-- pass in the desired pane via stdin
-- extract either paths or urls
-- pass it along to fzf (or something similar)
-- and finally use it to set a tmux buffer or the clipboard.
-
-This sample (for tmux 2.4+) defines a `extract-mode` that you enter with `X` and then use `p` to extract paths or `u` for urls (piping to xclip). The uppercase variants will insert the selection in the current pane.
-
-```
-bind-key X switch-client -Textract-mode
-bind-key -Textract-mode p split-window -v -l 6 "tmux-extrakto -p clip"
-bind-key -Textract-mode P split-window -v -l 6 "tmux-extrakto -p insert"
-bind-key -Textract-mode u split-window -v -l 6 "tmux-extrakto -u clip"
-bind-key -Textract-mode U split-window -v -l 6 "tmux-extrakto -u insert"
-```
-
-## CLI Usage
+### CLI Usage
 
 ```
 Usage: extrakto OPTION
