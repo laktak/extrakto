@@ -1,50 +1,62 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
-import sys, re
+import sys, re, argparse
 from collections import OrderedDict
 
-# for now only accept one option, get text from stdin
+parser = argparse.ArgumentParser(description='Extracts tokens from plaintext.')
+parser.add_argument('-p', help='extract path tokens', action='store_true')
+parser.add_argument('-u', help='extract url tokens', action='store_true')
+parser.add_argument('-w', help='extract word tokens', action='store_true')
+parser.add_argument('-r', help='reverse output', action='store_true')
+parser.add_argument('-m', '--min-length', help='minimum token length', default=5)
+args = parser.parse_args()
 
-if len(sys.argv) != 2:
-    print('Usage: extrakto OPTION')
-    print('Extracts tokens from plaintext.')
-    print()
-    print('-p                         extract path tokens')
-    print('-u                         extract url tokens')
-    print()
-    sys.exit(1)
+# regexes fro extraction
+REPATH = r'(?=[ \t\n]|"|\(|\[|<|\')?(~/|/)?([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:"\'$%&)>\]]*)'
+REURL = r"(https?://|git@|git://|ssh://|ftp://|file:///)[a-zA-Z0-9?=%/_.:,;~@!#$&()*+-]*"
+REWORD = r'[^][(){} \t\n\r]+'
 
-CMD=sys.argv[1]
-text=sys.stdin.read()
-
-res=list()
-if CMD == '-p':
-    # extract path tokens
-
-    # the regex works ok but could probably be improved
-    # copycat's regex was not used as it does not allow for things like "(/path)"
-
-    e = r'[ \t\n](?:"|\(|\[|<|\')?(~/|/)?([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:"\'$%&)>\]]*)'
-    for m in re.finditer(e, "\n" + text):
-        item=(m.group(1) or "") + m.group(2)
-        if item[-1] == ',': item = item[:-1]
+def processUP(find, text, ml):
+    res=list()
+    for m in re.finditer(find, "\n" + text):
+        item=m.group()
+        if item[-1] == ',' or item[-1] == ')': item = item[:-1] # possible markdown link
         # hack to exclude transfer speeds like 5k/s or m/s, and page 1/2
         if not re.search(r'[kmgKMG]/s$|^\d+/\d+$', item, re.I):
-            res.append(item)
+            if len(item) > ml: res.append(item)
+    return res
 
-elif CMD == '-u':
+def processW(find, text, ml):
+    res=list()
+    for m in re.finditer(find, "\n" + text):
+        item=m.group().strip(',.:;()[]{}<>\'"')
+        if len(item) > ml: res.append(item)
+    return res
+
+def getInput():
+    return sys.stdin.read()
+
+if args.w:
+    # extract words
+    res = processW(REWORD, getInput(), args.min_length)
+
+elif args.p:
+    # extract path tokens
+    if args.u: res = processUP(REPATH + "|" + REURL, getInput(), args.min_length)
+    else: res = processUP(REPATH, getInput(), args.min_length)
+
+elif args.u:
     # extract urls
+    res = processUP(REURL, getInput(), args.min_length)
 
-    e = r"(https?://|git@|git://|ssh://|ftp://|file:///)[a-zA-Z0-9?=%/_.:,;~@!#$&()*+-]*"
-    for m in re.finditer(e, text):
-        item = m.group()
-        if item[-1] == ',' or item[-1] == ')': item = item[:-1] # possible markdown link
-        res.append(item)
 else:
-    print('unknown option')
+    print('unknown option, see --help')
     sys.exit(1)
 
-res.reverse()
+if args.r: res.reverse()
+
+# remove duplicates and print
 for item in OrderedDict.fromkeys(res):
     print(item)
+
 

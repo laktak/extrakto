@@ -1,25 +1,16 @@
 
 # extrakto
 
-Extracts path and url tokens from plaintext.
+When you work in tmux you often copy and paste text from the current buffer. With extrakto you can fuzzy find your text instead of selecting it by hand.
 
-Can be used with tmux and fzf as a replacement for tmux-copycat.
+- press `prefix + e` to extract url and path tokens to be copied to the clipboard
+- press `prefix + tab` to extract words and insert them to the current pane
 
-## tmux
-
-In tmux press `prefix + X` to enter extract mode. Now you can
-
-- press `p` to extract paths
-- press `u` to extract urls
-- you can also use an uppercase version of the character to immediately pass in the selected value.
-
-Extrakto will parse the current buffer and push everything into fzf. The item you select in fzf will then be copied or inserted.
-
-Requires Python 3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip) and macOS (pbcopy) clipboards.
+Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip) and macOS (pbcopy) clipboards.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
-Add plugin to the list of TPM plugins in `.tmux.conf`:
+Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
     set -g @plugin 'laktak/extrakto'
 
@@ -37,14 +28,17 @@ Add this line to the bottom of `.tmux.conf`:
 
     run-shell ~/clone/path/extrakto.tmux
 
-Reload TMUX environment:
+Reload the tmux environment:
 
     # type this in terminal
     $ tmux source-file ~/.tmux.conf
 
 You should now have all `extrakto` key bindings defined.
 
+
 ## CLI
+
+You can use the tool without tmux to extrakt tokens from text.
 
 ### Installation
 
@@ -57,15 +51,22 @@ cd extrakto
 ln -s $PWD/extrakto.py ~/.local/bin/extrakto
 ```
 
-Requires Python 3.
+Requires Python 2/3.
 
 ### CLI Usage
 
 ```
-Usage: extrakto OPTION
+usage: extrakto.py [-h] [-p] [-u] [-w] [-r] [-m MIN_LENGTH]
+
 Extracts tokens from plaintext.
 
--p                         extract path tokens
--u                         extract url tokens
+optional arguments:
+  -h, --help            show this help message and exit
+  -p                    extract path tokens
+  -u                    extract url tokens
+  -w                    extract word tokens
+  -r                    reverse output
+  -m MIN_LENGTH, --min-length MIN_LENGTH
+                        minimum token length
 ```
 
