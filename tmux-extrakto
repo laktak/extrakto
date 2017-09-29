@@ -16,7 +16,7 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
-tmux set-buffer -- `tmux capture-pane -pS -32768 -t !|$DIR/extrakto.py $1|fzf`
+tmux set-buffer -- `tmux capture-pane -pJ -t !|$DIR/extrakto.py $1|fzf`
 
 if [ $? -eq 0 ]; then
   case $2 in
