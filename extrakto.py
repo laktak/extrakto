@@ -46,7 +46,7 @@ def get_args():
     return args
 
 
-def processUP(find, text, ml):
+def process_urls_and_paths(find, text, ml):
     res = list()
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
@@ -62,15 +62,15 @@ def processUP(find, text, ml):
 
 
 def get_urls(text, ml=0):
-    return processUP(RE_URL, text, ml)
+    return process_urls_and_paths(RE_URL, text, ml)
 
 
 def get_paths(text, ml=0):
-    return processUP(RE_PATH, text, ml)
+    return process_urls_and_paths(RE_PATH, text, ml)
 
 
 def get_urls_or_paths(text, ml=0):
-    return processUP(RE_URL_OR_PATH, text, ml)
+    return process_urls_and_paths(RE_URL_OR_PATH, text, ml)
 
 
 def get_words(text, ml):
