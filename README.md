@@ -84,11 +84,10 @@ Extracts tokens from plaintext.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p                    extract path tokens
-  -u                    extract url tokens
-  -w                    extract word tokens
-  -r                    reverse output
+  -p, --paths           extract path tokens
+  -u, --urls            extract url tokens
+  -w, --words           extract word tokens
+  -r, --reverse         reverse output
   -m MIN_LENGTH, --min-length MIN_LENGTH
                         minimum token length
 ```
-
