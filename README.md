@@ -1,6 +1,8 @@
 
 # extrakto
 
+## tmux plugin
+
 When you work in tmux you often copy and paste text from the current buffer. With extrakto you can fuzzy find your text instead of selecting it by hand.
 
 - press `prefix + e` to extract words to be copied to the clipboard
@@ -35,10 +37,30 @@ Reload the tmux environment:
 
 You should now have all `extrakto` key bindings defined.
 
+### Options
+
+```
+set -g @extrakto_clip_key 'e'
+set -g @extrakto_clip_opt 'wr'
+set -g @extrakto_insert_key 'tab'
+set -g @extrakto_insert_opt 'wr'
+```
+- @extrakto_clip_key: the key binding to copy to the clipboard
+- @extrakto_clip_opt: the extract options when copying
+- @extrakto_insert_key: the key binding to insert to the current pane
+- @extrakto_insert_opt: the extract options when inserting
+
+Available options are:
+- `p` extract path tokens
+- `u` extract url tokens
+- `w` extract word tokens
+- `r` reverse output
+
+**tl;dr**: you probably want either `wr` (default) or `pur`.
 
 ## CLI
 
-You can use the tool without tmux to extrakt tokens from text.
+You can also use extrakto as a standalone tool to extract tokens from text.
 
 ### Installation
 
