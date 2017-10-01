@@ -19,14 +19,14 @@ default_insert_opt="wr"
 extrakto_insert_opt=$(tmux show-option -gqv "@extrakto_insert_opt")
 INSERT_OPT=${extrakto_insert_opt:-$default_insert_opt}
 
-default_window_split_direction="v"
-extrakto_window_split_direction=$(tmux show-option -gqv "@extrakto_window_split_direction")
-SPLIT_DIRECTION=${extrakto_window_split_direction:-$default_window_split_direction}
+default_split_direction="v"
+extrakto_split_direction=$(tmux show-option -gqv "@extrakto_split_direction")
+SPLIT_DIRECTION=${extrakto_split_direction:-$default_split_direction}
 
-default_window_lines=6
-extrakto_window_lines=$(tmux show-option -gqv "@extrakto_window_lines")
-WINDOW_LINES=${extrakto_window_lines:-$default_window_lines}
+default_split_size=6
+extrakto_split_size=$(tmux show-option -gqv "@extrakto_split_size")
+SPLIT_SIZE=${extrakto_split_size:-$default_split_size}
 
 
-tmux bind-key ${CLIP_KEY} split-window -${SPLIT_DIRECTION} -l ${WINDOW_LINES} "$CURRENT_DIR/tmux-extrakto -${CLIP_OPT} clip"
-tmux bind-key ${INSERT_KEY} split-window -${SPLIT_DIRECTION} -l ${WINDOW_LINES} "$CURRENT_DIR/tmux-extrakto -${INSERT_OPT} insert"
+tmux bind-key ${CLIP_KEY} split-window -${SPLIT_DIRECTION} -l ${SPLIT_SIZE} "$CURRENT_DIR/tmux-extrakto -${CLIP_OPT} clip"
+tmux bind-key ${INSERT_KEY} split-window -${SPLIT_DIRECTION} -l ${SPLIT_SIZE} "$CURRENT_DIR/tmux-extrakto -${INSERT_OPT} insert"
