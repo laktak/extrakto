@@ -40,17 +40,22 @@ You should now have all `extrakto` key bindings defined.
 ### Options
 
 ```
+# Note: these are the default options
 set -g @extrakto_clip_key 'e'
 set -g @extrakto_clip_opt 'wr'
 set -g @extrakto_insert_key 'tab'
 set -g @extrakto_insert_opt 'wr'
+set -g @extrakto_split_direction 'v'
+set -g @extrakto_split_size '6'
 ```
 - @extrakto_clip_key: the key binding to copy to the clipboard
 - @extrakto_clip_opt: the extract options when copying
 - @extrakto_insert_key: the key binding to insert to the current pane
 - @extrakto_insert_opt: the extract options when inserting
+- @extrakto_split_direction: whether the tmux split will be 'v'ertical or 'h'orizontal
+- @extrakto_split_size: the size of the tmux split
 
-Available options are:
+Available options for `extrakto_clip_opt` and `extrakto_insert_opt` are:
 - `p` extract path tokens
 - `u` extract url tokens
 - `w` extract word tokens
