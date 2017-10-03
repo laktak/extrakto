@@ -21,7 +21,7 @@ fi
 function capture() {
 
   sel=$(tmux capture-pane -pJS -32768 -t ! | \
-    $extrakto $EXTRAKTO_OPT | \
+    $extrakto -r$EXTRAKTO_OPT | \
     fzf --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT]" --expect=tab,enter,ctrl-f)
 
   key=$(head -1 <<< "$sel")
@@ -36,10 +36,10 @@ function capture() {
       tmux set-buffer -- "$text"
       tmux paste-buffer -t ! ;;
     ctrl-f)
-      if [[ $EXTRAKTO_OPT == '-pur' ]]; then
-        EXTRAKTO_OPT=-wr
+      if [[ $EXTRAKTO_OPT == 'pu' ]]; then
+        EXTRAKTO_OPT=w
       else
-        EXTRAKTO_OPT=-pur
+        EXTRAKTO_OPT=pu
       fi
       capture
       ;;

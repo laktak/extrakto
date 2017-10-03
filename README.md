@@ -41,7 +41,7 @@ You should now have all `extrakto` key bindings defined.
 ```
 # Note: these are the default options
 set -g @extrakto_key 'tab'
-set -g @extrakto_default_opt 'wr'
+set -g @extrakto_default_opt 'w'
 set -g @extrakto_split_direction 'v'
 set -g @extrakto_split_size '7'
 ```
@@ -51,12 +51,8 @@ set -g @extrakto_split_size '7'
 - @extrakto_split_size: the size of the tmux split
 
 Available options for `extrakto_default_opt` are:
-- `p` extract path tokens
-- `u` extract url tokens
-- `w` extract word tokens
-- `r` reverse output
-
-**tl;dr**: you probably want either `wr` or `pur`.
+- `w`  extract word tokens
+- `pu` extract path & url tokens
 
 ## CLI
 
