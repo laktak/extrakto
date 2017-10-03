@@ -6,23 +6,12 @@ source "$CURRENT_DIR/scripts/helpers.sh"
 tmux_extrakto="$CURRENT_DIR/scripts/tmux-extrakto.sh"
 
 
-default_clip_key="e"
-clip_key=$(get_tmux_option "@extrakto_clip_key" "$default_clip_key")
-
-default_clip_opt="wr"
-clip_opt=$(get_tmux_option "@extrakto_clip_opt" "$default_clip_opt")
-
-default_insert_key="tab"
-insert_key=$(get_tmux_option "@extrakto_insert_key" "$default_insert_key")
-
-default_insert_opt="wr"
-insert_opt=$(get_tmux_option "@extrakto_insert_opt" "$default_insert_opt")
-
-default_split_direction="v"
-split_direction=$(get_tmux_option "@extrakto_split_direction" "$default_split_direction")
-
-default_split_size=6
-split_size=$(get_tmux_option "@extrakto_split_size" "$default_split_size")
+clip_key=$(get_tmux_option "@extrakto_clip_key" "e")
+clip_opt=$(get_tmux_option "@extrakto_clip_opt" "wr")
+insert_key=$(get_tmux_option "@extrakto_insert_key" "tab")
+insert_opt=$(get_tmux_option "@extrakto_insert_opt" "wr")
+split_direction=$(get_tmux_option "@extrakto_split_direction" "v")
+split_size=$(get_tmux_option "@extrakto_split_size" "6")
 
 
 tmux bind-key ${clip_key} split-window -${split_direction} -l ${split_size} "$tmux_extrakto -${clip_opt} clip"
