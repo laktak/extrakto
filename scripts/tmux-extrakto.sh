@@ -3,12 +3,13 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
-if [ -z "$2" ]; then
-  echo "tmux-extrakto EXTRAKTO-OPT {clip|insert} [CLIP-TOOL]"
+if [ -z "$1" ]; then
+  echo "tmux-extrakto EXTRAKTO-OPT [CLIP-TOOL]"
   exit 1
 fi
 
-CLIP=$3
+EXTRAKTO_OPT=$1
+CLIP=$2
 if [ -z "$CLIP" ]; then
   case "`uname`" in
     'Linux') CLIP='xclip -i -selection clipboard >/dev/null' ;;
@@ -17,16 +18,34 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
-tmux set-buffer -- `tmux capture-pane -pJS -32768 -t ! | \
-  $extrakto $1 | \
-  fzf --bind=tab:accept`
+function capture() {
 
-if [ $? -eq 0 ]; then
-  case $2 in
-    clip)
-      # run in background as xclip won't work otherwise
-      tmux run-shell -b "tmux show-buffer|$CLIP" ;;
-    insert)
-      tmux paste-buffer -t ! ;;
-  esac
-fi
+  sel=$(tmux capture-pane -pJS -32768 -t ! | \
+    $extrakto $EXTRAKTO_OPT | \
+    fzf --header="tab=insert, enter=copy, toggle filter=ctrl-f ($EXTRAKTO_OPT)" --expect=tab,enter,ctrl-f)
+
+  if [ $? -eq 0 ]; then
+
+    key=$(head -1 <<< "$sel")
+    text=$(tail -n +2 <<< "$sel")
+    tmux set-buffer -- "$text"
+
+    case $key in
+      enter)
+        # run in background as xclip won't work otherwise
+        tmux run-shell -b "tmux show-buffer|$CLIP" ;;
+      tab)
+        tmux paste-buffer -t ! ;;
+      ctrl-f)
+        if [[ $EXTRAKTO_OPT == '-pur' ]]; then
+          EXTRAKTO_OPT=-wr
+        else
+          EXTRAKTO_OPT=-pur
+        fi
+        capture
+        ;;
+    esac
+  fi
+}
+
+capture

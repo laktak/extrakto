@@ -5,8 +5,7 @@
 
 When you work in tmux you often copy and paste text from the current buffer. With extrakto you can fuzzy find your text instead of selecting it by hand.
 
-- press `prefix + e` to extract words to be copied to the clipboard
-- press `prefix + tab` to extract words and insert them to the current pane
+- pressing `prefix + tab` will allow you to extract text and to copy it to the clipboard or to insert it to the current pane
 
 Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip) and macOS (pbcopy) clipboards.
 
@@ -41,27 +40,23 @@ You should now have all `extrakto` key bindings defined.
 
 ```
 # Note: these are the default options
-set -g @extrakto_clip_key 'e'
-set -g @extrakto_clip_opt 'wr'
-set -g @extrakto_insert_key 'tab'
-set -g @extrakto_insert_opt 'wr'
+set -g @extrakto_key 'tab'
+set -g @extrakto_default_opt 'wr'
 set -g @extrakto_split_direction 'v'
-set -g @extrakto_split_size '6'
+set -g @extrakto_split_size '7'
 ```
-- @extrakto_clip_key: the key binding to copy to the clipboard
-- @extrakto_clip_opt: the extract options when copying
-- @extrakto_insert_key: the key binding to insert to the current pane
-- @extrakto_insert_opt: the extract options when inserting
+- @extrakto_key: the key binding to start
+- @extrakto_default_opt: the default extract options
 - @extrakto_split_direction: whether the tmux split will be 'v'ertical or 'h'orizontal
 - @extrakto_split_size: the size of the tmux split
 
-Available options for `extrakto_clip_opt` and `extrakto_insert_opt` are:
+Available options for `extrakto_default_opt` are:
 - `p` extract path tokens
 - `u` extract url tokens
 - `w` extract word tokens
 - `r` reverse output
 
-**tl;dr**: you probably want either `wr` (default) or `pur`.
+**tl;dr**: you probably want either `wr` or `pur`.
 
 ## CLI
 
