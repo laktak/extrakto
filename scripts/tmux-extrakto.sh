@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DIR="$(dirname "$(realpath "$0")")"
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+extrakto="$CURRENT_DIR/../extrakto.py"
 
 if [ -z "$2" ]; then
   echo "tmux-extrakto EXTRAKTO-OPT {clip|insert} [CLIP-TOOL]"
@@ -17,7 +18,7 @@ if [ -z "$CLIP" ]; then
 fi
 
 tmux set-buffer -- `tmux capture-pane -pJS -32768 -t ! | \
-  $DIR/extrakto.py $1 | \
+  $extrakto $1 | \
   fzf --bind=tab:accept`
 
 if [ $? -eq 0 ]; then
