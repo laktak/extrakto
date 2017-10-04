@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
 if [ -z "$1" ]; then
@@ -18,9 +19,11 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
+capture_pane_start=`get_capture_pane_start`
+
 function capture() {
 
-  sel=$(tmux capture-pane -pJS -32768 -t ! | \
+  sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$EXTRAKTO_OPT | \
     fzf \
       --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT]" \
