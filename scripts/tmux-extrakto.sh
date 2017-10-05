@@ -22,7 +22,10 @@ function capture() {
 
   sel=$(tmux capture-pane -pJS -32768 -t ! | \
     $extrakto -r$EXTRAKTO_OPT | \
-    fzf --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT]" --expect=tab,enter,ctrl-f)
+    fzf \
+      --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT]" \
+      --expect=tab,enter,ctrl-f \
+      --tiebreak=index)
 
   key=$(head -1 <<< "$sel")
   text=$(tail -n +2 <<< "$sel")
