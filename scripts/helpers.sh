@@ -13,11 +13,11 @@ get_tmux_option() {
 get_capture_pane_start() {
     split_direction=$(get_tmux_option "@extrakto_split_direction" "v")
     split_size=$(get_tmux_option "@extrakto_split_size" "7")
-    grab_area=$(get_tmux_option "@extrakto_grab_area" "all")
+    grab_area=$(get_tmux_option "@extrakto_grab_area" "full")
 
     capture_start="-32768"
 
-    if [ "$grab_area" == "visible" ]; then
+    if [ "$grab_area" == "recent" ]; then
         if [ "$split_direction" == "v" ]; then
             capture_start=-"$split_size"
         else
