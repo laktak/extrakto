@@ -1,7 +1,6 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
 if [ -z "$1" ]; then
@@ -10,7 +9,10 @@ if [ -z "$1" ]; then
 fi
 
 EXTRAKTO_OPT=$1
-CLIP=$2
+capture_pane_start=$2
+
+# CLIP=$2  # we are not passing this parameter
+CLIP=""
 if [ -z "$CLIP" ]; then
   case "`uname`" in
     'Linux') CLIP='xclip -i -selection clipboard >/dev/null' ;;
@@ -18,8 +20,6 @@ if [ -z "$CLIP" ]; then
     *) ;;
   esac
 fi
-
-capture_pane_start=`get_capture_pane_start`
 
 function capture() {
 
