@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
 if [ -z "$1" ]; then
@@ -8,10 +9,8 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-EXTRAKTO_OPT=$1
-capture_pane_start=$2
-
-# CLIP=$2  # we are not passing this parameter
+# We are not passing this parameter. TODO: configure as option?
+# CLIP=$2
 CLIP=""
 if [ -z "$CLIP" ]; then
   case "`uname`" in
@@ -21,13 +20,17 @@ if [ -z "$CLIP" ]; then
   esac
 fi
 
+grab_area=$(get_option "@extrakto_grab_area")
+capture_pane_start=$(get_capture_pane_start)
+EXTRAKTO_OPT=$(get_option "@extrakto_default_opt")
+
 function capture() {
 
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$EXTRAKTO_OPT | \
     fzf \
-      --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT]" \
-      --expect=tab,enter,ctrl-f \
+      --header="tab=insert, enter=copy, ctrl-f=toggle filter [$EXTRAKTO_OPT], ctrl-l=grab area [$grab_area]" \
+      --expect=tab,enter,ctrl-f,ctrl-l \
       --tiebreak=index)
 
   key=$(head -1 <<< "$sel")
@@ -47,6 +50,15 @@ function capture() {
       else
         EXTRAKTO_OPT=pu
       fi
+      capture
+      ;;
+    ctrl-l)
+      if [[ $grab_area == 'full' ]]; then
+        grab_area="recent"
+      else
+        grab_area="full"
+      fi
+      capture_pane_start=$(get_capture_pane_start "$grab_area")
       capture
       ;;
   esac
