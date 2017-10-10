@@ -4,11 +4,6 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
-if [ -z "$1" ]; then
-  echo "tmux-extrakto EXTRAKTO-OPT [CLIP-TOOL]"
-  exit 1
-fi
-
 # We are not passing this parameter. TODO: configure as option?
 # CLIP=$2
 CLIP=""
