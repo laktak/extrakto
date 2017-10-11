@@ -6,7 +6,7 @@ extrakto="$CURRENT_DIR/../extrakto.py"
 
 # We are not passing this parameter. TODO: configure as option?
 # CLIP=$2
-CLIP=""
+CLIP=$(get_option "@extrakto_clip_tool")
 if [ -z "$CLIP" ]; then
   case "`uname`" in
     'Linux') CLIP='xclip -i -selection clipboard >/dev/null' ;;

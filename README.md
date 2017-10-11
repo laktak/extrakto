@@ -45,12 +45,14 @@ set -g @extrakto_default_opt 'w'
 set -g @extrakto_split_direction 'v'
 set -g @extrakto_split_size '7'
 set -g @extrakto_grab_area "full"
+set -g @extrakto_clip_tool ""
 ```
 - @extrakto_key: the key binding to start
 - @extrakto_default_opt: the default extract options
 - @extrakto_split_direction: whether the tmux split will be 'v'ertical or 'h'orizontal
 - @extrakto_split_size: the size of the tmux split
 - @extrakto_grab_area: whether you want extrakto to grab data from the "recent" area, or from "full" the pane. You can also set this option to any number you want, this allows you to grab a smaller amount of data from the pane than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto.
+- @extrakto_clip_tool: set this to whatever clipboard tool you would like Extrakto to use to copy data into your clipboard. By default this is not set but Extrakto has support for some OS clipboards.
 
 Available options for `extrakto_default_opt` are:
 - `w`  extract word tokens

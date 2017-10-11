@@ -30,6 +30,9 @@ get_option() {
 
         "@extrakto_grab_area")
             echo $(get_tmux_option $option "full") ;;
+
+        "@extrakto_clip_tool")
+            echo $(get_tmux_option $option "") ;;
     esac
 }
 
