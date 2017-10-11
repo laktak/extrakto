@@ -16,6 +16,8 @@ if [ -z "$CLIP" ]; then
 fi
 
 grab_area=$(get_option "@extrakto_grab_area")
+original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
+
 capture_pane_start=$(get_capture_pane_start)
 EXTRAKTO_OPT=$(get_option "@extrakto_default_opt")
 
@@ -48,12 +50,22 @@ function capture() {
       capture
       ;;
     ctrl-l)
-      if [[ $grab_area == 'full' ]]; then
-        grab_area="recent"
+
+      # cycle between options like this: recent -> full -> custom (if any)-> recent ...
+      if [[ $grab_area == "recent" ]]; then
+          grab_area="full"
+      elif [[ $grab_area == "full" ]]; then
+          grab_area="recent"
+
+          if [[ "$original_grab_area" != "recent" && "$original_grab_area" != "full" ]]; then
+              grab_area="$original_grab_area"
+          fi
       else
-        grab_area="full"
+          grab_area="recent"
       fi
+
       capture_pane_start=$(get_capture_pane_start "$grab_area")
+
       capture
       ;;
   esac

@@ -30,9 +30,6 @@ get_option() {
 
         "@extrakto_grab_area")
             echo $(get_tmux_option $option "full") ;;
-
-        "@extrakto_grab_size")
-            echo $(get_tmux_option $option "") ;;
     esac
 }
 
@@ -49,20 +46,15 @@ get_capture_pane_start() {
         # TODO: check that this is good enough for "recent"
         local capture_start="-10"
 
-        echo $capture_start
-        return
-    fi
-
-    local grab_size=$(get_tmux_option "@extrakto_grab_size")
-
-    if [[ -n "$grab_size" ]]; then
-        # use the user defined limit for how much to grab
-        local capture_start="-${grab_size}"
-    else
-        # otherwise use the history limit, this is all the data on the pane
+    elif [ "$grab_area" == "full" ]; then
+        # use the history limit, this is all the data on the pane
         # if not set just go with tmux's default
         local history_limit=$(get_tmux_option "history-limit" "2000")
         local capture_start="-${history_limit}"
+
+    else
+        # use the user defined limit for how much to grab
+        local capture_start="-${grab_area}"
     fi
 
     echo $capture_start
