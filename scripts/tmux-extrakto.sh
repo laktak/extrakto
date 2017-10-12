@@ -7,7 +7,13 @@ extrakto="$CURRENT_DIR/../extrakto.py"
 CLIP=$(get_option "@extrakto_clip_tool")
 if [ -z "$CLIP" ]; then
   case "`uname`" in
-    'Linux') CLIP='xclip -i -selection clipboard >/dev/null' ;;
+    'Linux')
+      if [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
+        CLIP='clip.exe'
+      else
+        CLIP='xclip -i -selection clipboard >/dev/null'
+      fi
+      ;;
     'Darwin') CLIP='pbcopy' ;;
     *) ;;
   esac

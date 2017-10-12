@@ -7,7 +7,7 @@ When you work in tmux you often copy and paste text from the current buffer. Wit
 
 - pressing `prefix + tab` will allow you to extract text and to copy it to the clipboard or to insert it to the current pane
 
-Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip) and macOS (pbcopy) clipboards.
+Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
