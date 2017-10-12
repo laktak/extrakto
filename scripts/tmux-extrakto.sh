@@ -4,8 +4,6 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
-# We are not passing this parameter. TODO: configure as option?
-# CLIP=$2
 CLIP=$(get_option "@extrakto_clip_tool")
 if [ -z "$CLIP" ]; then
   case "`uname`" in

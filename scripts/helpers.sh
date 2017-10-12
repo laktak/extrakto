@@ -46,7 +46,6 @@ get_capture_pane_start() {
     grab_area=${1:-$grab_area}  # overwrite with $1, if set.
 
     if [ "$grab_area" == "recent" ]; then
-        # TODO: check that this is good enough for "recent"
         local capture_start="-10"
 
     elif [ "$grab_area" == "full" ]; then

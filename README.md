@@ -91,3 +91,7 @@ optional arguments:
   -m MIN_LENGTH, --min-length MIN_LENGTH
                         minimum token length
 ```
+
+# Contributions
+
+Special thanks go to @ivanalejandro0 and @maximbaz for their ideas and PRs!
