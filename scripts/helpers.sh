@@ -33,6 +33,9 @@ get_option() {
 
         "@extrakto_clip_tool")
             echo $(get_tmux_option $option "") ;;
+
+        "@extrakto_fzf_tool")
+            echo $(get_tmux_option $option "fzf") ;;
     esac
 }
 

@@ -7,6 +7,7 @@ extrakto="$CURRENT_DIR/../extrakto.py"
 # options
 grab_area=$(get_option "@extrakto_grab_area")
 extrakto_opt=$(get_option "@extrakto_default_opt")
+fzf_tool=$(get_option "@extrakto_fzf_tool")
 clip_tool=$(get_option "@extrakto_clip_tool")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
@@ -31,7 +32,7 @@ function capture() {
 
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$extrakto_opt | \
-    fzf \
+    $fzf_tool \
       --header="tab=insert, enter=copy, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]" \
       --expect=tab,enter,ctrl-f,ctrl-l \
       --tiebreak=index)
