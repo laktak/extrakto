@@ -38,12 +38,8 @@ get_option() {
 
 # This returns the start point parameter for `tmux capture-pane`.
 # The result will depend on how the user has set the grab area and grab size.
-#
-# If you pass a parameter to this function, it will be used to overwrite the
-# user's grab area configuration.
 get_capture_pane_start() {
-    local grab_area=$(get_option "@extrakto_grab_area")
-    grab_area=${1:-$grab_area}  # overwrite with $1, if set.
+    local grab_area=$1
 
     if [ "$grab_area" == "recent" ]; then
         local capture_start="-10"
