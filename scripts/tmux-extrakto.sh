@@ -81,4 +81,10 @@ function capture() {
   esac
 }
 
+# check terminal size, zoom pane if too small
+lines=$(tput lines)
+if [ $lines -lt 7 ]; then
+  tmux resize-pane -Z
+fi
+
 capture
