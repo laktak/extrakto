@@ -36,6 +36,9 @@ get_option() {
 
         "@extrakto_fzf_tool")
             echo $(get_tmux_option $option "fzf") ;;
+
+        "@extrakto_custom_tool")
+            echo $(get_tmux_option $option "") ;;
     esac
 }
 
