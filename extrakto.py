@@ -77,7 +77,7 @@ def get_words(text, ml):
     words = []
 
     for m in re.finditer(RE_WORD, "\n" + text):
-        item = m.group().strip(',.:;()[]{}<>\'"')
+        item = m.group().strip(',:;()[]{}<>\'"').rstrip('.')
         if len(item) > ml:
             words.append(item)
 
