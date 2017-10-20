@@ -95,7 +95,7 @@ function capture() {
 
     ctrl-o)
       if [ -n "$custom_tool" ]; then
-        tmux run-shell -b "$custom_tool $text"
+        tmux run-shell -b "cd $PWD; $custom_tool $text"
       else
         capture
       fi
