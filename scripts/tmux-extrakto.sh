@@ -28,10 +28,10 @@ if [ -z "$clip_tool" ]; then
   esac
 fi
 
-if [ -z "$open_tool" ]; then
+if [[ "$custom_tool" == "auto" ]]; then
   case "`uname`" in
-    'Linux') open_tool='xdg-open >/dev/null' ;;
-    'Darwin') open_tool='open' ;;
+    'Linux') custom_tool='xdg-open >/dev/null' ;;
+    'Darwin') custom_tool='open' ;;
     *) ;;
   esac
 fi
