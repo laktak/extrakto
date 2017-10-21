@@ -20,7 +20,7 @@ get_option() {
             echo $(get_tmux_option $option "tab") ;;
 
         "@extrakto_default_opt")
-            echo $(get_tmux_option $option "w") ;;
+            echo $(get_tmux_option $option "word") ;;
 
         "@extrakto_split_direction")
             echo $(get_tmux_option $option "v") ;;

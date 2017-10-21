@@ -36,14 +36,19 @@ if [[ "$open_tool" == "auto" ]]; then
   esac
 fi
 
-
 function capture() {
 
-  header="tab=insert, enter=copy, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
+  header="tab=insert, enter=copy"
   if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
+  header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
+
+  case $extrakto_opt in
+    'path/url') extrakto_flags='pu' ;;
+    *) extrakto_flags='w' ;;
+  esac
 
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
-    $extrakto -r$extrakto_opt | \
+    $extrakto -r$extrakto_flags | \
     $fzf_tool \
       --header="$header" \
       --expect=tab,enter,ctrl-f,ctrl-l,ctrl-o \
@@ -66,10 +71,10 @@ function capture() {
       ;;
 
     ctrl-f)
-      if [[ $extrakto_opt == 'pu' ]]; then
-        extrakto_opt=w
+      if [[ $extrakto_opt == 'word' ]]; then
+        extrakto_opt='path/url'
       else
-        extrakto_opt=pu
+        extrakto_opt='word'
       fi
       capture
       ;;
