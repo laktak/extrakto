@@ -9,7 +9,7 @@ grab_area=$(get_option "@extrakto_grab_area")
 extrakto_opt=$(get_option "@extrakto_default_opt")
 clip_tool=$(get_option "@extrakto_clip_tool")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
-custom_tool=$(get_option "@extrakto_custom_tool")
+open_tool=$(get_option "@extrakto_open_tool")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
@@ -28,11 +28,11 @@ if [ -z "$clip_tool" ]; then
   esac
 fi
 
-if [[ "$custom_tool" == "auto" ]]; then
+if [[ "$open_tool" == "auto" ]]; then
   case "`uname`" in
-    'Linux') custom_tool='xdg-open >/dev/null' ;;
-    'Darwin') custom_tool='open' ;;
-    *) ;;
+    'Linux') open_tool='xdg-open >/dev/null' ;;
+    'Darwin') open_tool='open' ;;
+    *) open_tool='' ;;
   esac
 fi
 
@@ -40,7 +40,7 @@ fi
 function capture() {
 
   header="tab=insert, enter=copy, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
-  if [ -n "$custom_tool" ]; then header="$header, ctrl-o=custom"; fi
+  if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
 
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$extrakto_opt | \
@@ -94,8 +94,8 @@ function capture() {
       ;;
 
     ctrl-o)
-      if [ -n "$custom_tool" ]; then
-        tmux run-shell -b "cd $PWD; $custom_tool $text"
+      if [ -n "$open_tool" ]; then
+        tmux run-shell -b "cd $PWD; $open_tool $text"
       else
         capture
       fi
