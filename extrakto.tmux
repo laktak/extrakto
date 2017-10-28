@@ -9,4 +9,6 @@ extrakto_key=$(get_option "@extrakto_key")
 split_direction=$(get_option "@extrakto_split_direction")
 split_size=$(get_option "@extrakto_split_size")
 
-tmux bind-key ${extrakto_key} split-window -c "#{pane_current_path}" -${split_direction} -l ${split_size} "$tmux_extrakto"
+if [ -n "${extrakto_key}" ]; then
+  tmux bind-key ${extrakto_key} split-window -c "#{pane_current_path}" -${split_direction} -l ${split_size} "$tmux_extrakto"
+fi
