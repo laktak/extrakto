@@ -32,7 +32,7 @@ get_option() {
             echo $(get_tmux_option $option "full") ;;
 
         "@extrakto_clip_tool")
-            echo $(get_tmux_option $option "") ;;
+            echo $(get_tmux_option $option "auto") ;;
 
         "@extrakto_fzf_tool")
             echo $(get_tmux_option $option "fzf") ;;

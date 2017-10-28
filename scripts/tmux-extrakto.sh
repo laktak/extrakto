@@ -14,7 +14,7 @@ open_tool=$(get_option "@extrakto_open_tool")
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
 
-if [ -z "$clip_tool" ]; then
+if [[ "$clip_tool" == "auto" ]]; then
   case "`uname`" in
     'Linux')
       if [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
