@@ -1,6 +1,8 @@
 
 # extrakto
 
+![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
+
 ## tmux plugin
 
 When you work in tmux you often copy and paste text from the current buffer. With extrakto you can fuzzy find your text instead of selecting it by hand.
