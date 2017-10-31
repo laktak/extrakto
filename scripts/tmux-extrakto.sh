@@ -51,8 +51,15 @@ function capture() {
     $extrakto -r$extrakto_flags | \
     $fzf_tool \
       --header="$header" \
-      --expect=tab,enter,ctrl-f,ctrl-l,ctrl-o \
+      --expect=tab,enter,ctrl-f,ctrl-l,ctrl-o,esc \
       --tiebreak=index)
+
+  if [ $? -gt 0 ]; then
+    echo "error: unable to extract - check/report errors above"
+    echo "You can also set the fzf path in options (see readme)."
+    read
+    exit
+  fi
 
   key=$(head -1 <<< "$sel")
   text=$(tail -n +2 <<< "$sel")
