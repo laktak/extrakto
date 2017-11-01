@@ -51,10 +51,12 @@ def process_urls_and_paths(find, text, ml):
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
         item = m.group()
-        if item[-1] == ',' or item[-1] == ')':
-            item = item[:-1]  # possible markdown link
+        # remove invalid end charaters (like punctuation
+        # or markdown syntax)
+        if item[-1] in ",):":
+            item = item[:-1]
 
-        # hack to exclude transfer speeds like 5k/s or m/s, and page 1/2
+        # exclude transfer speeds like 5k/s or m/s, and page 1/2
         if not re.search(RE_SPEED, item, re.I):
             if len(item) > ml:
                 res.append(item)
@@ -77,7 +79,7 @@ def get_words(text, ml):
     words = []
 
     for m in re.finditer(RE_WORD, "\n" + text):
-        item = m.group().strip(',:;()[]{}<>\'"').rstrip('.')
+        item = m.group().strip(',:;()[]{}<>\'"|').rstrip('.')
         if len(item) > ml:
             words.append(item)
 
