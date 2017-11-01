@@ -13,6 +13,7 @@ When you work in tmux you often copy and paste text from the current buffer. Wit
   - `enter` to copy it to the clipboard,
   - `tab` to insert it to the current pane or
   - `ctrl-o` to open the path/url.
+  - `ctrl-e` to open with `$EDITOR`
 
 Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
 
