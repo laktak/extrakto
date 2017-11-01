@@ -51,7 +51,7 @@ def process_urls_and_paths(find, text, ml):
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
         item = m.group()
-        # remove invalid end charaters (like punctuation
+        # remove invalid end characters (like punctuation
         # or markdown syntax)
         if item[-1] in ",):":
             item = item[:-1]
