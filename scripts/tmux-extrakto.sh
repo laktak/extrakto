@@ -47,7 +47,7 @@ function capture() {
 
   header="tab=insert, enter=copy"
   if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
-  header="$header, ctrl-e=open in $editor"
+  header="$header, ctrl-e=edit"
   header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
 
   case $extrakto_opt in
@@ -122,8 +122,7 @@ function capture() {
       ;;
 
     ctrl-e)
-      tmux send-keys -t ! "$editor -- $text"
-      tmux send-keys -t ! 'C-m'
+      tmux send-keys -t ! "$editor -- $text" 'C-m'
       ;;
   esac
 }
