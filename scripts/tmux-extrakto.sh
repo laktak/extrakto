@@ -36,10 +36,18 @@ if [[ "$open_tool" == "auto" ]]; then
   esac
 fi
 
+if [[ -z $EDITOR ]]; then
+  # fallback
+  editor="vi"
+else
+  editor="$EDITOR"
+fi
+
 function capture() {
 
   header="tab=insert, enter=copy"
   if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
+  header="$header, ctrl-e=edit"
   header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
 
   case $extrakto_opt in
@@ -51,7 +59,7 @@ function capture() {
     $extrakto -r$extrakto_flags | \
     $fzf_tool \
       --header="$header" \
-      --expect=tab,enter,ctrl-f,ctrl-l,ctrl-o,esc \
+      --expect=tab,enter,ctrl-e,ctrl-f,ctrl-l,ctrl-o,esc \
       --tiebreak=index)
 
   if [ $? -gt 0 ]; then
@@ -111,6 +119,10 @@ function capture() {
       else
         capture
       fi
+      ;;
+
+    ctrl-e)
+      tmux send-keys -t ! "$editor -- $text" 'C-m'
       ;;
   esac
 }
