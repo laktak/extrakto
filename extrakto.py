@@ -26,7 +26,7 @@ RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 # - Miscellaneous Symbols
 # - Dingbats
 # and whitespace ( \t\n\r)
-RE_WORD = '[^][(){}\u2500-\u27BF \\t\\n\\r]+'
+RE_WORD = u'[^][(){}\u2500-\u27BF \\t\\n\\r]+'
 
 # reg exp to exclude transfer speeds like 5k/s or m/s, and page 1/2
 RE_SPEED = r'[kmgKMG]/s$|^\d+/\d+$'
@@ -95,11 +95,17 @@ def get_words(text, min_length):
     return words
 
 
-def get_input():
-    return sys.stdin.read()
 
 
 def main():
+
+    def get_input():
+        return sys.stdin.read()
+
+    if (sys.version_info < (3, 0)):
+        import codecs
+        sys.stdin = codecs.getreader('utf8')(sys.stdin)
+
     args = get_args()
 
     if args.words:
