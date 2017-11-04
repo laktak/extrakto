@@ -17,7 +17,16 @@ RE_URL = (r"(https?://|git@|git://|ssh://|s*ftp://|file:///)"
 
 RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 
-RE_WORD = r'[^][(){} \t\n\r]+'
+# "words" consist of anything but the following characters:
+# [](){}
+# unicode range 2500-27BF which includes:
+# - Box Drawing
+# - Block Elements
+# - Geometric Shapes
+# - Miscellaneous Symbols
+# - Dingbats
+# and whitespace ( \t\n\r)
+RE_WORD = '[^][(){}\u2500-\u27BF \\t\\n\\r]+'
 
 # reg exp to exclude transfer speeds like 5k/s or m/s, and page 1/2
 RE_SPEED = r'[kmgKMG]/s$|^\d+/\d+$'
@@ -33,7 +42,7 @@ def get_args():
                         help='extract url tokens')
 
     parser.add_argument('-w', '--words', action='store_true',
-                        help='extract word tokens')
+                        help='extract "word" tokens')
 
     parser.add_argument('-r', '--reverse', action='store_true',
                         help='reverse output')
@@ -46,7 +55,7 @@ def get_args():
     return args
 
 
-def process_urls_and_paths(find, text, ml):
+def process_urls_and_paths(find, text, min_length):
     res = list()
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
@@ -58,29 +67,29 @@ def process_urls_and_paths(find, text, ml):
 
         # exclude transfer speeds like 5k/s or m/s, and page 1/2
         if not re.search(RE_SPEED, item, re.I):
-            if len(item) > ml:
+            if len(item) >= min_length:
                 res.append(item)
     return res
 
 
-def get_urls(text, ml=0):
-    return process_urls_and_paths(RE_URL, text, ml)
+def get_urls(text, min_length=0):
+    return process_urls_and_paths(RE_URL, text, min_length)
 
 
-def get_paths(text, ml=0):
-    return process_urls_and_paths(RE_PATH, text, ml)
+def get_paths(text, min_length=0):
+    return process_urls_and_paths(RE_PATH, text, min_length)
 
 
-def get_urls_or_paths(text, ml=0):
-    return process_urls_and_paths(RE_URL_OR_PATH, text, ml)
+def get_urls_or_paths(text, min_length=0):
+    return process_urls_and_paths(RE_URL_OR_PATH, text, min_length)
 
 
-def get_words(text, ml):
+def get_words(text, min_length):
     words = []
 
-    for m in re.finditer(RE_WORD, "\n" + text):
+    for m in re.finditer(RE_WORD, text):
         item = m.group().strip(',:;()[]{}<>\'"|').rstrip('.')
-        if len(item) > ml:
+        if len(item) >= min_length:
             words.append(item)
 
     return words

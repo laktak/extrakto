@@ -7,10 +7,20 @@ from extrakto import get_words
 
 
 class TestGetWords(unittest.TestCase):
+
     def test_skip_dot_last_word_in_sentence(self):
         text = "Hello world. Extrakto is an awesome plugin."
         words = [
             "Hello", "world", "Extrakto", "awesome", "plugin"
+        ]
+
+        result = get_words(text, 4)
+        self.assertEquals(words, result)
+
+    def test_box_drawing(self):
+        text = "last│first"
+        words = [
+            "last", "first"
         ]
 
         result = get_words(text, 4)
