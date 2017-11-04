@@ -18,7 +18,7 @@ class TestGetWords(unittest.TestCase):
         self.assertEquals(words, result)
 
     def test_box_drawing(self):
-        text = "last│first"
+        text = u"last│first"
         words = [
             "last", "first"
         ]
