@@ -1,23 +1,27 @@
 
-# extrakto
+# extrakto for tmux
 
 ![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
 
-## tmux plugin
+**Complete everything** - you can use `tab` to complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions.
 
-When you work in tmux you often copy and paste text from the current buffer. With extrakto you can fuzzy find your text instead of selecting it by hand.
+You can **fuzzy find your text** instead of selecting it by hand:
 
-- press `prefix + tab` to start extrakto
-- fuzzy find the required text/path/url
+- press tmux `prefix + tab` to start extrakto
+- fuzzy find the text/path/url
 - press
   - `enter` to copy it to the clipboard,
-  - `tab` to insert it to the current pane or
-  - `ctrl-o` to open the path/url.
-  - `ctrl-e` to open with `$EDITOR`
+  - `tab` to insert it to the current pane,
+  - `ctrl-o` to open the path/url or
+  - `ctrl-e` to edit with `$EDITOR`
 
-Requires Python 2/3 and [fzf](https://github.com/junegunn/fzf). Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
+Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
-### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+## Installation
+
+Requires [tmux](https://github.com/tmux/tmux/wiki), [fzf](https://github.com/junegunn/fzf) and Python 2/3. Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
+
+### with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -72,7 +76,9 @@ Example:
 set -g @extrakto_split_size "15"
 ```
 
-## CLI
+---
+
+# CLI
 
 You can also use extrakto as a standalone tool to extract tokens from text.
 
