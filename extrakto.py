@@ -129,7 +129,7 @@ def main():
 
     # remove duplicates and print
     for item in OrderedDict.fromkeys(res):
-        print(item)
+        print(item.encode('utf-8'))
 
 
 if __name__ == "__main__":
