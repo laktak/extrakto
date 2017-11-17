@@ -3,15 +3,15 @@
 
 ![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
 
-**Complete everything** - you can use `tab` to complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions.
+**Output completions** - you can complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions.
 
 You can **fuzzy find your text** instead of selecting it by hand:
 
 - press tmux `prefix + tab` to start extrakto
 - fuzzy find the text/path/url
 - press
-  - `enter` to copy it to the clipboard,
   - `tab` to insert it to the current pane,
+  - `enter` to copy it to the clipboard,
   - `ctrl-o` to open the path/url or
   - `ctrl-e` to edit with `$EDITOR`
 

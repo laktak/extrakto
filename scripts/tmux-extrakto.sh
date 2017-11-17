@@ -55,6 +55,9 @@ function capture() {
     *) extrakto_flags='w' ;;
   esac
 
+  # for troubleshooting add
+  # tee /tmp/stageN | \
+  # between the commands
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$extrakto_flags | \
     $fzf_tool \
