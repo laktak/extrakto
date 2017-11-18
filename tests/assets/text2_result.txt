@@ -1,0 +1,17 @@
+/path/in_brackets
+path/in_brackets
+/path/in-parantheses
+path/in-parantheses
+/path/in/quotes
+path/in/quotes
+/path/in-single
+path/in-single
+prompt:~/dot$
+status
+modified
+home/.tmux.conf
+deleted
+home/tools/bin/hello
+home/.laktakrc
+50m/s
+10k/s
