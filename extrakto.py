@@ -102,9 +102,16 @@ def main():
     def get_input():
         return sys.stdin.read()
 
+    def print_result(t):
+        print(t)
+
+    def print_result_py2(t):
+        print(t.encode('utf-8'))
+
     if (sys.version_info < (3, 0)):
         import codecs
         sys.stdin = codecs.getreader('utf8')(sys.stdin)
+        print_result = print_result_py2
 
     args = get_args()
 
@@ -129,7 +136,7 @@ def main():
 
     # remove duplicates and print
     for item in OrderedDict.fromkeys(res):
-        print(item)
+        print_result(item)
 
 
 if __name__ == "__main__":
