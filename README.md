@@ -14,6 +14,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
   - `enter` to copy it to the clipboard,
   - `ctrl-o` to open the path/url or
   - `ctrl-e` to edit with `$EDITOR`
+  - `ctrl-s` to search for it
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
