@@ -48,6 +48,7 @@ function capture() {
   header="tab=insert, enter=copy"
   if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
   header="$header, ctrl-e=edit"
+  header="$header, ctrl-s=search"
   header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
 
   case $extrakto_opt in
@@ -62,7 +63,7 @@ function capture() {
     $extrakto -r$extrakto_flags | \
     $fzf_tool \
       --header="$header" \
-      --expect=tab,enter,ctrl-e,ctrl-f,ctrl-l,ctrl-o,esc \
+      --expect=tab,enter,ctrl-e,ctrl-s,ctrl-f,ctrl-l,ctrl-o,esc \
       --tiebreak=index)
 
   if [ $? -gt 0 ]; then
@@ -95,6 +96,10 @@ function capture() {
         extrakto_opt='word'
       fi
       capture
+      ;;
+
+    ctrl-s)
+      tmux copy-mode -t ! \; send-keys -t ! -X search-backward "$text"
       ;;
 
     ctrl-l)
