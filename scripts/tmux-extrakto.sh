@@ -52,6 +52,7 @@ function capture() {
 
   case $extrakto_opt in
     'path/url') extrakto_flags='pu' ;;
+    'lines') extrakto_flags='l' ;;
     *) extrakto_flags='w' ;;
   esac
 
@@ -91,6 +92,8 @@ function capture() {
     ctrl-f)
       if [[ $extrakto_opt == 'word' ]]; then
         extrakto_opt='path/url'
+      elif [[ $extrakto_opt == 'path/url' ]]; then
+        extrakto_opt='lines'
       else
         extrakto_opt='word'
       fi
