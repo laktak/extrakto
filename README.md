@@ -8,7 +8,7 @@
 You can **fuzzy find your text** instead of selecting it by hand:
 
 - press tmux `prefix + tab` to start extrakto
-- fuzzy find the text/path/url
+- fuzzy find the text/path/url/line
 - press
   - `tab` to insert it to the current pane,
   - `enter` to copy it to the clipboard,
@@ -61,7 +61,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | Option                    | Default | Description |
 | :---                      | :---:   | :--- |
 | `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to '' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
-| `@extrakto_default_opt`     | `word`  | The default extract options (`word` or `path/url`) |
+| `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
 | `@extrakto_split_direction` | `v`     | Whether the tmux split will be `v`ertical or `h`orizontal |
 | `@extrakto_split_size`      | `7`     | The size of the tmux split |
 | `@extrakto_grab_area`       | `full`  | Whether you want extrakto to grab data from the `recent` area, or from `full` the pane. You can also set this option to any number you want, this allows you to grab a smaller amount of data from the pane than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
@@ -98,7 +98,7 @@ Requires Python 2/3.
 ### CLI Usage
 
 ```
-usage: extrakto.py [-h] [-p] [-u] [-w] [-r] [-m MIN_LENGTH]
+usage: extrakto.py [-h] [-p] [-u] [-w] [-l] [-r] [-m MIN_LENGTH]
 
 Extracts tokens from plaintext.
 
@@ -107,6 +107,7 @@ optional arguments:
   -p, --paths           extract path tokens
   -u, --urls            extract url tokens
   -w, --words           extract word tokens
+  -l, --lines           extract lines
   -r, --reverse         reverse output
   -m MIN_LENGTH, --min-length MIN_LENGTH
                         minimum token length

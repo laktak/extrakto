@@ -46,7 +46,7 @@ def get_args():
                         help='extract "word" tokens')
 
     parser.add_argument('-l', '--lines', action='store_true',
-                        help='extract "line" tokens')
+                        help='extract lines')
 
     parser.add_argument('-r', '--reverse', action='store_true',
                         help='reverse output')
