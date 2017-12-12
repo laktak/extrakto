@@ -45,6 +45,9 @@ def get_args():
     parser.add_argument('-w', '--words', action='store_true',
                         help='extract "word" tokens')
 
+    parser.add_argument('-l', '--lines', action='store_true',
+                        help='extract lines')
+
     parser.add_argument('-r', '--reverse', action='store_true',
                         help='reverse output')
 
@@ -96,6 +99,15 @@ def get_words(text, min_length):
     return words
 
 
+def get_lines(text, min_length):
+    lines = []
+
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if len(line) >= min_length:
+            lines.append(line)
+
+    return lines
 
 
 def main():
@@ -127,6 +139,9 @@ def main():
 
     elif args.urls:
         res = get_urls(get_input(), args.min_length)
+
+    elif args.lines:
+        res = get_lines(get_input(), args.min_length)
 
     else:
         print('unknown option, see --help')
