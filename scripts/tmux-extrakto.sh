@@ -61,6 +61,7 @@ function capture() {
   # between the commands
   sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
     $extrakto -r$extrakto_flags | \
+    (read line && (echo $line; cat) || echo NO MATCH - use a different filter) | \
     $fzf_tool \
       --header="$header" \
       --expect=tab,enter,ctrl-e,ctrl-f,ctrl-l,ctrl-o,ctrl-c,esc \
