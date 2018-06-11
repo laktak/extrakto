@@ -47,17 +47,21 @@ get_option() {
 get_capture_pane_start() {
     local grab_area=$1
 
-    if [ "$grab_area" == "recent" ]; then
+    if [[ "$grab_area" == "recent" || "$grab_area" == "window recent" ]]; then
         local capture_start="-10"
 
-    elif [ "$grab_area" == "full" ]; then
+    elif [[ "$grab_area" == "full" || "$grab_area" == "window full" ]]; then
         # use the history limit, this is all the data on the pane
         # if not set just go with tmux's default
         local history_limit=$(get_tmux_option "history-limit" "2000")
         local capture_start="-${history_limit}"
 
+    elif [[ "$grab_area" =~ ^window\  ]]; then
+        # use the user defined limit for how much to grab from every pane in the current window
+        local capture_start="-${grab_area:7}"
+
     else
-        # use the user defined limit for how much to grab
+        # use the user defined limit for how much to grab from the current pane
         local capture_start="-${grab_area}"
     fi
 

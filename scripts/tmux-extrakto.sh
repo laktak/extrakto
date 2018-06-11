@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+LAST_ACTIVE_PANE=$1
 source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 
@@ -43,6 +44,20 @@ else
   editor="$EDITOR"
 fi
 
+function capture_panes() {
+  if [[ $grab_area =~ ^window\  ]]; then
+    for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
+      if [[ $pane =~ ^0: && ${pane:2} != ${LAST_ACTIVE_PANE} ]]; then
+        local captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})
+        local captured+=$'\n'
+      fi
+    done
+  fi
+  local captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t !)
+
+  echo "$captured"
+}
+
 function capture() {
 
   header="tab=insert, enter=copy"
@@ -59,7 +74,7 @@ function capture() {
   # for troubleshooting add
   # tee /tmp/stageN | \
   # between the commands
-  sel=$(tmux capture-pane -pJS ${capture_pane_start} -t ! | \
+  sel=$(capture_panes | \
     $extrakto -r$extrakto_flags | \
     (read line && (echo $line; cat) || echo NO MATCH - use a different filter) | \
     $fzf_tool \
@@ -102,13 +117,18 @@ function capture() {
       ;;
 
     ctrl-l)
-      # cycle between options like this: recent -> full -> custom (if any)-> recent ...
+      # cycle between options like this:
+      # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
       if [[ $grab_area == "recent" ]]; then
+          grab_area="window recent"
+      elif [[ $grab_area == "window recent" ]]; then
           grab_area="full"
       elif [[ $grab_area == "full" ]]; then
+          grab_area="window full"
+      elif [[ $grab_area == "window full" ]]; then
           grab_area="recent"
 
-          if [[ "$original_grab_area" != "recent" && "$original_grab_area" != "full" ]]; then
+          if [[ ! "$original_grab_area" =~ ^(window )?(recent|full)$ ]]; then
               grab_area="$original_grab_area"
           fi
       else
