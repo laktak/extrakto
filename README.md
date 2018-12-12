@@ -64,7 +64,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
 | `@extrakto_split_direction` | `v`     | Whether the tmux split will be `v`ertical or `h`orizontal |
 | `@extrakto_split_size`      | `7`     | The size of the tmux split |
-| `@extrakto_grab_area`       | `full`  | Whether you want extrakto to grab data from the `recent` area, or from `full` the pane. You can also set this option to any number you want, this allows you to grab a smaller amount of data from the pane than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
+| `@extrakto_grab_area`       | `full`  | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's `recent` areas or all current window's `full` panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
 | `@extrakto_clip_tool`       | `auto`  | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_fzf_tool`        | `fzf`   | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
