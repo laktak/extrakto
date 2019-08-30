@@ -19,7 +19,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 
 ## Installation
 
-Requires [tmux](https://github.com/tmux/tmux/wiki), [fzf](https://github.com/junegunn/fzf) and Python 2/3. Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
+Requires [tmux](https://github.com/tmux/tmux/wiki), [fzf](https://github.com/junegunn/fzf) and Python 2/3. Supports Linux (xsel or xclip), macOS (pbcopy) and Bash on Windows clipboards.
 
 ### with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 

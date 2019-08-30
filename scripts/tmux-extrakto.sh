@@ -14,12 +14,15 @@ open_tool=$(get_option "@extrakto_open_tool")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
+os="$(uname)"
 
 if [[ "$clip_tool" == "auto" ]]; then
-  case "`uname`" in
+  case "$os" in
     'Linux')
-      if [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
+      if [[ "$(cat /proc/sys/kernel/osrelease)" =~ 'Microsoft' ]]; then
         clip_tool='clip.exe'
+      elif command -v xsel >/dev/null 2>&1; then
+        clip_tool='xsel --input --clipboard'
       else
         clip_tool='xclip -i -selection clipboard >/dev/null'
       fi
@@ -30,7 +33,7 @@ if [[ "$clip_tool" == "auto" ]]; then
 fi
 
 if [[ "$open_tool" == "auto" ]]; then
-  case "`uname`" in
+  case "$os" in
     'Linux') open_tool='xdg-open >/dev/null' ;;
     'Darwin') open_tool='open' ;;
     *) open_tool='' ;;
@@ -44,28 +47,30 @@ else
   editor="$EDITOR"
 fi
 
-function capture_panes() {
+capture_panes() {
+  local pane captured
+
   if [[ $grab_area =~ ^window\  ]]; then
     for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
       if [[ $pane =~ ^0: && ${pane:2} != ${LAST_ACTIVE_PANE} ]]; then
-        local captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})
-        local captured+=$'\n'
+        captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})
+        captured+=$'\n'
       fi
     done
   fi
-  local captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t !)
+  captured+=$(tmux capture-pane -pJS ${capture_pane_start} -t !)
 
   echo "$captured"
 }
 
-function capture() {
+capture() {
+  local header sel key text extrakto_flags
 
   header="tab=insert, enter=copy"
-  if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
-  header="$header, ctrl-e=edit"
-  header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
+  [[ -n "$open_tool" ]] && header+=", ctrl-o=open"
+  header+=", ctrl-e=edit, ctrl-f=toggle filter [$extrakto_opt], ctrl-l=grab area [$grab_area]"
 
-  case $extrakto_opt in
+  case "$extrakto_opt" in
     'path/url') extrakto_flags='pu' ;;
     'lines') extrakto_flags='l' ;;
     *) extrakto_flags='w' ;;
@@ -76,13 +81,13 @@ function capture() {
   # between the commands
   sel=$(capture_panes | \
     $extrakto -r$extrakto_flags | \
-    (read line && (echo $line; cat) || echo NO MATCH - use a different filter) | \
+    (read -r line && (echo "$line"; cat) || echo NO MATCH - use a different filter) | \
     $fzf_tool \
       --header="$header" \
       --expect=tab,enter,ctrl-e,ctrl-f,ctrl-l,ctrl-o,ctrl-c,esc \
       --tiebreak=index)
 
-  if [ $? -gt 0 ]; then
+  if [[ $? -ne 0 ]]; then
     echo "error: unable to extract - check/report errors above"
     echo "You can also set the fzf path in options (see readme)."
     read
@@ -92,8 +97,7 @@ function capture() {
   key=$(head -1 <<< "$sel")
   text=$(tail -n +2 <<< "$sel")
 
-  case $key in
-
+  case "$key" in
     enter)
       tmux set-buffer -- "$text"
       # run in background as xclip won't work otherwise
@@ -141,7 +145,7 @@ function capture() {
       ;;
 
     ctrl-o)
-      if [ -n "$open_tool" ]; then
+      if [[ -n "$open_tool" ]]; then
         tmux run-shell -b "cd $PWD; $open_tool $text"
       else
         capture
@@ -156,7 +160,7 @@ function capture() {
 
 # check terminal size, zoom pane if too small
 lines=$(tput lines)
-if [ $lines -lt 7 ]; then
+if [[ $lines -lt 7 ]]; then
   tmux resize-pane -Z
 fi
 
