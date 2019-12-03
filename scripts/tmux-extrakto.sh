@@ -82,15 +82,16 @@ function capture() {
       --expect=tab,enter,ctrl-e,ctrl-f,ctrl-l,ctrl-o,ctrl-c,esc \
       --tiebreak=index)
 
-  if [ $? -gt 0 ]; then
+  res=$?
+  key=$(head -1 <<< "$sel")
+  text=$(tail -n +2 <<< "$sel")
+
+  if [ $res -gt 0 -a "$key" == "" ]; then
     echo "error: unable to extract - check/report errors above"
     echo "You can also set the fzf path in options (see readme)."
     read
     exit
   fi
-
-  key=$(head -1 <<< "$sel")
-  text=$(tail -n +2 <<< "$sel")
 
   case $key in
 
