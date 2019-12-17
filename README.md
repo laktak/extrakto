@@ -74,6 +74,7 @@ Example:
 
 ```
 set -g @extrakto_split_size "15"
+set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
 ```
 
 ---
