@@ -77,6 +77,12 @@ set -g @extrakto_split_size "15"
 set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
 ```
 
+If you want Enter to paste to tmux the same way Tab does, you can set `@extrakto_clip_tool` to `tmux paste-buffer`:
+
+```
+set -g @extrakto_clip_tool "tmux paste-buffer"
+```
+
 ---
 
 # CLI
