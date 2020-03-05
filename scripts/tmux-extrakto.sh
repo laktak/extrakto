@@ -18,7 +18,9 @@ original_grab_area=${grab_area}  # keep this so we can cycle between alternative
 if [[ "$clip_tool" == "auto" ]]; then
   case "`uname`" in
     'Linux')
-      if [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
+      if [[ $PREFIX == *"com.termux"* ]]; then
+        clip_tool='termux-clipboard-set'
+      elif [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
         clip_tool='clip.exe'
       else
         clip_tool='xclip -i -selection clipboard >/dev/null'
