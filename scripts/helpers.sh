@@ -39,6 +39,12 @@ get_option() {
 
         "@extrakto_open_tool")
             echo $(get_tmux_option $option "auto") ;;
+
+        "@extrakto_copy_key")
+            echo $(get_tmux_option $option "enter") ;;
+
+        "@extrakto_insert_key")
+            echo $(get_tmux_option $option "tab") ;;
     esac
 }
 
