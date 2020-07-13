@@ -68,6 +68,8 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_clip_tool`       | `auto`  | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_fzf_tool`        | `fzf`   | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
+| `@extrakto_copy_key`       | `enter`  | Key to copy selection to clipboard. |
+| `@extrakto_insert_key`       | `tab`  | Key to insert selection. |
 
 
 Example:
@@ -75,6 +77,8 @@ Example:
 ```
 set -g @extrakto_split_size "15"
 set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
+set -g @extrakto_copy_key "tab"      # use tab to copy to clipboard
+set -g @extrakto_insert_key "enter"  # use enter to insert selection
 ```
 
 ---
