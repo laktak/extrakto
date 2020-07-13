@@ -48,6 +48,10 @@ Reload the tmux environment:
 
 You should now have all `extrakto` key bindings defined.
 
+### Wiki
+
+Add or look for special tips in our [wiki](https://github.com/laktak/extrakto/wiki).
+
 ### Options
 
 To set any of these options write on your `~/.tmux.conf` file:
@@ -58,8 +62,8 @@ set -g <option> "<value>"
 
 Where `<option>` and `<value>` are one of the specified here:
 
-| Option                    | Default | Description |
-| :---                      | :---:   | :--- |
+| Option                      | Default | Description |
+| :---                        | :---:   | :--- |
 | `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to '' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
 | `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
 | `@extrakto_split_direction` | `v`     | Whether the tmux split will be `v`ertical or `h`orizontal |
@@ -68,8 +72,8 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_clip_tool`       | `auto`  | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_fzf_tool`        | `fzf`   | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
-| `@extrakto_copy_key`       | `enter`  | Key to copy selection to clipboard. |
-| `@extrakto_insert_key`       | `tab`  | Key to insert selection. |
+| `@extrakto_copy_key`        | `enter` | Key to copy selection to clipboard. |
+| `@extrakto_insert_key`      | `tab`   | Key to insert selection. |
 
 
 Example:
