@@ -13,6 +13,7 @@ fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
+fg_copy=$(get_option "@extrakto_fg_copy")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
@@ -99,8 +100,13 @@ function capture() {
 
     ${copy_key})
       tmux set-buffer -- "$text"
-      # run in background as xclip won't work otherwise
-      tmux run-shell -b "tmux show-buffer|$clip_tool"
+      if [[ "$fg_copy" == "1" ]]; then
+        # run in foreground as OSC-52 copying won't work otherwise
+        tmux run-shell "tmux show-buffer|$clip_tool"
+      else
+        # run in background as xclip won't work otherwise
+        tmux run-shell -b "tmux show-buffer|$clip_tool"
+      fi
       ;;
 
     ${insert_key})

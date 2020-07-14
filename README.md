@@ -74,6 +74,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_copy_key`        | `enter` | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`   | Key to insert selection. |
+| `@extrakto_fg_copy`         | `1`     | Invoke open\_tool in a foreground shell (enables copying to clipboard using OSC52). |
 
 
 Example:
