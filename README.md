@@ -14,6 +14,8 @@ You can **fuzzy find your text** instead of selecting it by hand:
   - `enter` to copy it to the clipboard,
   - `ctrl-o` to open the path/url or
   - `ctrl-e` to edit with `$EDITOR`
+  - `ctrl-f` cycle extract options between word, path/url, lines
+  - `ctrl-g` cycle extract area between recent, full, window recent, window full, custom
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
