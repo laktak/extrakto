@@ -122,12 +122,25 @@ function capture() {
     ctrl-g)
       # cycle between options like this:
       # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
+      tmux_pane_num=$(tmux list-panes | wc -l)
       if [[ $grab_area == "recent" ]]; then
-          grab_area="window recent"
+          if [[ $tmux_pane_num -eq 2 ]]; then
+              grab_area="full"
+          else
+              grab_area="window recent"
+          fi
       elif [[ $grab_area == "window recent" ]]; then
           grab_area="full"
       elif [[ $grab_area == "full" ]]; then
-          grab_area="window full"
+          if [[ $tmux_pane_num -eq 2 ]]; then
+              grab_area="recent"
+
+              if [[ ! "$original_grab_area" =~ ^(window )?(recent|full)$ ]]; then
+                  grab_area="$original_grab_area"
+              fi
+          else
+              grab_area="window full"
+          fi
       elif [[ $grab_area == "window full" ]]; then
           grab_area="recent"
 
