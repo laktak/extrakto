@@ -46,8 +46,8 @@ get_option() {
         "@extrakto_insert_key")
             echo $(get_tmux_option $option "tab") ;;
 
-        "@extrakto_fg_copy")
-            echo $(get_tmux_option $option "") ;;
+        "@extrakto_clip_tool_run")
+            echo $(get_tmux_option $option "bg") ;;
     esac
 }
 
