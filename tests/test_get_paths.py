@@ -7,7 +7,6 @@ from extrakto import get_paths
 
 
 class TestGetPaths(unittest.TestCase):
-
     def test_match_tilde_path(self):
         text = "hey, test ~/tmp/test.txt etc..."
         urls = ["~/tmp/test.txt"]
@@ -23,5 +22,5 @@ class TestGetPaths(unittest.TestCase):
         self.assertEquals(urls, result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -128,3 +128,5 @@ optional arguments:
 # Contributions
 
 Special thanks go to @ivanalejandro0 and @maximbaz for their ideas and PRs!
+
+Please run black if you change any python code.

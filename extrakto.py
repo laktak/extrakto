@@ -8,12 +8,14 @@ from collections import OrderedDict
 
 RE_PATH = (
     r'(?=[ \t\n]|"|\(|\[|<|\')?'
-    '(~/|/)?'
-    '([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:"\'$%&)>\]]*)'
+    "(~/|/)?"
+    "([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:\"'$%&)>\]]*)"
 )
 
-RE_URL = (r"(https?://|git@|git://|ssh://|s*ftp://|file:///)"
-          "[a-zA-Z0-9?=%/_.:,;~@!#$&()*+-]*")
+RE_URL = (
+    r"(https?://|git@|git://|ssh://|s*ftp://|file:///)"
+    "[a-zA-Z0-9?=%/_.:,;~@!#$&()*+-]*"
+)
 
 RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 
@@ -27,32 +29,30 @@ RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 # - Dingbats
 # unicode range E000-F8FF (private use/Powerline)
 # and whitespace ( \t\n\r)
-RE_WORD = u'[^][(){}\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+'
+RE_WORD = u"[^][(){}\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
 
 # reg exp to exclude transfer speeds like 5k/s or m/s, and page 1/2
-RE_SPEED = r'[kmgKMG]/s$|^\d+/\d+$'
+RE_SPEED = r"[kmgKMG]/s$|^\d+/\d+$"
 
 
 def get_args():
-    parser = ArgumentParser(description='Extracts tokens from plaintext.')
+    parser = ArgumentParser(description="Extracts tokens from plaintext.")
 
-    parser.add_argument('-p', '--paths', action='store_true',
-                        help='extract path tokens')
+    parser.add_argument(
+        "-p", "--paths", action="store_true", help="extract path tokens"
+    )
 
-    parser.add_argument('-u', '--urls', action='store_true',
-                        help='extract url tokens')
+    parser.add_argument("-u", "--urls", action="store_true", help="extract url tokens")
 
-    parser.add_argument('-w', '--words', action='store_true',
-                        help='extract "word" tokens')
+    parser.add_argument(
+        "-w", "--words", action="store_true", help='extract "word" tokens'
+    )
 
-    parser.add_argument('-l', '--lines', action='store_true',
-                        help='extract lines')
+    parser.add_argument("-l", "--lines", action="store_true", help="extract lines")
 
-    parser.add_argument('-r', '--reverse', action='store_true',
-                        help='reverse output')
+    parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
-    parser.add_argument('-m', '--min-length', default=5,
-                        help='minimum token length')
+    parser.add_argument("-m", "--min-length", default=5, help="minimum token length")
 
     args = parser.parse_args()
 
@@ -92,7 +92,7 @@ def get_words(text, min_length):
     words = []
 
     for m in re.finditer(RE_WORD, text):
-        item = m.group().strip(',:;()[]{}<>\'"|').rstrip('.')
+        item = m.group().strip(",:;()[]{}<>'\"|").rstrip(".")
         if len(item) >= min_length:
             words.append(item)
 
@@ -111,7 +111,6 @@ def get_lines(text, min_length):
 
 
 def main():
-
     def get_input():
         return sys.stdin.read()
 
@@ -119,11 +118,12 @@ def main():
         print(t)
 
     def print_result_py2(t):
-        print(t.encode('utf-8'))
+        print(t.encode("utf-8"))
 
-    if (sys.version_info < (3, 0)):
+    if sys.version_info < (3, 0):
         import codecs
-        sys.stdin = codecs.getreader('utf8')(sys.stdin)
+
+        sys.stdin = codecs.getreader("utf8")(sys.stdin)
         print_result = print_result_py2
 
     args = get_args()
@@ -144,7 +144,7 @@ def main():
         res = get_lines(get_input(), args.min_length)
 
     else:
-        print('unknown option, see --help')
+        print("unknown option, see --help")
         sys.exit(1)
 
     if args.reverse:

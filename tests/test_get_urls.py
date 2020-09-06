@@ -7,7 +7,6 @@ from extrakto import get_urls
 
 
 class TestGetURLs(unittest.TestCase):
-
     def test_match_http(self):
         text = "hey, open this url http://google.com etc..."
         urls = ["http://google.com"]
@@ -44,8 +43,10 @@ class TestGetURLs(unittest.TestCase):
         self.assertEquals(urls, result)
 
     def test_match_git(self):
-        text = ("hey, check out this repo git@github.com:laktak/extrakto.git"
-                ", it's a great tmux plugin")
+        text = (
+            "hey, check out this repo git@github.com:laktak/extrakto.git"
+            ", it's a great tmux plugin"
+        )
         urls = ["git@github.com:laktak/extrakto.git"]
 
         result = get_urls(text)
@@ -59,5 +60,5 @@ class TestGetURLs(unittest.TestCase):
         self.assertEquals(urls, result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
