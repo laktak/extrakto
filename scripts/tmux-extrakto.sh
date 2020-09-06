@@ -9,6 +9,7 @@ extrakto="$CURRENT_DIR/../extrakto.py"
 grab_area=$(get_option "@extrakto_grab_area")
 extrakto_opt=$(get_option "@extrakto_default_opt")
 clip_tool=$(get_option "@extrakto_clip_tool")
+clip_tool_run=$(get_option "@extrakto_clip_tool_run")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
@@ -99,8 +100,13 @@ function capture() {
 
     ${copy_key})
       tmux set-buffer -- "$text"
-      # run in background as xclip won't work otherwise
-      tmux run-shell -b "tmux show-buffer|$clip_tool"
+      if [[ "$clip_tool_run" == "fg" ]]; then
+        # run in foreground as OSC-52 copying won't work otherwise
+        tmux run-shell "tmux show-buffer|$clip_tool"
+      else
+        # run in background as xclip won't work otherwise
+        tmux run-shell -b "tmux show-buffer|$clip_tool"
+      fi
       ;;
 
     ${insert_key})
