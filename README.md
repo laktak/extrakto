@@ -129,4 +129,4 @@ optional arguments:
 
 Special thanks go to @ivanalejandro0 and @maximbaz for their ideas and PRs!
 
-Please run black if you change any python code.
+Please run `black` if you change any python code and run `shfmt` if you change any bash files.

@@ -17,37 +17,48 @@ get_option() {
 
     case $option in
         "@extrakto_key")
-            echo $(get_tmux_option $option "tab") ;;
+            echo $(get_tmux_option $option "tab")
+            ;;
 
         "@extrakto_default_opt")
-            echo $(get_tmux_option $option "word") ;;
+            echo $(get_tmux_option $option "word")
+            ;;
 
         "@extrakto_split_direction")
-            echo $(get_tmux_option $option "v") ;;
+            echo $(get_tmux_option $option "v")
+            ;;
 
         "@extrakto_split_size")
-            echo $(get_tmux_option $option "7") ;;
+            echo $(get_tmux_option $option "7")
+            ;;
 
         "@extrakto_grab_area")
-            echo $(get_tmux_option $option "full") ;;
+            echo $(get_tmux_option $option "full")
+            ;;
 
         "@extrakto_clip_tool")
-            echo $(get_tmux_option $option "auto") ;;
+            echo $(get_tmux_option $option "auto")
+            ;;
 
         "@extrakto_fzf_tool")
-            echo $(get_tmux_option $option "fzf") ;;
+            echo $(get_tmux_option $option "fzf")
+            ;;
 
         "@extrakto_open_tool")
-            echo $(get_tmux_option $option "auto") ;;
+            echo $(get_tmux_option $option "auto")
+            ;;
 
         "@extrakto_copy_key")
-            echo $(get_tmux_option $option "enter") ;;
+            echo $(get_tmux_option $option "enter")
+            ;;
 
         "@extrakto_insert_key")
-            echo $(get_tmux_option $option "tab") ;;
+            echo $(get_tmux_option $option "tab")
+            ;;
 
         "@extrakto_clip_tool_run")
-            echo $(get_tmux_option $option "bg") ;;
+            echo $(get_tmux_option $option "bg")
+            ;;
     esac
 }
 

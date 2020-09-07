@@ -6,7 +6,9 @@ python:
 # no dependencies
 install:
   - pip install black
-#  - pip install -r requirements.txt
+  - curl -LsS -o ~/shfmt https://github.com/mvdan/sh/releases/download/v3.1.2/shfmt_v3.1.2_linux_amd64
+  - chmod +x ~/shfmt
 script:
   - black --check .
+  - ~/shfmt -d scripts/ extrakto.tmux
   - pytest
