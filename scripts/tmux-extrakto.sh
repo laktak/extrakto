@@ -20,18 +20,22 @@ CAPTURE_PANE_START=$(get_capture_pane_start "$GRAB_AREA")
 ORIGINAL_GRAB_AREA=${GRAB_AREA} # keep this so we can cycle between alternatives on fzf
 
 
+# note we use the superfluous 'local' keyword in front of 'captured' var;
+# without it we get intermittent issues with extracto python script (when reading stdin);
+# likely caused by some odd unicode-character encoding problem; debug by   echo "$captured" >> /tmp/capture
 capture_panes() {
     local pane captured
 
     if [[ $GRAB_AREA =~ ^window\  ]]; then
         for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
             if [[ $pane =~ ^0: && ${pane:2} != ${LAST_ACTIVE_PANE} ]]; then
-                captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t ${pane:2})
+                local captured+="$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t ${pane:2})"
                 captured+=$'\n'
             fi
         done
     fi
-    captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t !)
+
+    local captured+="$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t !)"  # note the superfluous 'local' for some reason fixes the encoding problem
 
     echo "$captured"
 }
