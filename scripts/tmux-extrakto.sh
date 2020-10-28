@@ -19,6 +19,18 @@ INSERT_KEY=$(get_option "@extrakto_insert_key")
 CAPTURE_PANE_START=$(get_capture_pane_start "$GRAB_AREA")
 ORIGINAL_GRAB_AREA=${GRAB_AREA} # keep this so we can cycle between alternatives on fzf
 
+declare -Ar COLORS=(
+    [RED]=$'\033[0;31m'
+    [GREEN]=$'\033[0;32m'
+    [BLUE]=$'\033[0;34m'
+    [PURPLE]=$'\033[0;35m'
+    [CYAN]=$'\033[0;36m'
+    [WHITE]=$'\033[0;37m'
+    [YELLOW]=$'\033[0;33m'
+    [OFF]=$'\033[0m'
+    [BOLD]=$'\033[1m'
+)
+
 
 # note we use the superfluous 'local' keyword in front of 'captured' var;
 # without it we get intermittent issues with extracto python script (when reading stdin);
@@ -43,9 +55,11 @@ capture_panes() {
 capture() {
     local header_tmpl header extrakto_flags out res key text tmux_pane_num query
 
-    header_tmpl="${INSERT_KEY}=insert, ${COPY_KEY}=copy"
-    [[ -n "$OPEN_TOOL" ]] && header_tmpl+=', ctrl-o=open'
-    header_tmpl+=', ctrl-e=edit, ctrl-f=toggle filter [{eo}], ctrl-g=grab area [{ga}]'
+    header_tmpl="${COLORS[BOLD]}${INSERT_KEY}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${COPY_KEY}${COLORS[OFF]}=copy"
+    [[ -n "$OPEN_TOOL" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
+    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit, \
+${COLORS[BOLD]}ctrl-f${COLORS[OFF]}=toggle filter [${COLORS[YELLOW]}${COLORS[BOLD]}{eo}${COLORS[OFF]}], \
+${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{ga}${COLORS[OFF]}]"
 
     while true; do
         header="$header_tmpl"
