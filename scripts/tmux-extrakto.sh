@@ -19,6 +19,156 @@ INSERT_KEY=$(get_option "@extrakto_insert_key")
 CAPTURE_PANE_START=$(get_capture_pane_start "$GRAB_AREA")
 ORIGINAL_GRAB_AREA=${GRAB_AREA} # keep this so we can cycle between alternatives on fzf
 
+
+capture_panes() {
+    local pane captured
+
+    if [[ $GRAB_AREA =~ ^window\  ]]; then
+        for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
+            if [[ $pane =~ ^0: && ${pane:2} != ${LAST_ACTIVE_PANE} ]]; then
+                captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t ${pane:2})
+                captured+=$'\n'
+            fi
+        done
+    fi
+    captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t !)
+
+    echo "$captured"
+}
+
+capture() {
+    local header_tmpl header extrakto_flags out res key text tmux_pane_num query
+
+    header_tmpl="${INSERT_KEY}=insert, ${COPY_KEY}=copy"
+    [[ -n "$OPEN_TOOL" ]] && header_tmpl+=', ctrl-o=open'
+    header_tmpl+=', ctrl-e=edit, ctrl-f=toggle filter [{eo}], ctrl-g=grab area [{ga}]'
+
+    while true; do
+        header="$header_tmpl"
+        header="${header/'{eo}'/$EXTRAKTO_OPT}"
+        header="${header/'{ga}'/$GRAB_AREA}"
+
+        case "$EXTRAKTO_OPT" in
+            'path/url') extrakto_flags='pu' ;;
+            'lines') extrakto_flags='l' ;;
+            *) extrakto_flags='w' ;;
+        esac
+
+        # for troubleshooting add
+        # tee /tmp/stageN | \
+        # between the commands
+        out="$(capture_panes \
+            | $EXTRAKTO -r$extrakto_flags \
+            | (read -r line && (
+                echo "$line"
+                cat
+            ) || echo 'NO MATCH - use a different filter') \
+            | $FZF_TOOL \
+                --print-query \
+                --query="$query" \
+                --header="$header" \
+                --expect=${INSERT_KEY},${COPY_KEY},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
+                --tiebreak=index)"
+        res=$?
+        mapfile -t out <<< "$out"
+        query="${out[0]}"
+        key="${out[1]}"
+        text="${out[-1]}"
+
+        if [[ $res -gt 0 && -z "$key" ]]; then
+            echo "error: unable to extract - check/report errors above"
+            echo "You can also set the fzf path in options (see readme)."
+            read  # pause
+            exit
+        fi
+
+        case "$key" in
+            "${COPY_KEY}")
+                tmux set-buffer -- "$text"
+                if [[ "$CLIP_TOOL_RUN" == "fg" ]]; then
+                    # run in foreground as OSC-52 copying won't work otherwise
+                    tmux run-shell "tmux show-buffer|$CLIP_TOOL"
+                else
+                    # run in background as xclip won't work otherwise
+                    tmux run-shell -b "tmux show-buffer|$CLIP_TOOL"
+                fi
+
+                return 0
+                ;;
+
+            "${INSERT_KEY}")
+                tmux set-buffer -- "$text"
+                tmux paste-buffer -t !
+                return 0
+                ;;
+
+            ctrl-f)
+                if [[ $EXTRAKTO_OPT == 'word' ]]; then
+                    EXTRAKTO_OPT='path/url'
+                elif [[ $EXTRAKTO_OPT == 'path/url' ]]; then
+                    EXTRAKTO_OPT='lines'
+                else
+                    EXTRAKTO_OPT='word'
+                fi
+                ;;
+
+            ctrl-g)
+                # cycle between options like this:
+                # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
+                tmux_pane_num=$(tmux list-panes | wc -l)
+                if [[ $GRAB_AREA == "recent" ]]; then
+                    if [[ $tmux_pane_num -eq 2 ]]; then
+                        GRAB_AREA="full"
+                    else
+                        GRAB_AREA="window recent"
+                    fi
+                elif [[ $GRAB_AREA == "window recent" ]]; then
+                    GRAB_AREA="full"
+                elif [[ $GRAB_AREA == "full" ]]; then
+                    if [[ $tmux_pane_num -eq 2 ]]; then
+                        GRAB_AREA="recent"
+
+                        if [[ ! "$ORIGINAL_GRAB_AREA" =~ ^(window )?(recent|full)$ ]]; then
+                            GRAB_AREA="$ORIGINAL_GRAB_AREA"
+                        fi
+                    else
+                        GRAB_AREA="window full"
+                    fi
+                elif [[ $GRAB_AREA == "window full" ]]; then
+                    GRAB_AREA="recent"
+
+                    if [[ ! "$ORIGINAL_GRAB_AREA" =~ ^(window )?(recent|full)$ ]]; then
+                        GRAB_AREA="$ORIGINAL_GRAB_AREA"
+                    fi
+                else
+                    GRAB_AREA="recent"
+                fi
+
+                CAPTURE_PANE_START=$(get_capture_pane_start "$GRAB_AREA")
+                ;;
+
+            ctrl-o)
+                if [[ -n "$OPEN_TOOL" ]]; then
+                    tmux run-shell -b "cd -- $PWD; $OPEN_TOOL $text"
+                    return 0
+                fi
+                ;;
+
+            ctrl-e)
+                tmux send-keys -t ! "$_EDITOR -- $text" 'C-m'
+                return 0
+                ;;
+            *)
+                return 0
+                ;;
+        esac
+    done
+}
+
+##############
+# Entry
+##############
+
 if [[ "$CLIP_TOOL" == "auto" ]]; then
     case "$PLATFORM" in
         'Linux')
@@ -46,140 +196,6 @@ if [[ -z $EDITOR ]]; then
 else
     _EDITOR="$EDITOR"
 fi
-
-capture_panes() {
-    local pane captured
-
-    if [[ $GRAB_AREA =~ ^window\  ]]; then
-        for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
-            if [[ $pane =~ ^0: && ${pane:2} != ${LAST_ACTIVE_PANE} ]]; then
-                captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t ${pane:2})
-                captured+=$'\n'
-            fi
-        done
-    fi
-    captured+=$(tmux capture-pane -pJS ${CAPTURE_PANE_START} -t !)
-
-    echo "$captured"
-}
-
-capture() {
-    local header extrakto_flags sel res key text tmux_pane_num
-
-    header="${INSERT_KEY}=insert, ${COPY_KEY}=copy"
-    if [ -n "$OPEN_TOOL" ]; then header="$header, ctrl-o=open"; fi
-    header="$header, ctrl-e=edit"
-    header="$header, ctrl-f=toggle filter [$EXTRAKTO_OPT], ctrl-g=grab area [$GRAB_AREA]"
-
-    case "$EXTRAKTO_OPT" in
-        'path/url') extrakto_flags='pu' ;;
-        'lines') extrakto_flags='l' ;;
-        *) extrakto_flags='w' ;;
-    esac
-
-    # for troubleshooting add
-    # tee /tmp/stageN | \
-    # between the commands
-    sel="$(capture_panes \
-        | $EXTRAKTO -r$extrakto_flags \
-        | (read line && (
-            echo "$line"
-            cat
-        ) || echo 'NO MATCH - use a different filter') \
-        | $FZF_TOOL \
-            --header="$header" \
-            --expect=${INSERT_KEY},${COPY_KEY},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
-            --tiebreak=index)"
-
-    res=$?
-    key=$(head -1 <<< "$sel")
-    text=$(tail -n +2 <<< "$sel")
-
-    if [[ $res -gt 0 && -z "$key" ]]; then
-        echo "error: unable to extract - check/report errors above"
-        echo "You can also set the fzf path in options (see readme)."
-        read  # pause
-        exit
-    fi
-
-    case "$key" in
-        "${COPY_KEY}")
-            tmux set-buffer -- "$text"
-            if [[ "$CLIP_TOOL_RUN" == "fg" ]]; then
-                # run in foreground as OSC-52 copying won't work otherwise
-                tmux run-shell "tmux show-buffer|$CLIP_TOOL"
-            else
-                # run in background as xclip won't work otherwise
-                tmux run-shell -b "tmux show-buffer|$CLIP_TOOL"
-            fi
-            ;;
-
-        "${INSERT_KEY}")
-            tmux set-buffer -- "$text"
-            tmux paste-buffer -t !
-            ;;
-
-        ctrl-f)
-            if [[ $EXTRAKTO_OPT == 'word' ]]; then
-                EXTRAKTO_OPT='path/url'
-            elif [[ $EXTRAKTO_OPT == 'path/url' ]]; then
-                EXTRAKTO_OPT='lines'
-            else
-                EXTRAKTO_OPT='word'
-            fi
-            capture
-            ;;
-
-        ctrl-g)
-            # cycle between options like this:
-            # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
-            tmux_pane_num=$(tmux list-panes | wc -l)
-            if [[ $GRAB_AREA == "recent" ]]; then
-                if [[ $tmux_pane_num -eq 2 ]]; then
-                    GRAB_AREA="full"
-                else
-                    GRAB_AREA="window recent"
-                fi
-            elif [[ $GRAB_AREA == "window recent" ]]; then
-                GRAB_AREA="full"
-            elif [[ $GRAB_AREA == "full" ]]; then
-                if [[ $tmux_pane_num -eq 2 ]]; then
-                    GRAB_AREA="recent"
-
-                    if [[ ! "$ORIGINAL_GRAB_AREA" =~ ^(window )?(recent|full)$ ]]; then
-                        GRAB_AREA="$ORIGINAL_GRAB_AREA"
-                    fi
-                else
-                    GRAB_AREA="window full"
-                fi
-            elif [[ $GRAB_AREA == "window full" ]]; then
-                GRAB_AREA="recent"
-
-                if [[ ! "$ORIGINAL_GRAB_AREA" =~ ^(window )?(recent|full)$ ]]; then
-                    GRAB_AREA="$ORIGINAL_GRAB_AREA"
-                fi
-            else
-                GRAB_AREA="recent"
-            fi
-
-            CAPTURE_PANE_START=$(get_capture_pane_start "$GRAB_AREA")
-
-            capture
-            ;;
-
-        ctrl-o)
-            if [[ -n "$OPEN_TOOL" ]]; then
-                tmux run-shell -b "cd -- $PWD; $OPEN_TOOL $text"
-            else
-                capture
-            fi
-            ;;
-
-        ctrl-e)
-            tmux send-keys -t ! "$_EDITOR -- $text" 'C-m'
-            ;;
-    esac
-}
 
 # check terminal size, zoom pane if too small
 lines=$(tput lines)
