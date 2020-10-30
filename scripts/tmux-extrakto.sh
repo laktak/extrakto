@@ -77,20 +77,24 @@ function capture() {
     # for troubleshooting add
     # tee /tmp/stageN | \
     # between the commands
-    sel=$(capture_panes \
+    out=$(capture_panes \
         | $extrakto -r$extrakto_flags \
         | (read line && (
             echo $line
             cat
         ) || echo NO MATCH - use a different filter) \
         | $fzf_tool \
+            --print-query \
+            --query="$query" \
             --header="$header" \
             --expect=${insert_key},${copy_key},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
             --tiebreak=index)
 
     res=$?
-    key=$(head -1 <<< "$sel")
-    text=$(tail -n +2 <<< "$sel")
+    mapfile -t out <<< "$out"
+    query="${out[0]}"
+    key="${out[1]}"
+    text="${out[-1]}"
 
     if [ $res -gt 0 -a "$key" == "" ]; then
         echo "error: unable to extract - check/report errors above"
