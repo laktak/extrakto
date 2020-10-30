@@ -62,11 +62,16 @@ function capture_panes() {
 }
 
 function capture() {
+    local header_tmpl header extrakto_flags out res key text tmux_pane_num query
 
-    header="${insert_key}=insert, ${copy_key}=copy"
-    if [ -n "$open_tool" ]; then header="$header, ctrl-o=open"; fi
-    header="$header, ctrl-e=edit"
-    header="$header, ctrl-f=toggle filter [$extrakto_opt], ctrl-g=grab area [$grab_area]"
+    header_tmpl="${insert_key}=insert, ${copy_key}=copy"
+    [[ -n "$open_tool" ]] && header_tmpl+=', ctrl-o=open'
+    header_tmpl+=', ctrl-e=edit, ctrl-f=toggle filter [{eo}], ctrl-g=grab area [{ga}]'
+
+    while true; do
+    header="$header_tmpl"
+    header="${header/'{eo}'/$extrakto_opt}"
+    header="${header/'{ga}'/$grab_area}"
 
     case $extrakto_opt in
         'path/url') extrakto_flags='pu' ;;
@@ -79,7 +84,7 @@ function capture() {
     # between the commands
     out=$(capture_panes \
         | $extrakto -r$extrakto_flags \
-        | (read line && (
+        | (read -r line && (
             echo $line
             cat
         ) || echo NO MATCH - use a different filter) \
@@ -104,7 +109,6 @@ function capture() {
     fi
 
     case $key in
-
         ${copy_key})
             tmux set-buffer -- "$text"
             if [[ "$clip_tool_run" == "fg" ]]; then
@@ -114,11 +118,14 @@ function capture() {
                 # run in background as xclip won't work otherwise
                 tmux run-shell -b "tmux show-buffer|$clip_tool"
             fi
+
+            return 0
             ;;
 
         ${insert_key})
             tmux set-buffer -- "$text"
             tmux paste-buffer -t !
+            return 0
             ;;
 
         ctrl-f)
@@ -129,7 +136,6 @@ function capture() {
             else
                 extrakto_opt='word'
             fi
-            capture
             ;;
 
         ctrl-g)
@@ -165,22 +171,24 @@ function capture() {
             fi
 
             capture_pane_start=$(get_capture_pane_start "$grab_area")
-
-            capture
             ;;
 
         ctrl-o)
-            if [ -n "$open_tool" ]; then
-                tmux run-shell -b "cd $PWD; $open_tool $text"
-            else
-                capture
+            if [[ -n "$open_tool" ]]; then
+                tmux run-shell -b "cd -- $PWD; $open_tool $text"
+                return 0
             fi
             ;;
 
         ctrl-e)
             tmux send-keys -t ! "$editor -- $text" 'C-m'
+            return 0
+            ;;
+        *)
+            return 0
             ;;
     esac
+    done
 }
 
 # check terminal size, zoom pane if too small
