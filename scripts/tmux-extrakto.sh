@@ -60,22 +60,20 @@ else
 fi
 
 
-# note we use the superfluous 'local' keyword in front of 'captured' var;
-# without it we get intermittent issues with extracto python script (when reading stdin);
-# likely caused by some odd unicode-character encoding problem; debug by   echo "$captured" >> /tmp/capture
 capture_panes() {
     local pane captured
+    captured=""
 
     if [[ $grab_area =~ ^window\  ]]; then
         for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
             if [[ $pane =~ ^0: && ${pane:2} != "$LAST_ACTIVE_PANE" ]]; then
-                local captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})"
+                captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})"
                 captured+=$'\n'
             fi
         done
     fi
 
-    local captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t !)"
+    captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t !)"
 
     echo "$captured"
 }
