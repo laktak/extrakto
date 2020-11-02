@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CURRENT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LAST_ACTIVE_PANE="$1"
+trigger_pane=$1
+mode=$2
 source "$CURRENT_DIR/helpers.sh"
 extrakto="$CURRENT_DIR/../extrakto.py"
 platform="$(uname)"
@@ -66,20 +67,32 @@ capture_panes() {
 
     if [[ $grab_area =~ ^window\  ]]; then
         for pane in $(tmux list-panes -F "#{pane_active}:#{pane_id}"); do
-            if [[ $pane =~ ^0: && ${pane:2} != "$LAST_ACTIVE_PANE" ]]; then
+            # exclude the active (for split) and trigger panes
+            # in popup mode the active and tigger panes are the same
+            if [[ $pane =~ ^0: && ${pane:2} != "$trigger_pane" ]]; then
                 captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t ${pane:2})"
                 captured+=$'\n'
             fi
         done
     fi
 
-    captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t !)"
+    captured+="$(tmux capture-pane -pJS ${capture_pane_start} -t $trigger_pane)"
 
     echo "$captured"
 }
 
+has_single_pane() {
+    local num_panes
+    num_panes=$(tmux list-panes | wc -l)
+    if [[ $mode == popup ]]; then
+        [[ $num_panes == 1 ]]
+    else
+        [[ $num_panes == 2 ]]
+    fi
+}
+
 capture() {
-    local header_tmpl header extrakto_flags out res key text tmux_pane_num query
+    local header_tmpl header extrakto_flags out res key text query
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
@@ -142,7 +155,7 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
 
             "${insert_key}")
                 tmux set-buffer -- "$text"
-                tmux paste-buffer -t !
+                tmux paste-buffer -t $trigger_pane
                 return 0
                 ;;
 
@@ -159,9 +172,8 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
             ctrl-g)
                 # cycle between options like this:
                 # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
-                tmux_pane_num=$(tmux list-panes | wc -l)
                 if [[ $grab_area == "recent" ]]; then
-                    if [[ $tmux_pane_num -eq 2 ]]; then
+                    if has_single_pane; then
                         grab_area="full"
                     else
                         grab_area="window recent"
@@ -169,7 +181,7 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
                 elif [[ $grab_area == "window recent" ]]; then
                     grab_area="full"
                 elif [[ $grab_area == "full" ]]; then
-                    if [[ $tmux_pane_num -eq 2 ]]; then
+                    if has_single_pane; then
                         grab_area="recent"
 
                         if [[ ! "$original_grab_area" =~ ^(window )?(recent|full)$ ]]; then
@@ -199,7 +211,7 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
                 ;;
 
             ctrl-e)
-                tmux send-keys -t ! "$editor -- $text" 'C-m'
+                tmux send-keys -t $trigger_pane "$editor -- $text" 'C-m'
                 return 0
                 ;;
             *)
@@ -213,10 +225,12 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
 # Entry
 ##############
 
-# check terminal size, zoom pane if too small
-lines=$(tput lines)
-if [[ $lines -lt 7 ]]; then
-    tmux resize-pane -Z
+if [[ $mode != popup ]]; then
+    # check terminal size, zoom pane if too small
+    lines=$(tput lines)
+    if [[ $lines -lt 7 ]]; then
+        tmux resize-pane -Z
+    fi
 fi
 
 capture

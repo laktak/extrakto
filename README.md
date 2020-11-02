@@ -19,6 +19,8 @@ You can **fuzzy find your text** instead of selecting it by hand:
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
+By default extrakto will open in a tmux popup (requires tmux beta or 3.2+). See the options if you wish to change this.
+
 ## Installation
 
 Requires [tmux](https://github.com/tmux/tmux/wiki), [fzf](https://github.com/junegunn/fzf) and Python 3.6+. Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
@@ -68,7 +70,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | :---                        | :---:   | :--- |
 | `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to '' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
 | `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
-| `@extrakto_split_direction` | `v`     | Whether the tmux split will be `v`ertical or `h`orizontal |
+| `@extrakto_split_direction` | `a`     | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`      | `7`     | The size of the tmux split |
 | `@extrakto_grab_area`       | `full`  | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's `recent` areas or all current window's `full` panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
 | `@extrakto_clip_tool`       | `auto`  | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
