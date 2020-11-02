@@ -1,0 +1,17 @@
+
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: psf/black@stable
+      - name: shfmt
+        run: |
+          curl -LsS -o ~/shfmt https://github.com/mvdan/sh/releases/download/v3.1.2/shfmt_v3.1.2_linux_amd64
+          chmod +x ~/shfmt
+          ~/shfmt -d scripts/ extrakto.tmux
