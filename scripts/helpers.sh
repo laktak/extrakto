@@ -91,4 +91,3 @@ get_capture_pane_start() {
 
     echo "$capture_start"
 }
-

@@ -9,7 +9,6 @@ pane_id=$1
 split_direction=$(get_option "@extrakto_split_direction")
 split_size=$(get_option "@extrakto_split_size")
 
-
 if [[ $split_direction == a ]]; then
     if [[ -n $(tmux list-commands popup) ]]; then
         split_direction=p

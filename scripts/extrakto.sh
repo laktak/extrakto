@@ -30,7 +30,7 @@ copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
-original_grab_area=${grab_area}  # keep this so we can cycle between alternatives on fzf
+original_grab_area=${grab_area} # keep this so we can cycle between alternatives on fzf
 
 if [[ "$clip_tool" == "auto" ]]; then
     case "$platform" in
@@ -55,11 +55,10 @@ if [[ "$open_tool" == "auto" ]]; then
 fi
 
 if [[ -z $EDITOR ]]; then
-    editor="vi"  # fallback
+    editor="vi" # fallback
 else
     editor="$EDITOR"
 fi
-
 
 capture_panes() {
     local pane captured
@@ -96,14 +95,14 @@ capture() {
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
-    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit, \
-${COLORS[BOLD]}ctrl-f${COLORS[OFF]}=toggle filter [${COLORS[YELLOW]}${COLORS[BOLD]}{eo}${COLORS[OFF]}], \
-${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{ga}${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit, "
+    header_tmpl+="${COLORS[BOLD]}ctrl-f${COLORS[OFF]}=toggle filter [${COLORS[YELLOW]}${COLORS[BOLD]}:eo:${COLORS[OFF]}], "
+    header_tmpl+="${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
 
     while true; do
         header="$header_tmpl"
-        header="${header/'{eo}'/$extrakto_opt}"
-        header="${header/'{ga}'/$grab_area}"
+        header="${header/:eo:/$extrakto_opt}"
+        header="${header/:ga:/$grab_area}"
 
         case "$extrakto_opt" in
             'path/url') extrakto_flags='pu' ;;
@@ -135,7 +134,7 @@ ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}{
         if [[ $res -gt 0 && -z "$key" ]]; then
             echo "error: unable to extract - check/report errors above"
             echo "You can also set the fzf path in options (see readme)."
-            read  # pause
+            read # pause
             exit
         fi
 
@@ -234,4 +233,3 @@ if [[ $mode != popup ]]; then
 fi
 
 capture
-
