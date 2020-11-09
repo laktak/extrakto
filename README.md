@@ -91,6 +91,8 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_copy_key`        | `enter` | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`   | Key to insert selection. |
+| `@extrakto_popup_size`      | `90%`   | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
+| `@extrakto_popup_position`  | `C`     | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |
 
 
 Example:

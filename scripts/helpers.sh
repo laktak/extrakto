@@ -61,6 +61,14 @@ get_option() {
         "@extrakto_clip_tool_run")
             echo $(get_tmux_option $option "bg")
             ;;
+
+        "@extrakto_popup_size")
+            echo $(get_tmux_option $option "90%")
+            ;;
+
+        "@extrakto_popup_position")
+            echo $(get_tmux_option $option "C")
+            ;;
     esac
 }
 
