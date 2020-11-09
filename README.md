@@ -23,7 +23,19 @@ By default extrakto will open in a tmux popup (requires tmux beta or 3.2+). See 
 
 ## Installation
 
-Requires [tmux](https://github.com/tmux/tmux/wiki), [fzf](https://github.com/junegunn/fzf) and Python 3.6+. Supports Linux (xclip), macOS (pbcopy) and Bash on Windows clipboards.
+Requires
+
+- [tmux](https://github.com/tmux/tmux/wiki)
+- [fzf](https://github.com/junegunn/fzf)
+- Python 3.6+
+- Bash (tested with 5.0+, on macOS please `brew install bash` first)
+
+Supported clipboards:
+
+- Linux (xclip)
+- macOS (pbcopy)
+- WSL (aka "Bash on Windows")
+- *bring your own*
 
 ### with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
