@@ -20,10 +20,10 @@ if [[ $split_direction == p ]]; then
     IFS=, read popup_width popup_height <<< "$(get_option "@extrakto_popup_size")"
     IFS=, read popup_x popup_y <<< "$(get_option "@extrakto_popup_position")"
     tmux popup \
-        -w ${popup_width:-$popup_default_size} \
-        -h ${popup_height:-$popup_default_size} \
-        -x ${popup_x:-$popup_default_position} \
-        -y ${popup_y:-$popup_default_position} \
+        -w ${popup_width} \
+        -h ${popup_height:-$popup_width} \
+        -x ${popup_x} \
+        -y ${popup_y:-$popup_x} \
         -KER "${extrakto} ${pane_id} popup"
 else
     split_size=$(get_option "@extrakto_split_size")
