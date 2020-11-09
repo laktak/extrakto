@@ -1,5 +1,8 @@
 #!/bin/bash
 
+popup_default_size="90%"
+popup_default_position="C"
+
 get_tmux_option() {
     local option default_value option_value
 
@@ -63,11 +66,11 @@ get_option() {
             ;;
 
         "@extrakto_popup_size")
-            echo $(get_tmux_option $option "90%,90%")
+            echo $(get_tmux_option $option "$popup_default_size,$popup_default_size")
             ;;
 
         "@extrakto_popup_position")
-            echo $(get_tmux_option $option "C,C")
+            echo $(get_tmux_option $option "$popup_default_position,$popup_default_position")
             ;;
     esac
 }

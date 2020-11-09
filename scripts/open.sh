@@ -17,13 +17,13 @@ if [[ $split_direction == a ]]; then
 fi
 
 if [[ $split_direction == p ]]; then
-    popup_size=$(get_option "@extrakto_popup_size")
-    popup_position=$(get_option "@extrakto_popup_position")
-    popup_width=$(echo $popup_size | awk -F ',' '{ print $1 }')
-    popup_height=$(echo $popup_size | awk -F ',' '{ print $2 }')
-    popup_x=$(echo $popup_position | awk -F ',' '{ print $1 }')
-    popup_y=$(echo $popup_position | awk -F ',' '{ print $2 }')
-    tmux popup -w ${popup_width} -h ${popup_height} -x ${popup_x} -y ${popup_y} \
+    IFS=, read popup_width popup_height <<< "$(get_option "@extrakto_popup_size")"
+    IFS=, read popup_x popup_y <<< "$(get_option "@extrakto_popup_position")"
+    tmux popup \
+        -w ${popup_width:-$popup_default_size} \
+        -h ${popup_height:-$popup_default_size} \
+        -x ${popup_x:-$popup_default_position} \
+        -y ${popup_y:-$popup_default_position} \
         -KER "${extrakto} ${pane_id} popup"
 else
     split_size=$(get_option "@extrakto_split_size")
