@@ -21,6 +21,15 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 
 By default extrakto will open in a tmux popup (requires tmux beta or 3.2+). See the options if you wish to change this.
 
+*tmux beta*
+
+Because tmux with popups will not be released before/around May 2021 you may wish to install the master/beta version.
+
+- On Arch: `trizen -S tmux-git` or `yay -S tmux-git` (see your AUR package manager)
+- On macOS with homebrew: `brew install tmux --HEAD`
+
+If you do not wish to install the beta extrakto will open in a split window.
+
 ## Installation
 
 Requires
