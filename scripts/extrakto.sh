@@ -2,8 +2,8 @@
 platform="$(uname)"
 
 # first check the version of bash
-if [[ ${BASH_VERSINFO:-0} -lt 5 ]]; then
-    echo "error: extrakto needs Bash >= 5.0"
+if ! type mapfile &> /dev/null; then
+    echo "error: extrakto needs a newer Bash"
     if [[ $platform == Darwin ]]; then
         echo "On macOS you need to install/update it with Homebrew."
     fi
