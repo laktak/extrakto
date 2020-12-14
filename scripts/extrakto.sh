@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
+platform="$(uname)"
 
-CURRENT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# first check the version of bash
+if [[ ${BASH_VERSINFO:-0} -lt 5 ]]; then
+    echo "error: extrakto needs Bash >= 5.0"
+    if [[ $platform == Darwin ]]; then
+        echo "On macOS you need to install/update it with Homebrew."
+    fi
+    read # pause
+    exit 1
+fi
+
+current_dir="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 trigger_pane=$1
 mode=$2
-source "$CURRENT_DIR/helpers.sh"
-extrakto="$CURRENT_DIR/../extrakto.py"
-platform="$(uname)"
+source "$current_dir/helpers.sh"
+extrakto="$current_dir/../extrakto.py"
 
 declare -Ar COLORS=(
     [RED]=$'\033[0;31m'
@@ -135,7 +145,7 @@ capture() {
             echo "error: unable to extract - check/report errors above"
             echo "You can also set the fzf path in options (see readme)."
             read # pause
-            exit
+            exit 1
         fi
 
         case "$key" in
