@@ -45,7 +45,7 @@ original_grab_area=${grab_area} # keep this so we can cycle between alternatives
 if [[ "$clip_tool" == "auto" ]]; then
     case "$platform" in
         'Linux')
-            if [[ $(cat /proc/sys/kernel/osrelease) =~ 'Microsoft' ]]; then
+            if [[ $(cat /proc/sys/kernel/osrelease) =~ Microsoft|microsoft ]]; then
                 clip_tool='clip.exe'
             else
                 clip_tool='xclip -i -selection clipboard >/dev/null'
