@@ -69,6 +69,11 @@ get_option() {
         "@extrakto_popup_position")
             echo $(get_tmux_option $option "C")
             ;;
+
+        "@extrakto_fzf_layout")
+            echo $(get_tmux_option $option "default")
+            ;;
+
     esac
 }
 
