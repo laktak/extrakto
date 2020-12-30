@@ -38,6 +38,7 @@ fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
+fzf_layout=$(get_option "@extrakto_fzf_layout")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area} # keep this so we can cycle between alternatives on fzf
@@ -134,7 +135,8 @@ capture() {
                 --query="$query" \
                 --header="$header" \
                 --expect=${insert_key},${copy_key},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
-                --tiebreak=index)"
+                --tiebreak=index \
+                --layout="$fzf_layout")"
         res=$?
         mapfile -t out <<< "$out"
         query="${out[0]}"
