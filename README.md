@@ -89,7 +89,7 @@ Where `<option>` and `<value>` are one of the specified here:
 
 | Option                      | Default | Description |
 | :---                        | :---:   | :--- |
-| `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to '' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
+| `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
 | `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
 | `@extrakto_split_direction` | `a`     | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`      | `7`     | The size of the tmux split |

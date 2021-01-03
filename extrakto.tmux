@@ -7,6 +7,6 @@ extrakto_open="$CURRENT_DIR/scripts/open.sh"
 
 extrakto_key=$(get_option "@extrakto_key")
 
-if [ -n "${extrakto_key}" ]; then
+if [[ $extrakto_key != none ]]; then
     tmux bind-key ${extrakto_key} run-shell "\"$extrakto_open\" \"#{pane_id}\""
 fi
