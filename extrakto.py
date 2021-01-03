@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 RE_PATH = (
     r'(?=[ \t\n]|"|\(|\[|<|\')?'
-    "(~/|/)?"
+    "(~|/)?"
     "([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:\"'$%&)>\]]*)"
 )
 
