@@ -19,12 +19,15 @@ fi
 if [[ $split_direction == p ]]; then
     IFS=, read popup_width popup_height <<< "$(get_option "@extrakto_popup_size")"
     IFS=, read popup_x popup_y <<< "$(get_option "@extrakto_popup_position")"
-    tmux popup \
-        -w ${popup_width} \
-        -h ${popup_height:-$popup_width} \
-        -x ${popup_x} \
-        -y ${popup_y:-$popup_x} \
-        -KER "${extrakto} ${pane_id} popup"
+    while :; do
+        tmux popup \
+            -w ${popup_width} \
+            -h ${popup_height:-$popup_width} \
+            -x ${popup_x} \
+            -y ${popup_y:-$popup_x} \
+            -KER "${extrakto} ${pane_id} popup"
+        [[ $? -eq 129 ]] || break
+    done
 else
     split_size=$(get_option "@extrakto_split_size")
     tmux split-window -${split_direction} -l ${split_size} "${extrakto} ${pane_id} split"
