@@ -136,7 +136,8 @@ capture() {
                 --header="$header" \
                 --expect=${insert_key},${copy_key},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
                 --tiebreak=index \
-                --layout="$fzf_layout")"
+                --layout="$fzf_layout" \
+                --no-info)"
         res=$?
         mapfile -t out <<< "$out"
         query="${out[0]}"
