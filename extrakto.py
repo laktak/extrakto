@@ -20,7 +20,7 @@ RE_URL = (
 RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 
 # "words" consist of anything but the following characters:
-# [](){}
+# [](){}=$
 # unicode range 2500-27BF which includes:
 # - Box Drawing
 # - Block Elements
@@ -29,7 +29,7 @@ RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 # - Dingbats
 # unicode range E000-F8FF (private use/Powerline)
 # and whitespace ( \t\n\r)
-RE_WORD = u"[^][(){}\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
+RE_WORD = u"[^][(){}=$\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
 
 # reg exp to exclude transfer speeds like 5k/s or m/s, and page 1/2
 RE_SPEED = r"[kmgKMG]/s$|^\d+/\d+$"
