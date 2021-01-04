@@ -19,6 +19,8 @@ RE_URL = (
 
 RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 
+RE_QUOTE = r'"([^"\n\r]+)"'
+
 # "words" consist of anything but the following characters:
 # [](){}=$
 # unicode range 2500-27BF which includes:
@@ -42,11 +44,20 @@ def get_args():
         "-p", "--paths", action="store_true", help="extract path tokens"
     )
 
+    parser.add_argument(
+        "-M",
+        "--multi",
+        action="store_true",
+        help="return multiple variants for each match (e.g. https://example.com and example.com)",
+    )
+
     parser.add_argument("-u", "--urls", action="store_true", help="extract url tokens")
 
     parser.add_argument(
         "-w", "--words", action="store_true", help='extract "word" tokens'
     )
+
+    parser.add_argument("-q", "--quotes", action="store_true", help="extract quotes")
 
     parser.add_argument("-l", "--lines", action="store_true", help="extract lines")
 
@@ -63,7 +74,7 @@ def get_args():
     return args
 
 
-def process_urls_and_paths(find, text, min_length):
+def process_urls_and_paths(find, text, min_length, multi):
     res = list()
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
@@ -77,22 +88,38 @@ def process_urls_and_paths(find, text, min_length):
         if not re.search(RE_SPEED, item, re.I):
             if len(item) >= min_length:
                 res.append(item)
+                if multi:
+                    i = item.index("://")
+                    if i >= 0:
+                        res.append(item[i + 3 :])
     return res
 
 
-def get_urls(text, min_length=0):
-    return process_urls_and_paths(RE_URL, text, min_length)
+def get_urls(text, min_length, multi):
+    return process_urls_and_paths(RE_URL, text, min_length, multi)
 
 
-def get_paths(text, min_length=0):
-    return process_urls_and_paths(RE_PATH, text, min_length)
+def get_paths(text, min_length, multi):
+    return process_urls_and_paths(RE_PATH, text, min_length, multi)
 
 
-def get_urls_or_paths(text, min_length=0):
-    return process_urls_and_paths(RE_URL_OR_PATH, text, min_length)
+def get_urls_or_paths(text, min_length, multi):
+    return process_urls_and_paths(RE_URL_OR_PATH, text, min_length, multi)
 
 
-def get_words(text, min_length):
+def get_quotes(text, min_length, multi):
+    res = list()
+
+    for m in re.finditer(RE_QUOTE, "\n" + text, flags=re.I):
+        item = m.group()
+        if len(item) >= min_length:
+            res.append(item)
+            if multi:
+                res.append(item[1:-1])
+    return res
+
+
+def get_words(text, min_length, multi):
     words = []
 
     for m in re.finditer(RE_WORD, text):
@@ -131,23 +158,32 @@ def main():
         print_result = print_result_py2
 
     args = get_args()
+    res = []
+    sel = False
 
     if args.words:
-        res = get_words(get_input(), args.min_length)
+        sel = True
+        res += get_words(get_input(), args.min_length, args.multi)
 
-    elif args.paths:
+    if args.paths:
+        sel = True
         if args.urls:
-            res = get_urls_or_paths(get_input(), args.min_length)
+            res += get_urls_or_paths(get_input(), args.min_length, args.multi)
         else:
-            res = get_paths(get_input(), args.min_length)
-
+            res += get_paths(get_input(), args.min_length, args.multi)
     elif args.urls:
-        res = get_urls(get_input(), args.min_length)
+        sel = True
+        res += get_urls(get_input(), args.min_length, args.multi)
 
-    elif args.lines:
-        res = get_lines(get_input(), args.min_length)
+    if args.quotes:
+        sel = True
+        res += get_quotes(get_input(), args.min_length, args.multi)
 
-    else:
+    if args.lines:
+        sel = True
+        res += get_lines(get_input(), args.min_length)
+
+    if not sel:
         print("unknown option, see --help")
         sys.exit(1)
 

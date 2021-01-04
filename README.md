@@ -14,7 +14,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
   - `enter` to copy it to the clipboard,
   - `ctrl-o` to open the path/url or
   - `ctrl-e` to edit with `$EDITOR`
-  - `ctrl-f` cycle extract options between word, path/url, lines
+  - `ctrl-k` switch to two-step mode where you first select a line and than choose a filter result (path, quote, etc.)
   - `ctrl-g` cycle extract area between recent, full, window recent, window full, custom
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
@@ -87,22 +87,23 @@ set -g <option> "<value>"
 
 Where `<option>` and `<value>` are one of the specified here:
 
-| Option                      | Default | Description |
-| :---                        | :---:   | :--- |
-| `@extrakto_key`             | `tab`   | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
-| `@extrakto_default_opt`     | `word`  | The default extract options (`word`, `lines` or `path/url`) |
-| `@extrakto_split_direction` | `a`     | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
-| `@extrakto_split_size`      | `7`     | The size of the tmux split |
-| `@extrakto_grab_area`       | `full`  | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's `recent` areas or all current window's `full` panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
-| `@extrakto_clip_tool`       | `auto`  | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
-| `@extrakto_clip_tool_run`   | `bg`    | Set this to `fg` to have your clipboard tool run in a foreground shell (enabling copying to clipboard using OSC52). |
-| `@extrakto_fzf_tool`        | `fzf`   | Set this to path of fzf if it can't be found in your `PATH`. |
-| `@extrakto_open_tool`       | `auto`  | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
-| `@extrakto_copy_key`        | `enter` | Key to copy selection to clipboard. |
-| `@extrakto_insert_key`      | `tab`   | Key to insert selection. |
-| `@extrakto_popup_size`      | `90%`   | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
-| `@extrakto_popup_position`  | `C`     | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |
-| `@extrakto_fzf_layout`      |`default`| Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
+| Option                      | Default  | Description |
+| :---                        | :---:    | :--- |
+| `@extrakto_key`             | `tab`    | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
+| `@extrakto_split_direction` | `a`      | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
+| `@extrakto_split_size`      | `7`      | The size of the tmux split (for vertical/horizontal) |
+| `@extrakto_popup_size`      | `90%`    | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
+| `@extrakto_popup_position`  | `C`      | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |
+| `@extrakto_grab_area`       | `full`   | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's `recent` areas or all current window's `full` panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
+| `@extrakto_clip_tool`       | `auto`   | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
+| `@extrakto_clip_tool_run`   | `bg`     | Set this to `fg` to have your clipboard tool run in a foreground shell (enabling copying to clipboard using OSC52). |
+| `@extrakto_fzf_tool`        | `fzf`    | Set this to path of fzf if it can't be found in your `PATH`. |
+| `@extrakto_fzf_layout`      |`default` | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
+| `@extrakto_open_tool`       | `auto`   | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
+| `@extrakto_copy_key`        | `enter`  | Key to copy selection to clipboard. |
+| `@extrakto_insert_key`      | `tab`    | Key to insert selection. |
+| `@extrakto_twostep_key`     | `ctrl-k` | Key to swith to two-step mode. |
+| `@extrakto_default_opt`     | `word`   | **LEGACY** this option was removed in favor of the two step select |
 
 Example:
 

@@ -31,13 +31,13 @@ declare -Ar COLORS=(
 
 # options; note some of the values can be overwritten by capture()
 grab_area=$(get_option "@extrakto_grab_area")
-extrakto_opt=$(get_option "@extrakto_default_opt")
 clip_tool=$(get_option "@extrakto_clip_tool")
 clip_tool_run=$(get_option "@extrakto_clip_tool_run")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
+twostep_key=$(get_option "@extrakto_twostep_key")
 fzf_layout=$(get_option "@extrakto_fzf_layout")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
@@ -101,36 +101,77 @@ has_single_pane() {
     fi
 }
 
+show_fzf_error() {
+    echo "error: unable to extract - check/report errors above"
+    echo "You can also set the fzf path in options (see readme)."
+    read # pause
+}
+
+twostep() {
+    local header out res key text
+
+    header="${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line as input"
+
+    out="$(capture_panes \
+        | $extrakto --warn-empty -rl \
+        | $fzf_tool \
+            --header="$header" \
+            --expect=${copy_key},esc \
+            --tiebreak=index \
+            --layout="$fzf_layout" \
+            --no-info)"
+    res=$?
+    mapfile -t out <<< "$out"
+    key="${out[0]}"
+    text="${out[-1]}"
+
+    if [[ $res -gt 0 && -z "$key" ]]; then
+        show_fzf_error
+        exit 1
+    fi
+
+    case "$key" in
+        "${copy_key}")
+            echo "$text"
+            return 0
+            ;;
+
+        *)
+            return 0
+            ;;
+    esac
+}
+
 capture() {
-    local header_tmpl header extrakto_flags out res key text query
+    local header_tmpl header out res key text query twostep_result
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
+    header_tmpl+=", ${COLORS[BOLD]}${twostep_key}${COLORS[OFF]}=two-step"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
-    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit, "
-    header_tmpl+="${COLORS[BOLD]}ctrl-f${COLORS[OFF]}=toggle filter [${COLORS[YELLOW]}${COLORS[BOLD]}:eo:${COLORS[OFF]}], "
-    header_tmpl+="${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit"
+    header_tmpl+=", ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+
+    get_cap() {
+        if [[ -z $twostep_result ]]; then
+            capture_panes | $extrakto --warn-empty -rw
+        else
+            echo $twostep_result | $extrakto --warn-empty -Mrwup
+        fi
+    }
 
     while true; do
         header="$header_tmpl"
-        header="${header/:eo:/$extrakto_opt}"
         header="${header/:ga:/$grab_area}"
-
-        case "$extrakto_opt" in
-            'path/url') extrakto_flags='pu' ;;
-            'lines') extrakto_flags='l' ;;
-            *) extrakto_flags='w' ;;
-        esac
 
         # for troubleshooting add
         # tee /tmp/stageN | \
         # between the commands
-        out="$(capture_panes \
-            | $extrakto --warn-empty -r$extrakto_flags \
+        out="$(get_cap \
             | $fzf_tool \
                 --print-query \
                 --query="$query" \
                 --header="$header" \
-                --expect=${insert_key},${copy_key},ctrl-e,ctrl-f,ctrl-g,ctrl-o,ctrl-c,esc \
+                --expect=${insert_key},${copy_key},${twostep_key},ctrl-e,ctrl-g,ctrl-o,ctrl-c,esc \
                 --tiebreak=index \
                 --layout="$fzf_layout" \
                 --no-info)"
@@ -141,9 +182,7 @@ capture() {
         text="${out[-1]}"
 
         if [[ $res -gt 0 && -z "$key" ]]; then
-            echo "error: unable to extract - check/report errors above"
-            echo "You can also set the fzf path in options (see readme)."
-            read # pause
+            show_fzf_error
             exit 1
         fi
 
@@ -167,14 +206,8 @@ capture() {
                 return 0
                 ;;
 
-            ctrl-f)
-                if [[ $extrakto_opt == 'word' ]]; then
-                    extrakto_opt='path/url'
-                elif [[ $extrakto_opt == 'path/url' ]]; then
-                    extrakto_opt='lines'
-                else
-                    extrakto_opt='word'
-                fi
+            "${twostep_key}")
+                twostep_result=$(twostep)
                 ;;
 
             ctrl-g)
