@@ -54,6 +54,10 @@ def get_args():
 
     parser.add_argument("-m", "--min-length", default=5, help="minimum token length")
 
+    parser.add_argument(
+        "--warn-empty", action="store_true", help="warn if result is empty"
+    )
+
     args = parser.parse_args()
 
     return args
@@ -147,12 +151,16 @@ def main():
         print("unknown option, see --help")
         sys.exit(1)
 
-    if args.reverse:
-        res.reverse()
+    if res:
+        if args.reverse:
+            res.reverse()
 
-    # remove duplicates and print
-    for item in OrderedDict.fromkeys(res):
-        print_result(item)
+        # remove duplicates and print
+        for item in OrderedDict.fromkeys(res):
+            print_result(item)
+
+    elif args.warn_empty:
+        print("NO MATCH - use a different filter")
 
 
 if __name__ == "__main__":

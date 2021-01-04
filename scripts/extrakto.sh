@@ -125,11 +125,7 @@ capture() {
         # tee /tmp/stageN | \
         # between the commands
         out="$(capture_panes \
-            | $extrakto -r$extrakto_flags \
-            | (read -r line && (
-                echo "$line"
-                cat
-            ) || echo 'NO MATCH - use a different filter') \
+            | $extrakto --warn-empty -r$extrakto_flags \
             | $fzf_tool \
                 --print-query \
                 --query="$query" \
