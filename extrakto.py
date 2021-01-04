@@ -17,6 +17,8 @@ RE_URL = (
     "[a-zA-Z0-9?=%/_.:,;~@!#$&()*+-]*"
 )
 
+RE_DOMAIN = r"://([^/? ]+)"
+
 RE_URL_OR_PATH = RE_PATH + "|" + RE_URL
 
 RE_QUOTE = r'"([^"\n\r]+)"'
@@ -87,11 +89,11 @@ def process_urls_and_paths(find, text, min_length, multi):
         # exclude transfer speeds like 5k/s or m/s, and page 1/2
         if not re.search(RE_SPEED, item, re.I):
             if len(item) >= min_length:
-                res.append(item)
                 if multi:
-                    i = item.index("://")
-                    if i >= 0:
-                        res.append(item[i + 3 :])
+                    dom = re.search(RE_DOMAIN, item)
+                    if dom:
+                        res.append(dom[1])
+                res.append(item)
     return res
 
 
@@ -113,9 +115,9 @@ def get_quotes(text, min_length, multi):
     for m in re.finditer(RE_QUOTE, "\n" + text, flags=re.I):
         item = m.group()
         if len(item) >= min_length:
-            res.append(item)
             if multi:
                 res.append(item[1:-1])
+            res.append(item)
     return res
 
 
@@ -142,9 +144,6 @@ def get_lines(text, min_length):
 
 
 def main():
-    def get_input():
-        return sys.stdin.read()
-
     def print_result(t):
         print(t)
 
@@ -160,28 +159,29 @@ def main():
     args = get_args()
     res = []
     sel = False
+    text = sys.stdin.read()
 
     if args.words:
         sel = True
-        res += get_words(get_input(), args.min_length, args.multi)
+        res += get_words(text, args.min_length, args.multi)
 
     if args.paths:
         sel = True
         if args.urls:
-            res += get_urls_or_paths(get_input(), args.min_length, args.multi)
+            res += get_urls_or_paths(text, args.min_length, args.multi)
         else:
-            res += get_paths(get_input(), args.min_length, args.multi)
+            res += get_paths(text, args.min_length, args.multi)
     elif args.urls:
         sel = True
-        res += get_urls(get_input(), args.min_length, args.multi)
+        res += get_urls(text, args.min_length, args.multi)
 
     if args.quotes:
         sel = True
-        res += get_quotes(get_input(), args.min_length, args.multi)
+        res += get_quotes(text, args.min_length, args.multi)
 
     if args.lines:
         sel = True
-        res += get_lines(get_input(), args.min_length)
+        res += get_lines(text, args.min_length)
 
     if not sel:
         print("unknown option, see --help")
