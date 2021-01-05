@@ -6,12 +6,8 @@ path/in-parantheses
 path/in/quotes
 /path/in-single
 path/in-single
-prompt:~/dot$
-status
-modified
+~/home/path
+~/dot
 home/.tmux.conf
-deleted
 home/tools/bin/hello
 home/.laktakrc
-50m/s
-10k/s

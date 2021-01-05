@@ -9,7 +9,7 @@ from collections import OrderedDict
 RE_PATH = (
     r'(?=[ \t\n]|"|\(|\[|<|\')?'
     r"(~|/)?"
-    "([-a-zA-Z0-9_+-,.]+/[^ \t\n\r|:\"'$%&)>\]]*)"
+    "([-~a-zA-Z0-9_+-,.]+/[^ \t\n\r|:\"'$%&)>\]]*)"
 )
 
 RE_URL = (

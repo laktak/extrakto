@@ -12,14 +12,14 @@ class TestGetWords(unittest.TestCase):
         words = ["Hello", "world", "Extrakto", "awesome", "plugin"]
 
         result = get_words(text, 4)
-        self.assertEquals(words, result)
+        self.assertEqual(words, result)
 
     def test_box_drawing(self):
         text = u"last│first"
         words = ["last", "first"]
 
         result = get_words(text, 4)
-        self.assertEquals(words, result)
+        self.assertEqual(words, result)
 
     def test_match_hidden_files(self):
         text = "one /home/user/.hidden.txt two .hidden.txt three ./.hidden.txt four ../.hidden.txt"
@@ -31,7 +31,7 @@ class TestGetWords(unittest.TestCase):
         ]
 
         result = get_words(text, 6)
-        self.assertEquals(words, result)
+        self.assertEqual(words, result)
 
 
 if __name__ == "__main__":
