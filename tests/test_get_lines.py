@@ -17,7 +17,7 @@ short"""
             "second line with whitespace",
         ]
 
-        result = get_lines(text, 6)
+        result = get_lines(text, min_length=6)
         self.assertEqual(words, result)
 
 

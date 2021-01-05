@@ -1,0 +1,3 @@
+"simple quote"
+"first quote"
+"second quote"

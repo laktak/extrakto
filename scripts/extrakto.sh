@@ -110,7 +110,7 @@ show_fzf_error() {
 twostep() {
     local header out res key text
 
-    header="${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line as input"
+    header="select input for filters: ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line"
 
     out="$(capture_panes \
         | $extrakto --warn-empty -rl \

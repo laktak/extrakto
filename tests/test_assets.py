@@ -25,6 +25,9 @@ class TestAssets(unittest.TestCase):
         for test in ["text1", "path"]:
             run_test("-pu", test)
 
+        for test in ["text1", "quotes"]:
+            run_test("-q", test)
+
 
 if __name__ == "__main__":
     unittest.main()

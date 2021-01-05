@@ -76,8 +76,14 @@ def get_args():
     return args
 
 
-def process_urls_and_paths(find, text, min_length, multi):
+def get_paths(text, *, paths=True, urls=True, min_length=5, multi=False):
     res = list()
+    if paths and urls:
+        find = RE_URL_OR_PATH
+    elif urls:
+        find = RE_URL
+    else:
+        find = RE_PATH
 
     for m in re.finditer(find, "\n" + text, flags=re.I):
         item = m.group()
@@ -97,19 +103,7 @@ def process_urls_and_paths(find, text, min_length, multi):
     return res
 
 
-def get_urls(text, min_length, multi):
-    return process_urls_and_paths(RE_URL, text, min_length, multi)
-
-
-def get_paths(text, min_length, multi):
-    return process_urls_and_paths(RE_PATH, text, min_length, multi)
-
-
-def get_urls_or_paths(text, min_length, multi):
-    return process_urls_and_paths(RE_URL_OR_PATH, text, min_length, multi)
-
-
-def get_quotes(text, min_length, multi):
+def get_quotes(text, *, min_length=5, multi=False):
     res = list()
 
     for m in re.finditer(RE_QUOTE, "\n" + text, flags=re.I):
@@ -121,7 +115,7 @@ def get_quotes(text, min_length, multi):
     return res
 
 
-def get_words(text, min_length, multi):
+def get_words(text, *, min_length=5, multi=False):
     words = []
 
     for m in re.finditer(RE_WORD, text):
@@ -132,7 +126,7 @@ def get_words(text, min_length, multi):
     return words
 
 
-def get_lines(text, min_length):
+def get_lines(text, *, min_length=5):
     lines = []
 
     for raw_line in text.splitlines():
@@ -161,27 +155,27 @@ def main():
     sel = False
     text = sys.stdin.read()
 
+    if args.lines:
+        sel = True
+        res += get_lines(text, min_length=args.min_length)
+
     if args.words:
         sel = True
-        res += get_words(text, args.min_length, args.multi)
+        res += get_words(text, min_length=args.min_length, multi=args.multi)
 
-    if args.paths:
+    if args.paths or args.urls:
         sel = True
-        if args.urls:
-            res += get_urls_or_paths(text, args.min_length, args.multi)
-        else:
-            res += get_paths(text, args.min_length, args.multi)
-    elif args.urls:
-        sel = True
-        res += get_urls(text, args.min_length, args.multi)
+        res += get_paths(
+            text,
+            paths=args.paths,
+            urls=args.urls,
+            min_length=args.min_length,
+            multi=args.multi,
+        )
 
     if args.quotes:
         sel = True
-        res += get_quotes(text, args.min_length, args.multi)
-
-    if args.lines:
-        sel = True
-        res += get_lines(text, args.min_length)
+        res += get_quotes(text, min_length=args.min_length, multi=args.multi)
 
     if not sel:
         print("unknown option, see --help")

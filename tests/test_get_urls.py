@@ -3,7 +3,7 @@
 
 import unittest
 
-from extrakto import get_urls
+from extrakto import get_paths
 
 
 class TestGetURLs(unittest.TestCase):
@@ -11,35 +11,35 @@ class TestGetURLs(unittest.TestCase):
         text = "hey, open this url http://google.com etc..."
         urls = ["http://google.com"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_https(self):
         text = "hey, open this secure url https://google.com etc..."
         urls = ["https://google.com"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_ftp(self):
         text = "hey, connect to this server ftp://myserver.com etc..."
         urls = ["ftp://myserver.com"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_sftp(self):
         text = "hey, connect to this secure server sftp://myserver.com etc..."
         urls = ["sftp://myserver.com"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_home_path(self):
         text = "hey, open this file file:////home/joe etc..."
         urls = ["file:////home/joe"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_git(self):
@@ -49,14 +49,14 @@ class TestGetURLs(unittest.TestCase):
         )
         urls = ["git@github.com:laktak/extrakto.git"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
     def test_match_HTTP(self):
         text = "hey, open this url HTTP://GOOGLE.COM etc..."
         urls = ["HTTP://GOOGLE.COM"]
 
-        result = get_urls(text)
+        result = get_paths(text, paths=False, urls=True)
         self.assertEqual(urls, result)
 
 

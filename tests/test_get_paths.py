@@ -11,14 +11,14 @@ class TestGetPaths(unittest.TestCase):
         text = "hey, test ~/tmp/test.txt etc..."
         urls = ["~/tmp/test.txt"]
 
-        result = get_paths(text)
+        result = get_paths(text, paths=True, urls=False)
         self.assertEqual(urls, result)
 
     def test_match_full_path(self):
         text = "hey, open this file /home/joe/test.txt etc..."
         urls = ["/home/joe/test.txt"]
 
-        result = get_paths(text)
+        result = get_paths(text, paths=True, urls=False)
         self.assertEqual(urls, result)
 
 
