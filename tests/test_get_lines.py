@@ -18,7 +18,7 @@ short"""
         ]
 
         result = get_lines(text, 6)
-        self.assertEquals(words, result)
+        self.assertEqual(words, result)
 
 
 if __name__ == "__main__":

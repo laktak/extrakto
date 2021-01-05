@@ -1,0 +1,18 @@
+
+prefix [/path/in_brackets] suffix
+prefix [path/in_brackets] suffix
+prefix (/path/in-parantheses) suffix
+prefix (path/in-parantheses) suffix
+prefix "/path/in/quotes" suffix
+prefix "path/in/quotes" suffix
+prefix '/path/in-single' suffix
+prefix 'path/in-single' suffix
+prefix ~/home/path suffix
+
+prompt:~/dot$ git status
+        modified:   home/.tmux.conf
+        deleted:    home/tools/bin/hello
+        new file:   home/.laktakrc
+
+non path: 100 k/s  50m/s 10k/s
+non path: page 1/2

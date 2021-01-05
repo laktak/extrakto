@@ -1,31 +1,29 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import unittest
 import subprocess
 import os
 import sys
 
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+
+def run_test(switch, name):
+    subprocess.run(
+        f"../extrakto.py {switch} < assets/{name}.txt | cmp - ./assets/{name}_result{switch}.txt",
+        shell=True,
+        check=True,
+        cwd=script_dir,
+    )
+
 
 class TestAssets(unittest.TestCase):
     def test_all(self):
-        script_dir = os.path.dirname(os.path.realpath(__file__))
-        tests = ["text1", "text2", "unicode"]
-        for test in tests:
-            if sys.version_info < (3, 0):
-                subprocess.check_call(
-                    "cd '%s'; ../extrakto.py -w < assets/%s.txt | cmp - ./assets/%s_result.txt"
-                    % (script_dir, test, test),
-                    shell=True,
-                )
-            else:
-                subprocess.run(
-                    "../extrakto.py -w < assets/%s.txt | cmp - ./assets/%s_result.txt"
-                    % (test, test),
-                    shell=True,
-                    check=True,
-                    cwd=script_dir,
-                )
+        for test in ["text1", "text2", "path", "unicode", "quotes"]:
+            run_test("-w", test)
+
+        for test in ["text1", "path"]:
+            run_test("-pu", test)
 
 
 if __name__ == "__main__":

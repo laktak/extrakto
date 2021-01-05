@@ -1,5 +1,5 @@
 
-name: Lint
+name: Check
 
 on: [push, pull_request]
 
@@ -15,3 +15,6 @@ jobs:
           curl -LsS -o ~/shfmt https://github.com/mvdan/sh/releases/download/v3.1.2/shfmt_v3.1.2_linux_amd64
           chmod +x ~/shfmt
           ~/shfmt -d scripts/ extrakto.tmux
+      - name: tests
+        run: |
+          python3 -m unittest discover -s tests/

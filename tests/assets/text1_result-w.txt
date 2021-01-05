@@ -71,7 +71,6 @@ Current
 Directory
 Pathname
 ~user
-$HOME
 become
 8.4.1
 Leading
@@ -468,10 +467,10 @@ aware
 this!
 inside
 variables
-$HOME/foo
+HOME/foo
 could
 /home/idallen/foo
-$HOME/bin
+HOME/bin
 modify
 before
 executed

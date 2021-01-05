@@ -1,0 +1,2 @@
+foo "simple quote" bar
+foo "first quote" foobar "second quote" bar
