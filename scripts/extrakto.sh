@@ -158,7 +158,7 @@ capture() {
         if [[ -z $twostep_result ]]; then
             capture_panes | $extrakto --warn-empty -rw
         else
-            echo $twostep_result | $extrakto --warn-empty -Mrwup
+            echo $twostep_result | $extrakto --warn-empty -Mwqupr
         fi
     }
 
@@ -169,7 +169,8 @@ capture() {
             header="${header/:ts:/}"
         else
             header="${header/:ts:/ cancel}"
-            header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} now select from the filter results"
+            header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} now choose from a filter result for your selection:"
+            header+=$'\n'"${COLORS[WHITE]}${twostep_result}${COLORS[OFF]}"
         fi
 
         # for troubleshooting add
