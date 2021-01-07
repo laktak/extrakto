@@ -108,14 +108,17 @@ show_fzf_error() {
 }
 
 twostep() {
-    local header out res key text
+    local header query out res key text
 
-    header="select input for filters: ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line"
+    header="${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line"
+    header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} select input for filters"
+    query=$1
 
     out="$(capture_panes \
         | $extrakto --warn-empty -rl \
         | $fzf_tool \
             --header="$header" \
+            --query="$query" \
             --expect=${copy_key},esc \
             --tiebreak=index \
             --layout="$fzf_layout" \
@@ -146,7 +149,7 @@ capture() {
     local header_tmpl header out res key text query twostep_result
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
-    header_tmpl+=", ${COLORS[BOLD]}${twostep_key}${COLORS[OFF]}=two-step"
+    header_tmpl+=", ${COLORS[BOLD]}${twostep_key}${COLORS[OFF]}=two-step:ts:"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
     header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit"
     header_tmpl+=", ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
@@ -162,6 +165,12 @@ capture() {
     while true; do
         header="$header_tmpl"
         header="${header/:ga:/$grab_area}"
+        if [[ -z $twostep_result ]]; then
+            header="${header/:ts:/}"
+        else
+            header="${header/:ts:/ cancel}"
+            header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} now select from the filter results"
+        fi
 
         # for troubleshooting add
         # tee /tmp/stageN | \
@@ -207,7 +216,11 @@ capture() {
                 ;;
 
             "${twostep_key}")
-                twostep_result=$(twostep)
+                if [[ -z $twostep_result ]]; then
+                    twostep_result=$(twostep "$query")
+                else
+                    twostep_result=
+                fi
                 ;;
 
             ctrl-g)
@@ -262,9 +275,7 @@ capture() {
     done
 }
 
-##############
 # Entry
-##############
 
 if [[ $mode != popup ]]; then
     # check terminal size, zoom pane if too small
