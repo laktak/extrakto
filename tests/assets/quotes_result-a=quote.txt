@@ -1,3 +1,6 @@
+simple quote
 "simple quote"
+first quote
 "first quote"
+second quote
 "second quote"

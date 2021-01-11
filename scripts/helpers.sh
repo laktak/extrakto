@@ -54,8 +54,8 @@ get_option() {
             echo $(get_tmux_option $option "tab")
             ;;
 
-        "@extrakto_twostep_key")
-            echo $(get_tmux_option $option "ctrl-k")
+        "@extrakto_filter_key")
+            echo $(get_tmux_option $option "ctrl-f")
             ;;
 
         "@extrakto_clip_tool_run")

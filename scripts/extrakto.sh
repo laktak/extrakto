@@ -13,7 +13,7 @@ fi
 
 current_dir="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 trigger_pane=$1
-mode=$2
+launch_mode=$2
 source "$current_dir/helpers.sh"
 extrakto="$current_dir/../extrakto.py"
 
@@ -37,7 +37,7 @@ fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
-twostep_key=$(get_option "@extrakto_twostep_key")
+filter_key=$(get_option "@extrakto_filter_key")
 fzf_layout=$(get_option "@extrakto_fzf_layout")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
@@ -94,7 +94,7 @@ capture_panes() {
 has_single_pane() {
     local num_panes
     num_panes=$(tmux list-panes | wc -l)
-    if [[ $mode == popup ]]; then
+    if [[ $launch_mode == popup ]]; then
         [[ $num_panes == 1 ]]
     else
         [[ $num_panes == 2 ]]
@@ -107,71 +107,30 @@ show_fzf_error() {
     read # pause
 }
 
-twostep() {
-    local header query out res key text
-
-    header="${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=use line"
-    header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} select input for filters"
-    query=$1
-
-    out="$(capture_panes \
-        | $extrakto --warn-empty -rl \
-        | $fzf_tool \
-            --header="$header" \
-            --query="$query" \
-            --expect=${copy_key},esc \
-            --tiebreak=index \
-            --layout="$fzf_layout" \
-            --no-info)"
-    res=$?
-    mapfile -t out <<< "$out"
-    key="${out[0]}"
-    text="${out[-1]}"
-
-    if [[ $res -gt 0 && -z "$key" ]]; then
-        show_fzf_error
-        exit 1
-    fi
-
-    case "$key" in
-        "${copy_key}")
-            echo "$text"
-            return 0
-            ;;
-
-        *)
-            return 0
-            ;;
-    esac
-}
-
 capture() {
-    local header_tmpl header out res key text query twostep_result
+    local mode header_tmpl header out res key text query
 
+    mode=word
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
-    header_tmpl+=", ${COLORS[BOLD]}${twostep_key}${COLORS[OFF]}=two-step:ts:"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
     header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit"
+    header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
     header_tmpl+=", ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
 
     get_cap() {
-        if [[ -z $twostep_result ]]; then
-            capture_panes | $extrakto --warn-empty -rw
+        if [[ $mode == all ]]; then
+            capture_panes | $extrakto --warn-empty --alt --all --name -r
+        elif [[ $mode == line ]]; then
+            capture_panes | $extrakto --warn-empty -rl
         else
-            echo $twostep_result | $extrakto --warn-empty -Mwqupr
+            capture_panes | $extrakto --warn-empty -rw
         fi
     }
 
     while true; do
-        header="$header_tmpl"
-        header="${header/:ga:/$grab_area}"
-        if [[ -z $twostep_result ]]; then
-            header="${header/:ts:/}"
-        else
-            header="${header/:ts:/ cancel}"
-            header+=$'\n'"${COLORS[YELLOW]}[two-step]${COLORS[OFF]} now choose from a filter result for your selection:"
-            header+=$'\n'"${COLORS[WHITE]}${twostep_result}${COLORS[OFF]}"
-        fi
+        header=$header_tmpl
+        header=${header/:ga:/$grab_area}
+        header=${header/:filter:/$mode}
 
         # for troubleshooting add
         # tee /tmp/stageN | \
@@ -181,7 +140,7 @@ capture() {
                 --print-query \
                 --query="$query" \
                 --header="$header" \
-                --expect=${insert_key},${copy_key},${twostep_key},ctrl-e,ctrl-g,ctrl-o,ctrl-c,esc \
+                --expect=${insert_key},${copy_key},${filter_key},ctrl-e,ctrl-g,ctrl-o,ctrl-c,ctrl-a,esc \
                 --tiebreak=index \
                 --layout="$fzf_layout" \
                 --no-info)"
@@ -190,6 +149,10 @@ capture() {
         query="${out[0]}"
         key="${out[1]}"
         text="${out[-1]}"
+
+        if [[ $mode == all ]]; then
+            text=${text#*: }
+        fi
 
         if [[ $res -gt 0 && -z "$key" ]]; then
             show_fzf_error
@@ -216,11 +179,13 @@ capture() {
                 return 0
                 ;;
 
-            "${twostep_key}")
-                if [[ -z $twostep_result ]]; then
-                    twostep_result=$(twostep "$query")
+            "${filter_key}")
+                if [[ $mode == all ]]; then
+                    mode=line
+                elif [[ $mode == line ]]; then
+                    mode=word
                 else
-                    twostep_result=
+                    mode=all
                 fi
                 ;;
 
@@ -278,7 +243,7 @@ capture() {
 
 # Entry
 
-if [[ $mode != popup ]]; then
+if [[ $launch_mode != popup ]]; then
     # check terminal size, zoom pane if too small
     lines=$(tput lines)
     if [[ $lines -lt 7 ]]; then

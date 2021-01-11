@@ -10,7 +10,7 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 
 def run_test(switch, name):
     subprocess.run(
-        f"../extrakto.py {switch} < assets/{name}.txt | cmp - ./assets/{name}_result{switch}.txt",
+        f"../extrakto.py {switch} --alt < assets/{name}.txt | cmp - ./assets/{name}_result{switch}.txt",
         shell=True,
         check=True,
         cwd=script_dir,
@@ -26,7 +26,7 @@ class TestAssets(unittest.TestCase):
             run_test("-pu", test)
 
         for test in ["text1", "quotes"]:
-            run_test("-q", test)
+            run_test("-a=quote", test)
 
 
 if __name__ == "__main__":

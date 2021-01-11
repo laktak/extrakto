@@ -3,7 +3,9 @@
 
 import unittest
 
-from extrakto import get_words
+from extrakto import Extrakto
+
+get_words = Extrakto(min_length=5)["word"].filter
 
 
 class TestGetWords(unittest.TestCase):
@@ -11,14 +13,14 @@ class TestGetWords(unittest.TestCase):
         text = "Hello world. Extrakto is an awesome plugin."
         words = ["Hello", "world", "Extrakto", "awesome", "plugin"]
 
-        result = get_words(text, min_length=4)
+        result = get_words(text)
         self.assertEqual(words, result)
 
     def test_box_drawing(self):
-        text = u"last│first"
-        words = ["last", "first"]
+        text = u"other│something"
+        words = ["other", "something"]
 
-        result = get_words(text, min_length=4)
+        result = get_words(text)
         self.assertEqual(words, result)
 
     def test_match_hidden_files(self):
@@ -26,11 +28,12 @@ class TestGetWords(unittest.TestCase):
         words = [
             "/home/user/.hidden.txt",
             ".hidden.txt",
+            "three",
             "./.hidden.txt",
             "../.hidden.txt",
         ]
 
-        result = get_words(text, min_length=6)
+        result = get_words(text)
         self.assertEqual(words, result)
 
 

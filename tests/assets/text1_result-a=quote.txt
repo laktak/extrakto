@@ -1,10 +1,20 @@
+path of names
 "path of names"
+slash
 "slash"
+acyclic
 "acyclic"
+cycle
 "cycle"
+ (the nameless 
 " (the nameless "
+ROOT
 "ROOT"
+the nameless topmost ROOT directory that is to the left of the separating slash
 "the nameless topmost ROOT directory that is to the left of the separating slash"
+inserted in front of
 "inserted in front of"
+$HOME
 "$HOME"
+$HOME/bin
 "$HOME/bin"

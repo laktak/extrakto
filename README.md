@@ -14,7 +14,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
   - `enter` to copy it to the clipboard,
   - `ctrl-o` to open the path/url or
   - `ctrl-e` to edit with `$EDITOR`
-  - `ctrl-k` switch to two-step mode where you first select a line and than choose a filter result (path, quote, etc.)
+  - `ctrl-f` toggle the filter mode, let's you choose from words or results defined by your filters
   - `ctrl-g` cycle extract area between recent, full, window recent, window full, custom
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
@@ -102,8 +102,8 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_open_tool`       | `auto`   | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_copy_key`        | `enter`  | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`    | Key to insert selection. |
-| `@extrakto_twostep_key`     | `ctrl-k` | Key to swith to two-step mode. |
-| `@extrakto_default_opt`     | `word`   | **LEGACY** this option was removed in favor of the two step select |
+| `@extrakto_filter_key`      | `ctrl-f` | Key to toggle filter mode. |
+| `@extrakto_default_opt`     | `word`   | **LEGACY** this option was removed in favor of the new filter mode. |
 
 Example:
 
@@ -113,6 +113,18 @@ set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
 set -g @extrakto_copy_key "tab"      # use tab to copy to clipboard
 set -g @extrakto_insert_key "enter"  # use enter to insert selection
 ```
+
+### Custom Filters
+
+You can define your own filters by creating a file in `~/.config/extrakto/extrakto.conf`:
+
+```
+[quote]
+regex: ("[^"\n\r]+")
+```
+
+See [extrakto.conf](extrakto.conf) for syntax and other predefined filters.
+
 
 ---
 
@@ -136,23 +148,28 @@ Requires Python 3.6+.
 ### CLI Usage
 
 ```
-usage: extrakto.py [-h] [-p] [-u] [-w] [-l] [-r] [-m MIN_LENGTH]
+usage: extrakto.py [-h] [--name] [-w] [-l] [--all] [-a ADD] [-p] [-u] [--alt] [-r] [-m MIN_LENGTH] [--warn-empty]
 
 Extracts tokens from plaintext.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p, --paths           extract path tokens
-  -u, --urls            extract url tokens
-  -w, --words           extract word tokens
+  --name                prefix filter name in the output
+  -w, --words           extract "word" tokens
   -l, --lines           extract lines
+  --all                 extract using all filters defined in extrakto.conf
+  -a ADD, --add ADD     add custom filter
+  -p, --paths           short for -a=path
+  -u, --urls            short for -a=url
+  --alt                 return alternate variants for each match (e.g. https://example.com and example.com)
   -r, --reverse         reverse output
   -m MIN_LENGTH, --min-length MIN_LENGTH
                         minimum token length
+  --warn-empty          warn if result is empty
 ```
 
 # Contributions
 
-Special thanks go to @ivanalejandro0 and @maximbaz for their ideas and PRs!
+Thanks go to all contributors for their ideas and PRs!
 
 Please run `black` if you change any python code and run `shfmt` if you change any bash files.

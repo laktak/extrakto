@@ -1,4 +1,3 @@
-http://teaching.idallen.com/cst8207/12f/notes/160_pathnames.html
 Unix/Linux
 /home/user/lab/foo/bar
 /home/user/lab/foo
@@ -15,7 +14,6 @@ Unix/Linux
 /var/log/ntpstats/loopstats
 /home/abcd0001/CST8207-16W/Assignments/assignment02
 /usr/bin/wc.
-http://teaching.idallen.com/
 /home/idallen/bin/file.txt
 /usr/bin/
 /bin/
@@ -24,7 +22,6 @@ http://teaching.idallen.com/
 /bin////////////////////////////////
 dir/.
 /dir/symlink
-/etc///////passwd
 /etc/passwd/
 /etc/passwd/.
 /etc/passwd/..
@@ -76,9 +73,7 @@ bin/script
 /var/spool/uucp
 /usr/games
 ~idallen/bin
-HOME/foo
 /home/idallen/foo
-HOME/bin
 /home/user/lab/foo/bar/file.txt
 /home/user/lab/foo/bar/file2.txt
 /home/user/lab/foo/bar/file.txt.
@@ -166,8 +161,15 @@ dir1/../dir1/../../..
 /tmp/../tmp/idallen/file1
 /tmp/idallen/../idallen/file2
 /tmp/idallen/../../tmp/idallen/file2
-http://idallen.com/
-http://contactimprov.ca/
 Free/Libre
+teaching.idallen.com
+http://teaching.idallen.com/cst8207/12f/notes/160_pathnames.html
+http://teaching.idallen.com/
+idallen.com
+http://idallen.com/
+contactimprov.ca
+http://contactimprov.ca/
+eff.org
 http://eff.org/
+fools.ca
 http://fools.ca/

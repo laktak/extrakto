@@ -1,13 +1,22 @@
 
 prefix [/path/in_brackets] suffix
+[/path/in_brackets]
 prefix [path/in_brackets] suffix
+[path/in_brackets]
 prefix (/path/in-parantheses) suffix
+(/path/in-parantheses)
 prefix (path/in-parantheses) suffix
+(path/in-parantheses)
 prefix "/path/in/quotes" suffix
+"/path/in/quotes"
 prefix "path/in/quotes" suffix
+"path/in/quotes"
 prefix '/path/in-single' suffix
+'/path/in-single'
 prefix 'path/in-single' suffix
+'path/in-single'
 prefix ~/home/path suffix
+~/home/path
 
 prompt:~/dot$ git status
         modified:   home/.tmux.conf
