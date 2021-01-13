@@ -1,4 +1,3 @@
-
 # extrakto for tmux
 
 ![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
@@ -12,10 +11,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
 - press
   - `tab` to insert it to the current pane,
   - `enter` to copy it to the clipboard,
-  - `ctrl-o` to open the path/url or
-  - `ctrl-e` to edit with `$EDITOR`
-  - `ctrl-f` toggle the filter mode, let's you choose from words or results defined by your filters
-  - `ctrl-g` cycle extract area between recent, full, window recent, window full, custom
+- see other features in the [HELP](HELP.md) (press `ctrl-/` in extrakto)
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
@@ -103,6 +99,9 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_copy_key`        | `enter`  | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`    | Key to insert selection. |
 | `@extrakto_filter_key`      | `ctrl-f` | Key to toggle filter mode. |
+| `@extrakto_grab_key`        | `ctrl-g` | Key to toggle grab mode. |
+| `@extrakto_edit_key`        | `ctrl-e` | Key to run the editor. |
+| `@extrakto_open_key`        | `ctrl-o` | Key to run the open command. |
 | `@extrakto_default_opt`     | `word`   | **LEGACY** this option was removed in favor of the new filter mode. |
 
 Example:

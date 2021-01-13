@@ -58,6 +58,22 @@ get_option() {
             echo $(get_tmux_option $option "ctrl-f")
             ;;
 
+        "@extrakto_open_key")
+            echo $(get_tmux_option $option "ctrl-o")
+            ;;
+
+        "@extrakto_edit_key")
+            echo $(get_tmux_option $option "ctrl-e")
+            ;;
+
+        "@extrakto_grab_key")
+            echo $(get_tmux_option $option "ctrl-g")
+            ;;
+
+        "@extrakto_help_key")
+            echo $(get_tmux_option $option "ctrl-/")
+            ;;
+
         "@extrakto_clip_tool_run")
             echo $(get_tmux_option $option "bg")
             ;;

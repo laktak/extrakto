@@ -11,6 +11,7 @@ if ! type mapfile &> /dev/null; then
     exit 1
 fi
 
+PRJ_URL=https://github.com/laktak/extrakto
 current_dir="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 trigger_pane=$1
 launch_mode=$2
@@ -38,6 +39,10 @@ open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
 filter_key=$(get_option "@extrakto_filter_key")
+open_key=$(get_option "@extrakto_open_key")
+edit_key=$(get_option "@extrakto_edit_key")
+grab_key=$(get_option "@extrakto_grab_key")
+help_key=$(get_option "@extrakto_help_key")
 fzf_layout=$(get_option "@extrakto_fzf_layout")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
@@ -70,6 +75,24 @@ if [[ -z $EDITOR ]]; then
 else
     editor="$EDITOR"
 fi
+
+copy() {
+    tmux set-buffer -- "$1"
+    if [[ "$clip_tool_run" == "fg" ]]; then
+        # run in foreground as OSC-52 copying won't work otherwise
+        tmux run-shell "tmux show-buffer|$clip_tool"
+    else
+        # run in background as xclip won't work otherwise
+        tmux run-shell -b "tmux show-buffer|$clip_tool"
+    fi
+}
+
+open() {
+    if [[ -n "$open_tool" ]]; then
+        tmux run-shell -b "cd -- $PWD; $open_tool $1"
+        return 0
+    fi
+}
 
 capture_panes() {
     local pane captured
@@ -111,11 +134,13 @@ capture() {
     local mode header_tmpl header out res key text query
 
     mode=word
-    header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert, ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
-    [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}ctrl-o${COLORS[OFF]}=open"
-    header_tmpl+=", ${COLORS[BOLD]}ctrl-e${COLORS[OFF]}=edit"
+    header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
+    header_tmpl+=", ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
+    [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
+    header_tmpl+=", ${COLORS[BOLD]}${edit_key}${COLORS[OFF]}=edit"
     header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
-    header_tmpl+=", ${COLORS[BOLD]}ctrl-g${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
 
     get_cap() {
         if [[ $mode == all ]]; then
@@ -140,7 +165,7 @@ capture() {
                 --print-query \
                 --query="$query" \
                 --header="$header" \
-                --expect=${insert_key},${copy_key},${filter_key},ctrl-e,ctrl-g,ctrl-o,ctrl-c,ctrl-a,esc \
+                --expect=${insert_key},${copy_key},${filter_key},${edit_key},${open_key},${grab_key},${help_key},ctrl-c,esc \
                 --tiebreak=index \
                 --layout="$fzf_layout" \
                 --no-info)"
@@ -161,15 +186,7 @@ capture() {
 
         case "$key" in
             "${copy_key}")
-                tmux set-buffer -- "$text"
-                if [[ "$clip_tool_run" == "fg" ]]; then
-                    # run in foreground as OSC-52 copying won't work otherwise
-                    tmux run-shell "tmux show-buffer|$clip_tool"
-                else
-                    # run in background as xclip won't work otherwise
-                    tmux run-shell -b "tmux show-buffer|$clip_tool"
-                fi
-
+                copy "$text"
                 return 0
                 ;;
 
@@ -189,7 +206,7 @@ capture() {
                 fi
                 ;;
 
-            ctrl-g)
+            "${grab_key}")
                 # cycle between options like this:
                 # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
                 if [[ $grab_area == "recent" ]]; then
@@ -223,17 +240,27 @@ capture() {
                 capture_pane_start=$(get_capture_pane_start "$grab_area")
                 ;;
 
-            ctrl-o)
-                if [[ -n "$open_tool" ]]; then
-                    tmux run-shell -b "cd -- $PWD; $open_tool $text"
-                    return 0
-                fi
+            "${open_key}")
+                open "$text"
                 ;;
 
-            ctrl-e)
+            "${edit_key}")
                 tmux send-keys -t $trigger_pane "$editor -- $text" 'C-m'
                 return 0
                 ;;
+
+            "${help_key}")
+                less -+EF $(realpath "$current_dir/../HELP.md")
+
+                echo -e "\nSince the help page is not 'extrakt'-able:"
+                read -p "Do you wish to [o]pen or [c]opy the GitHub page or [a]bort? [ocA]" -d'' -s -n1 confirm
+                if [[ $confirm == o ]]; then
+                    open $PRJ_URL
+                elif [[ $confirm == c ]]; then
+                    copy $PRJ_URL
+                fi
+                ;;
+
             *)
                 return 0
                 ;;

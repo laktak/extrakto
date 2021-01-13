@@ -1,0 +1,33 @@
+# extrakto help
+
+You can give feedback or star extrakto at https://github.com/laktak/extrakto
+
+Extrakto uses fzf. You only need to type a few keys to find your selection with a fuzzy match.
+
+- Press *ctrl-f* to change to the next filter mode.
+  - *word*, the default filter allows you to select words (min length=5)
+  - *all*, runs all filters and allows you select quotes, url, paths, etc.
+  - *line*, select full lines
+
+- Press *ctrl-g* to change the grab area
+  - *full*, everything from the current pane
+  - *window full*, everything from all panes in this window
+  - *recent*, everything visible with a few lines from the history (current pane)
+  - *window recent*, everything visible with a few lines from the history (window)
+
+- Press *esc* or *ctrl-c* to cancel
+
+Actions that use the current selection:
+
+- Press *tab* to insert the selection into the active tmux pane (insert_key).
+
+- Press *enter* to copy the selection to the clipboard (copy_key).
+
+- Press *ctrl-o* to pass the selection to the *open* command of your OS (open_key). \
+  For example if you select a URL this will open the browser.
+
+- Press *ctrl-e* to open the selection in your $EDITOR. \
+  This only makes sense if you select a path.
+
+
+You can configure most keys that extrakto uses, please see the GitHub readme for instructions.
