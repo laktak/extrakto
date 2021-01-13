@@ -250,6 +250,7 @@ capture() {
                 ;;
 
             "${help_key}")
+                clear
                 less -+EF $(realpath "$current_dir/../HELP.md")
 
                 echo -e "\nSince the help page is not 'extrakt'-able:"

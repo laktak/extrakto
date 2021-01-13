@@ -71,7 +71,7 @@ get_option() {
             ;;
 
         "@extrakto_help_key")
-            echo $(get_tmux_option $option "ctrl-/")
+            echo $(get_tmux_option $option "ctrl-h")
             ;;
 
         "@extrakto_clip_tool_run")
