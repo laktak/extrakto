@@ -15,17 +15,6 @@ You can **fuzzy find your text** instead of selecting it by hand:
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
-By default extrakto will open in a tmux popup (requires tmux beta or 3.2+). See the options if you wish to change this.
-
-*tmux beta*
-
-Because tmux with popups will not be released before/around May 2021 you may wish to install the master/beta version.
-
-- On Arch: `trizen -S tmux-git` or `yay -S tmux-git` (see your AUR package manager)
-- On macOS with homebrew: `brew install tmux --HEAD`
-
-If you do not wish to install the beta extrakto will open in a split window.
-
 ## Installation
 
 Requires
@@ -42,7 +31,16 @@ Supported clipboards:
 - WSL (aka "Bash on Windows")
 - *bring your own*
 
-### with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+### tmux beta
+
+Because tmux with popups will not be released before/around May 2021 you may wish to install the master/beta version.
+
+- On Arch: `trizen -S tmux-git` or `yay -S tmux-git` (see your AUR package manager)
+- On macOS with homebrew: `brew install tmux --HEAD`
+
+If you do not wish to install the beta extrakto will open in a split window.
+
+### a: with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -52,7 +50,7 @@ Hit `prefix + I` to fetch the plugin and source it.
 
 You should now have all `extrakto` key bindings defined.
 
-### Manual Installation
+### b: Manual Installation
 
 Clone the repo:
 
