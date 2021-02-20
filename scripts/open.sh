@@ -32,5 +32,5 @@ if [[ $split_direction == p ]]; then
     exit $rc
 else
     split_size=$(get_option "@extrakto_split_size")
-    tmux split-window -${split_direction} -l ${split_size} "${extrakto} ${pane_id} split"
+    tmux split-window -${split_direction} -l ${split_size} "tmux setw remain-on-exit off; ${extrakto} ${pane_id} split"
 fi
