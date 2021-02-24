@@ -197,7 +197,9 @@ if __name__ == "__main__":
 
     parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
-    parser.add_argument("-m", "--min-length", default=5, help="minimum token length", type=int)
+    parser.add_argument(
+        "-m", "--min-length", default=5, help="minimum token length", type=int
+    )
 
     parser.add_argument(
         "--warn-empty", action="store_true", help="warn if result is empty"
