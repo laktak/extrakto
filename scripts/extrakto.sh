@@ -35,6 +35,7 @@ grab_area=$(get_option "@extrakto_grab_area")
 clip_tool=$(get_option "@extrakto_clip_tool")
 clip_tool_run=$(get_option "@extrakto_clip_tool_run")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
+fzf_preview=$(get_option "@extrakto_fzf_preview")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
@@ -162,6 +163,7 @@ capture() {
         # between the commands
         out="$(get_cap \
             | $fzf_tool \
+                --preview "$fzf_preview" \
                 --print-query \
                 --query="$query" \
                 --header="$header" \

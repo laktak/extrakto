@@ -41,6 +41,9 @@ get_option() {
         "@extrakto_fzf_tool")
             echo $(get_tmux_option $option "fzf")
             ;;
+        "@extrakto_fzf_preview")
+            echo $(get_tmux_option $option "echo {}")
+            ;;
 
         "@extrakto_open_tool")
             echo $(get_tmux_option $option "auto")
