@@ -8,6 +8,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
 
 - press tmux `prefix + tab` to start extrakto
 - fuzzy find the text/path/url/line
+- use custom filters (`ctrl + f`)
 - press
   - `tab` to insert it to the current pane,
   - `enter` to copy it to the clipboard,
@@ -120,7 +121,9 @@ You can define your own filters by creating a file in `~/.config/extrakto/extrak
 regex: ("[^"\n\r]+")
 ```
 
-See [extrakto.conf](extrakto.conf) for syntax and other predefined filters.
+To override an existing filter copy it to your file first.
+
+See [extrakto.conf](extrakto.conf) for syntax and predefined filters.
 
 
 ---
