@@ -16,9 +16,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
-## Installation
-
-Requires
+## Requirements
 
 - [tmux](https://github.com/tmux/tmux/wiki)
 - [fzf](https://github.com/junegunn/fzf)
@@ -41,7 +39,7 @@ Because tmux with popups will not be released before/around May 2021 you may wis
 
 If you do not wish to install the beta extrakto will open in a split window.
 
-### a: with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -51,7 +49,7 @@ Hit `prefix + I` to fetch the plugin and source it.
 
 You should now have all `extrakto` key bindings defined.
 
-### b: Manual Installation
+## Manual Installation
 
 Clone the repo:
 
@@ -68,11 +66,11 @@ Reload the tmux environment:
 
 You should now have all `extrakto` key bindings defined.
 
-### Wiki
+## Wiki
 
 Add or look for special tips in our [wiki](https://github.com/laktak/extrakto/wiki).
 
-### Options
+## Options
 
 To set any of these options write on your `~/.tmux.conf` file:
 
@@ -112,7 +110,7 @@ set -g @extrakto_copy_key "tab"      # use tab to copy to clipboard
 set -g @extrakto_insert_key "enter"  # use enter to insert selection
 ```
 
-### Custom Filters
+## Custom Filters
 
 You can define your own filters by creating a file in `~/.config/extrakto/extrakto.conf`:
 
@@ -132,7 +130,7 @@ See [extrakto.conf](extrakto.conf) for syntax and predefined filters.
 
 You can also use extrakto as a standalone tool to extract tokens from text.
 
-### Installation
+## Installation
 
 For now simply clone the repository and link to the tool somewhere in your path:
 
@@ -145,7 +143,7 @@ ln -s $PWD/extrakto.py ~/.local/bin/extrakto
 
 Requires Python 3.6+.
 
-### CLI Usage
+## CLI Usage
 
 ```
 usage: extrakto.py [-h] [--name] [-w] [-l] [--all] [-a ADD] [-p] [-u] [--alt] [-r] [-m MIN_LENGTH] [--warn-empty]
