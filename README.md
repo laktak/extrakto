@@ -18,7 +18,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 
 ## Requirements
 
-- [tmux](https://github.com/tmux/tmux/wiki)
+- [tmux](https://github.com/tmux/tmux) - popups require 3.2, otherwise extrakto will open in a split window.
 - [fzf](https://github.com/junegunn/fzf)
 - Python 3.6+
 - Bash (tested with 5.0+, on macOS please `brew install bash` first)
@@ -29,15 +29,6 @@ Supported clipboards:
 - macOS (pbcopy)
 - WSL (aka "Bash on Windows")
 - *bring your own*
-
-### tmux beta
-
-Because tmux with popups will not be released before/around May 2021 you may wish to install the master/beta version.
-
-- On Arch: `trizen -S tmux-git` or `yay -S tmux-git` (see your AUR package manager)
-- On macOS with homebrew: `brew install tmux --HEAD`
-
-If you do not wish to install the beta extrakto will open in a split window.
 
 ## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
