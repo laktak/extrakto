@@ -138,7 +138,8 @@ def main(parser):
     run_list += args.add
 
     res = []
-    text = sys.stdin.read()
+    # input from the terminal can cause UnicodeDecodeErrors in some instances, ignore for now
+    text = sys.stdin.buffer.read().decode("utf-8", "ignore")
 
     extrakto = Extrakto(min_length=args.min_length, alt=args.alt, prefix_name=args.name)
     if args.all:
