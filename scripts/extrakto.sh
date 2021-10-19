@@ -242,6 +242,7 @@ capture() {
 
             "${open_key}")
                 open "$text"
+                return 0
                 ;;
 
             "${edit_key}")
