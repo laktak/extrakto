@@ -30,9 +30,6 @@ declare -Ar COLORS=(
     [BOLD]=$'\033[1m'
 )
 
-declare -A next_mode
-declare -a modes_list
-
 # options; note some of the values can be overwritten by capture()
 grab_area=$(get_option "@extrakto_grab_area")
 clip_tool=$(get_option "@extrakto_clip_tool")
@@ -133,47 +130,10 @@ show_fzf_error() {
     read # pause
 }
 
-sanitize_modes_list() {
-    local -a default=("word" "all" "line")
-    local -A valid_modes=(["word"]=1 ["all"]=1 ["line"]=1)
-
-    local invalid=1
-    for mode in ${modes_list[@]}; do
-        if [[ ${valid_modes[$mode]} -ne 1 ]]; then
-            invalid=0
-            break
-        fi
-    done
-
-    if $invalid; then
-        # change $modes_list to $default
-        for i in ${!default[@]}; do
-            modes_list[$i]=${default[$i]}
-        done
-    fi
-}
-
-#transform the modes_list got from @extraktor_filter_order into
-#the more usable form of associative array
-mk_next_mode_list() {
-
-    for i in ${!modes_list[@]}; do
-        if [[ $i -eq $((${#modes_list}-1)) ]]; then
-            next_mode+=([${modes_list[$i]}]=${modes_list[0]})
-        else
-            next_mode+=([${modes_list[$i]}]=${modes_list[$((i+1))]})
-        fi
-    done
-
-}
-
 capture() {
     local mode header_tmpl header out res key text query
 
-    readarray -td ' ' modes_list <<<"$(get_option @extrakto_filter_order) "; unset 'modes_list[-1]'
-    sanitize_modes_list
-    mk_next_mode_list
-    mode=${modes_list[0]}
+    mode=$(get_next_mode "initial")
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
     header_tmpl+=", ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
@@ -238,7 +198,7 @@ capture() {
                 ;;
 
             "${filter_key}")
-                mode=${next_mode[$mode]}
+                mode=$(get_next_mode $mode)
                 ;;
 
             "${grab_key}")
