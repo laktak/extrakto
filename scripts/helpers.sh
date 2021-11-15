@@ -90,6 +90,9 @@ get_option() {
             echo $(get_tmux_option $option "default")
             ;;
 
+        "@extrakto_filter_order")
+            echo $(get_tmux_option $option "all line word")
+            ;;
     esac
 }
 
