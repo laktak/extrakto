@@ -134,8 +134,8 @@ show_fzf_error() {
 }
 
 sanitize_modes_list() {
-    local -a default=("all" "line" "word")
-    local -A valid_modes=(["all"]=1 ["line"]=1 ["word"]=1)
+    local -a default=("word" "all" "line")
+    local -A valid_modes=(["word"]=1 ["all"]=1 ["line"]=1)
 
     local invalid=1
     for mode in ${modes_list[@]}; do
