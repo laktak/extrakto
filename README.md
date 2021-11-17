@@ -90,6 +90,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_grab_key`        | `ctrl-g` | Key to toggle grab mode. |
 | `@extrakto_edit_key`        | `ctrl-e` | Key to run the editor. |
 | `@extrakto_open_key`        | `ctrl-o` | Key to run the open command. |
+| `@extrakto_filter_order`    | `word all line` | Filter modes order |
 | `@extrakto_default_opt`     | `word`   | **LEGACY** this option was removed in favor of the new filter mode. |
 
 Example:

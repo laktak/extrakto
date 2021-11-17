@@ -133,7 +133,8 @@ show_fzf_error() {
 capture() {
     local mode header_tmpl header out res key text query
 
-    mode=word
+    mode=$(get_next_mode "initial")
+
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
     header_tmpl+=", ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
@@ -197,13 +198,7 @@ capture() {
                 ;;
 
             "${filter_key}")
-                if [[ $mode == all ]]; then
-                    mode=line
-                elif [[ $mode == line ]]; then
-                    mode=word
-                else
-                    mode=all
-                fi
+                mode=$(get_next_mode $mode)
                 ;;
 
             "${grab_key}")
