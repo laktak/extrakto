@@ -28,7 +28,7 @@ Actions that use the current selection:
   For example if you select a URL this will open the browser.
 
 - Press *ctrl-e* to open the selection in your $EDITOR (*edit_key*). \
-  This only makes sense if you select a path.
-
+  This only makes sense if you select a path and if you are currently in a shell. \
+  extrakto will send the command to launch the editor to your active pane.
 
 You can change most keys, define your own filters and change other configuration options. Please see the GitHub readme for instructions.
