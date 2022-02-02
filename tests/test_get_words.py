@@ -17,7 +17,7 @@ class TestGetWords(unittest.TestCase):
         self.assertEqual(words, result)
 
     def test_box_drawing(self):
-        text = u"other│something"
+        text = "other│something"
         words = ["other", "something"]
 
         result = get_words(text)
