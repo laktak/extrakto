@@ -25,7 +25,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 
 Supported clipboards:
 
-- Linux (xclip)
+- Linux Xorg (xclip) and Wayland (wl-copy)
 - macOS (pbcopy)
 - WSL (aka "Bash on Windows")
 - *bring your own*

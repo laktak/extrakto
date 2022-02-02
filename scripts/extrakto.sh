@@ -53,6 +53,8 @@ if [[ "$clip_tool" == "auto" ]]; then
         'Linux')
             if [[ $(cat /proc/sys/kernel/osrelease) =~ Microsoft|microsoft ]]; then
                 clip_tool='clip.exe'
+            elif [[ $XDG_SESSION_TYPE == "wayland" ]]; then
+                clip_tool='wl-copy'
             else
                 clip_tool='xclip -i -selection clipboard >/dev/null'
             fi
