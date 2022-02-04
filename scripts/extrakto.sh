@@ -165,6 +165,7 @@ capture() {
         # between the commands
         out="$(get_cap \
             | $fzf_tool \
+                --multi \
                 --print-query \
                 --query="$query" \
                 --header="$header" \
@@ -173,19 +174,28 @@ capture() {
                 --layout="$fzf_layout" \
                 --no-info)"
         res=$?
-        mapfile -t out <<< "$out"
-        query="${out[0]}"
-        key="${out[1]}"
-        text="${out[-1]}"
-
-        if [[ $mode == all ]]; then
-            text=${text#*: }
-        fi
+        {
+            read query
+            read key
+            mapfile -t selection
+        } <<< "$out"
 
         if [[ $res -gt 0 && -z "$key" ]]; then
             show_fzf_error
             exit 1
         fi
+
+        case "$mode" in
+            all)
+                text="${selection[@]#*: }"
+                ;;
+            line)
+                IFS=$'\n' text="${selection[*]}"
+                ;;
+            *)
+                text="${selection[@]}"
+                ;;
+        esac
 
         case "$key" in
             "${copy_key}")
@@ -195,7 +205,7 @@ capture() {
 
             "${insert_key}")
                 tmux set-buffer -- "$text"
-                tmux paste-buffer -t $trigger_pane
+                tmux paste-buffer -p -t $trigger_pane
                 return 0
                 ;;
 
