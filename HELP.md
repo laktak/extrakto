@@ -18,6 +18,8 @@ Extrakto uses fzf. You only need to type a few keys to find your selection with 
 
 - Press *esc* or *ctrl-c* to cancel
 
+- Use *shift-tab* to select multiple entries.
+
 Actions that use the current selection:
 
 - Press *tab* to insert the selection into the active tmux pane (*insert_key*).
