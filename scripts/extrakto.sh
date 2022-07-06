@@ -83,7 +83,7 @@ copy() {
         # run in foreground as OSC-52 copying won't work otherwise
         tmux set-buffer -- "$1"
         tmux run-shell "tmux show-buffer|$clip_tool"
-    elif [[ "$clip_tool" == "tmux_osc52" ]]; then
+    elif [[ "$clip_tool_run" == "tmux_osc52" ]]; then
         # use native tmux 3.2 OSC 52 functionality
         tmux set-buffer -w -- "$1"
     else
