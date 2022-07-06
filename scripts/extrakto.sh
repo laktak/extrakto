@@ -79,20 +79,18 @@ else
 fi
 
 copy() {
-    if [[ "$clip_tool" == "osc52" ]]; then
-        # copy to OSC 52 with -w
+    if [[ "$clip_tool_run" == "fg" ]]; then
+        # run in foreground as OSC-52 copying won't work otherwise
+        tmux set-buffer -- "$1"
+        tmux run-shell "tmux show-buffer|$clip_tool"
+    elif [[ "$clip_tool" == "tmux_osc52" ]]; then
+        # use native tmux 3.2 OSC 52 functionality
         tmux set-buffer -w -- "$1"
     else
+        # run in background as xclip won't work otherwise
         tmux set-buffer -- "$1"
-        if [[ "$clip_tool_run" == "fg" ]]; then
-            # run in foreground as OSC-52 copying won't work otherwise
-            tmux run-shell "tmux show-buffer|$clip_tool"
-        else
-            # run in background as xclip won't work otherwise
-            tmux run-shell -b "tmux show-buffer|$clip_tool"
-        fi
+        tmux run-shell -b "tmux show-buffer|$clip_tool"
     fi
-
 }
 
 open() {
