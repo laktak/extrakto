@@ -7,3 +7,4 @@ Unicode:
 excluded:
   note_♫_
   block_drawing_│_
+  some_whitespace_⋅↴│_

@@ -5,3 +5,4 @@ ruble_₽_
 excluded
 note_
 block_drawing_
+some_whitespace_
