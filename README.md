@@ -22,6 +22,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 - [fzf](https://github.com/junegunn/fzf)
 - Python 3.6+
 - Bash (tested with 5.0+, on macOS please `brew install bash` first)
+  see the [Wiki for Bash 4 support](https://github.com/laktak/extrakto/wiki/Bash4)
 
 Supported clipboards:
 
