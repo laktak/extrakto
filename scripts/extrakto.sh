@@ -55,6 +55,8 @@ if [[ "$clip_tool" == "auto" ]]; then
                 clip_tool='clip.exe'
             elif [[ $XDG_SESSION_TYPE == "wayland" ]]; then
                 clip_tool='wl-copy'
+            elif [[ $(uname -o) == "Android" ]]; then
+                clip_tool='termux-clipboard-set'
             else
                 clip_tool='xclip -i -selection clipboard >/dev/null'
             fi

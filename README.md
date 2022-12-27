@@ -29,6 +29,7 @@ Supported clipboards:
 - Linux Xorg (xclip) and Wayland (wl-copy)
 - macOS (pbcopy)
 - WSL (aka "Bash on Windows")
+- Termux (termux-clipboard-set on "termux-api")
 - *bring your own*
 
 ## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
