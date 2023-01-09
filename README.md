@@ -29,7 +29,7 @@ Supported clipboards:
 - Linux Xorg (xclip) and Wayland (wl-copy)
 - macOS (pbcopy)
 - WSL (aka "Bash on Windows")
-- *bring your own*
+- *bring your own*, see the [Wiki](https://github.com/laktak/extrakto/wiki/) for examples (like termux)
 
 ## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
