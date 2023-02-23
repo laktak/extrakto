@@ -19,79 +19,79 @@ get_option() {
 
     case "$option" in
         "@extrakto_key")
-            get_tmux_option $option "tab"
+            get_tmux_option "$option" "tab"
             ;;
 
         "@extrakto_split_direction")
-            get_tmux_option $option "a"
+            get_tmux_option "$option" "a"
             ;;
 
         "@extrakto_split_size")
-            get_tmux_option $option "7"
+            get_tmux_option "$option" "7"
             ;;
 
         "@extrakto_grab_area")
-            get_tmux_option $option "full"
+            get_tmux_option "$option" "full"
             ;;
 
         "@extrakto_clip_tool")
-            get_tmux_option $option "auto"
+            get_tmux_option "$option" "auto"
             ;;
 
         "@extrakto_fzf_tool")
-            get_tmux_option $option "fzf"
+            get_tmux_option "$option" "fzf"
             ;;
 
         "@extrakto_open_tool")
-            get_tmux_option $option "auto"
+            get_tmux_option "$option" "auto"
             ;;
 
         "@extrakto_copy_key")
-            get_tmux_option $option "enter"
+            get_tmux_option "$option" "enter"
             ;;
 
         "@extrakto_insert_key")
-            get_tmux_option $option "tab"
+            get_tmux_option "$option" "tab"
             ;;
 
         "@extrakto_filter_key")
-            get_tmux_option $option "ctrl-f"
+            get_tmux_option "$option" "ctrl-f"
             ;;
 
         "@extrakto_open_key")
-            get_tmux_option $option "ctrl-o"
+            get_tmux_option "$option" "ctrl-o"
             ;;
 
         "@extrakto_edit_key")
-            get_tmux_option $option "ctrl-e"
+            get_tmux_option "$option" "ctrl-e"
             ;;
 
         "@extrakto_grab_key")
-            get_tmux_option $option "ctrl-g"
+            get_tmux_option "$option" "ctrl-g"
             ;;
 
         "@extrakto_help_key")
-            get_tmux_option $option "ctrl-h"
+            get_tmux_option "$option" "ctrl-h"
             ;;
 
         "@extrakto_clip_tool_run")
-            get_tmux_option $option "bg"
+            get_tmux_option "$option" "bg"
             ;;
 
         "@extrakto_popup_size")
-            get_tmux_option $option "90%"
+            get_tmux_option "$option" "90%"
             ;;
 
         "@extrakto_popup_position")
-            get_tmux_option $option "C"
+            get_tmux_option "$option" "C"
             ;;
 
         "@extrakto_fzf_layout")
-            get_tmux_option $option "default"
+            get_tmux_option "$option" "default"
             ;;
 
         "@extrakto_filter_order")
-            get_tmux_option $option "word all line"
+            get_tmux_option "$option" "word all line"
             ;;
     esac
 }
@@ -153,7 +153,7 @@ sanitize_modes_list() {
 # transform the modes_list acquired from @extrakto_filter_order into
 # the more usable form of associative array
 mk_next_mode_map() {
-    for i in ${!modes_list[@]}; do
+    for i in "${!modes_list[@]}"; do
         if [[ $i -eq $((${#modes_list[@]} - 1)) ]]; then
             next_mode+=([${modes_list[$i]}]=${modes_list[0]})
         else
@@ -177,9 +177,9 @@ get_next_mode() {
     fi
 
     local next=$1
-    if [ $next == "initial" ]; then
-        echo ${modes_list[0]}
+    if [ "$next" == "initial" ]; then
+        echo "${modes_list[0]}"
     else
-        echo ${next_mode[$next]}
+        echo "${next_mode[$next]}"
     fi
 }
