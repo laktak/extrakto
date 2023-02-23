@@ -19,79 +19,79 @@ get_option() {
 
     case "$option" in
         "@extrakto_key")
-            echo $(get_tmux_option $option "tab")
+            get_tmux_option $option "tab"
             ;;
 
         "@extrakto_split_direction")
-            echo $(get_tmux_option $option "a")
+            get_tmux_option $option "a"
             ;;
 
         "@extrakto_split_size")
-            echo $(get_tmux_option $option "7")
+            get_tmux_option $option "7"
             ;;
 
         "@extrakto_grab_area")
-            echo $(get_tmux_option $option "full")
+            get_tmux_option $option "full"
             ;;
 
         "@extrakto_clip_tool")
-            echo $(get_tmux_option $option "auto")
+            get_tmux_option $option "auto"
             ;;
 
         "@extrakto_fzf_tool")
-            echo $(get_tmux_option $option "fzf")
+            get_tmux_option $option "fzf"
             ;;
 
         "@extrakto_open_tool")
-            echo $(get_tmux_option $option "auto")
+            get_tmux_option $option "auto"
             ;;
 
         "@extrakto_copy_key")
-            echo $(get_tmux_option $option "enter")
+            get_tmux_option $option "enter"
             ;;
 
         "@extrakto_insert_key")
-            echo $(get_tmux_option $option "tab")
+            get_tmux_option $option "tab"
             ;;
 
         "@extrakto_filter_key")
-            echo $(get_tmux_option $option "ctrl-f")
+            get_tmux_option $option "ctrl-f"
             ;;
 
         "@extrakto_open_key")
-            echo $(get_tmux_option $option "ctrl-o")
+            get_tmux_option $option "ctrl-o"
             ;;
 
         "@extrakto_edit_key")
-            echo $(get_tmux_option $option "ctrl-e")
+            get_tmux_option $option "ctrl-e"
             ;;
 
         "@extrakto_grab_key")
-            echo $(get_tmux_option $option "ctrl-g")
+            get_tmux_option $option "ctrl-g"
             ;;
 
         "@extrakto_help_key")
-            echo $(get_tmux_option $option "ctrl-h")
+            get_tmux_option $option "ctrl-h"
             ;;
 
         "@extrakto_clip_tool_run")
-            echo $(get_tmux_option $option "bg")
+            get_tmux_option $option "bg"
             ;;
 
         "@extrakto_popup_size")
-            echo $(get_tmux_option $option "90%")
+            get_tmux_option $option "90%"
             ;;
 
         "@extrakto_popup_position")
-            echo $(get_tmux_option $option "C")
+            get_tmux_option $option "C"
             ;;
 
         "@extrakto_fzf_layout")
-            echo $(get_tmux_option $option "default")
+            get_tmux_option $option "default"
             ;;
 
         "@extrakto_filter_order")
-            echo $(get_tmux_option $option "word all line")
+            get_tmux_option $option "word all line"
             ;;
     esac
 }
