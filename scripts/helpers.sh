@@ -146,9 +146,7 @@ sanitize_modes_list() {
 
     if [[ $invalid == true ]]; then
         # change $modes_list to $default
-        for i in ${!default[@]}; do
-            modes_list[$i]=${default[$i]}
-        done
+        modes_list=("${default[@]}")
     fi
 }
 
