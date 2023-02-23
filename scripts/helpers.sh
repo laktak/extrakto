@@ -134,11 +134,11 @@ sanitize_modes_list() {
     # in case of further "first class" filter modes implemented in the future
     # add their names to the following default list and valid_modes set
     local -a default=("word" "all" "line")
-    local -A valid_modes=(["word"]=1 ["all"]=1 ["line"]=1)
+    local -a valid_modes=("word" "all" "line" "url" "path" "quote" "s-quote")
 
     local invalid=false
-    for mode in ${modes_list[@]}; do
-        if [[ ${valid_modes[$mode]} -ne 1 ]]; then
+    for mode in "${modes_list[@]}"; do
+        if [[ ! ${valid_modes[*]} =~ ${mode} ]]; then
             invalid=true
             break
         fi
