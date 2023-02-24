@@ -93,6 +93,10 @@ get_option() {
         "@extrakto_filter_order")
             get_tmux_option "$option" "word all line"
             ;;
+
+        "@extrakto_fzf_unset_default_opts")
+            get_tmux_option "$option" "true"
+            ;;
     esac
 }
 

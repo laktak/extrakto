@@ -44,9 +44,16 @@ edit_key=$(get_option "@extrakto_edit_key")
 grab_key=$(get_option "@extrakto_grab_key")
 help_key=$(get_option "@extrakto_help_key")
 fzf_layout=$(get_option "@extrakto_fzf_layout")
+fzf_unset_default_opts=$(get_option "@extrakto_fzf_unset_default_opts")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area} # keep this so we can cycle between alternatives on fzf
+
+# On many occasions, customized FZF_DEFAULT_OPTS will make our plugin behave
+# strangely.
+if [[ $fzf_unset_default_opts == "true" ]]; then
+    unset FZF_DEFAULT_OPTS
+fi
 
 if [[ "$clip_tool" == "auto" ]]; then
     case "$platform" in
