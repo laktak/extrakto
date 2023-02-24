@@ -157,13 +157,30 @@ capture() {
     header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
 
     get_cap() {
-        if [[ $mode == all ]]; then
-            capture_panes | $extrakto --warn-empty --alt --all --name -r
-        elif [[ $mode == line ]]; then
-            capture_panes | $extrakto --warn-empty -rl
-        else
-            capture_panes | $extrakto --warn-empty -rw
-        fi
+        case "$mode" in
+            "all")
+                capture_panes | $extrakto --warn-empty --alt --all --name -r
+                ;;
+            "line")
+                capture_panes | $extrakto --warn-empty -rl
+                ;;
+            "path")
+                capture_panes | $extrakto --warn-empty -rp
+                ;;
+            "url")
+                capture_panes | $extrakto --warn-empty -ru
+                ;;
+            "quote")
+                capture_panes | $extrakto --warn-empty -rq
+                ;;
+            "s-quote")
+                capture_panes | $extrakto --warn-empty -rs
+                ;;
+            "word" | *)
+                capture_panes | $extrakto --warn-empty -rw
+                ;;
+
+        esac
     }
 
     while true; do
