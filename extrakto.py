@@ -129,12 +129,16 @@ def main(parser):
     args = parser.parse_args()
 
     run_list = []
-    if args.words:
-        run_list.append("word")
     if args.paths:
         run_list.append("path")
+    if args.quote:
+        run_list.append("quote")
+    if args.squote:
+        run_list.append("s-quote")
     if args.urls:
         run_list.append("url")
+    if args.words:
+        run_list.append("word")
     run_list += args.add
 
     res = []
@@ -171,7 +175,12 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "-w", "--words", action="store_true", help='extract "word" tokens'
+        "-w",
+        "--words",
+        "--word",
+        dest="words",
+        action="store_true",
+        help='extract "word" tokens',
     )
 
     parser.add_argument("-l", "--lines", action="store_true", help="extract lines")
@@ -189,6 +198,12 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--paths", action="store_true", help="short for -a=path")
 
     parser.add_argument("-u", "--urls", action="store_true", help="short for -a=url")
+
+    parser.add_argument("-q", "--quote", action="store_true", help="short for -a=quote")
+
+    parser.add_argument(
+        "-s", "--squote", action="store_true", help="short for -a=s-quote"
+    )
 
     parser.add_argument(
         "--alt",
