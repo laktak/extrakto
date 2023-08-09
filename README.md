@@ -85,6 +85,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_fzf_tool`        | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_fzf_layout`      |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_open_tool`       | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
+| `@extrakto_editor`          | `auto`          | Set this to path of your own editor tool. If not set, `$EDITOR` will be used and `vi` if `$EDITOR1 is not set. |
 | `@extrakto_copy_key`        | `enter`         | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`           | Key to insert selection. |
 | `@extrakto_filter_key`      | `ctrl-f`        | Key to toggle filter mode. |
@@ -100,6 +101,7 @@ set -g @extrakto_split_size "15"
 set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
 set -g @extrakto_copy_key "tab"      # use tab to copy to clipboard
 set -g @extrakto_insert_key "enter"  # use enter to insert selection
+set -g @extrakto_editor "nano"       # set nano as the editor, helpful if $EDITOR is not set in bash profile
 ```
 
 ## Custom Filters

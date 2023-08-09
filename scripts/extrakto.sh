@@ -34,6 +34,7 @@ declare -Ar COLORS=(
 grab_area=$(get_option "@extrakto_grab_area")
 clip_tool=$(get_option "@extrakto_clip_tool")
 clip_tool_run=$(get_option "@extrakto_clip_tool_run")
+editor=$(get_option "@extrakto_editor")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
@@ -72,10 +73,12 @@ if [[ "$open_tool" == "auto" ]]; then
     esac
 fi
 
-if [[ -z $EDITOR ]]; then
-    editor="vi" # fallback
-else
-    editor="$EDITOR"
+if [[ -z $editor ]]; then
+    if [[ -z $EDITOR ]]; then
+        editor="vi" # fallback
+    else
+        editor="$EDITOR"
+    fi
 fi
 
 copy() {
