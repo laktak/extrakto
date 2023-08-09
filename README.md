@@ -113,7 +113,15 @@ You can define your own filters by creating a file in `~/.config/extrakto/extrak
 regex: ("[^"\n\r]+")
 ```
 
-To override an existing filter copy it to your file first.
+To override an existing filter copy it to your file first. For instance, if you want to remove the `quote2` and `s-quote2` filters you can:
+
+```toml
+[quote]
+alt2: None
+
+[s-quote]
+alt2: None
+```
 
 See [extrakto.conf](extrakto.conf) for syntax and predefined filters.
 
@@ -159,6 +167,17 @@ optional arguments:
                         minimum token length
   --warn-empty          warn if result is empty
 ```
+
+# Development
+
+If you used tpm to install the tool, you can run it directly from the command line using:
+
+```shell
+tmux capture-pane -p | ~/.tmux/plugins/extrakto/extrakto.py --alt --all --name -r --warn-empty
+```
+
+If you want to use an interactive debugger, like `ipython`, don't pipe input to the py program and instead paste the input
+you'd like to pipe in, and then ^D to send EOF without closing the pipe (so it can be used to control ipython).
 
 # Contributions
 
