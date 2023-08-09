@@ -33,8 +33,9 @@ class Extrakto:
 
         conf.read([default_conf, user_conf])
         sections = conf.sections()
+
         if not "path" in sections or not "url" in sections:
-            raise Exception("extrakto.conf incomplete")
+            raise Exception("extrakto.conf incomplete, path and url must exist")
 
         self.min_length = min_length
         self.alt = alt
@@ -42,11 +43,14 @@ class Extrakto:
 
         self.in_all = []
         self.fdict = {}
+
         for name in sections:
             sect = conf[name]
             alt = []
             for i in range(2, 10):
                 key = f"alt{i}"
+
+                # if alt2, alt{n} exists as a value in a section, create a variant based on that regex
                 if key in sect:
                     alt.append(sect[key])
 
