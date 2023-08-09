@@ -142,11 +142,11 @@ capture() {
     mode=$(get_next_mode "initial")
 
     header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
+    header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
     header_tmpl+=", ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
     header_tmpl+=", ${COLORS[BOLD]}${edit_key}${COLORS[OFF]}=edit"
-    header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
-    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
     header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
 
     get_cap() {
