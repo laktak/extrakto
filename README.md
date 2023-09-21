@@ -162,4 +162,7 @@ optional arguments:
 
 Thanks go to all contributors for their ideas and PRs!
 
+**If you make a PR, please keep it small so that it's easier to test and review. Try to create one PR per feature/bug.**
+
 Please run `black` if you change any python code and run `shfmt` if you change any bash files.
+
