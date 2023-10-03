@@ -85,7 +85,7 @@ Where `<option>` and `<value>` are one of the specified here:
 | `@extrakto_fzf_tool`        | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_fzf_layout`      |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_open_tool`       | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
-| `@extrakto_editor`          | `auto`          | Set this to path of your own editor tool. If not set, `$EDITOR` will be used and `vi` if `$EDITOR1 is not set. |
+| `@extrakto_editor`          | `auto`          | Set this to path of your own editor tool. If not set, `$EDITOR` will be used and `vi` if `$EDITOR`is not set. |
 | `@extrakto_copy_key`        | `enter`         | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`      | `tab`           | Key to insert selection. |
 | `@extrakto_filter_key`      | `ctrl-f`        | Key to toggle filter mode. |
