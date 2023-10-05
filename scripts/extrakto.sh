@@ -146,7 +146,7 @@ capture() {
     [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
     header_tmpl+=", ${COLORS[BOLD]}${edit_key}${COLORS[OFF]}=edit"
     header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
-    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab area [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
     header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
 
     get_cap() {
@@ -163,6 +163,7 @@ capture() {
         header=$header_tmpl
         header=${header/:ga:/$grab_area}
         header=${header/:filter:/$mode}
+        header=${header//ctrl-/^}
 
         # for troubleshooting add
         # tee /tmp/stageN | \
