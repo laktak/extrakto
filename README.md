@@ -77,8 +77,7 @@ Where `<option>` and `<value>` are one of the specified here below
 | Option                                | Default         | Description |
 | :---                                  | :---:           | :--- |
 | `@extrakto_grab_area`                 | `window full`   | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's (`window recent`) areas or all current window's (`window full`) panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
-| `@extrakto_filter_order`              | `word all line` | Filter modes order. The first listed mode will be the default when opening extrakto. You may use
-`word`, `line`, `path`, `url`, `quote`, `s-quote` or any of your own filters separated by a space. `all` applies all filters at the same time. |
+| `@extrakto_filter_order`              | `word all line` | Filter modes order. The first listed mode will be the default when opening extrakto. You may use `word`, `line`, `path`, `url`, `quote`, `s-quote` or any of your own filters separated by a space. `all` applies all filters at the same time. |
 
 ### Keys
 
@@ -100,6 +99,7 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | :---                                  | :---:           | :--- |
 | `@extrakto_clip_tool_run`             | `bg`            | Set this to `tmux_osc52` to enable [remote clipboard support](https://github.com/laktak/extrakto/wiki/Remote-Copy-via-OSC52) or `fg`/`bg` to have your clipboard tool run in a foreground/background shell. |
 | `@extrakto_clip_tool`                 | `auto`          | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
+| `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 | `@extrakto_fzf_layout`                |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. |
 | `@extrakto_fzf_unset_default_opts`    | `true`          | Unsets custom FZF_DEFAULT_OPTS as it can potentially cause problems in extrakto operations |
@@ -108,7 +108,6 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_popup_size`                | `90%`           | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
 | `@extrakto_split_direction`           | `a`             | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`                | `7`             | The size of the tmux split (for vertical/horizontal) |
-| `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 
 ### Examples
 
