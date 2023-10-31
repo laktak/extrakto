@@ -31,7 +31,7 @@ get_option() {
             ;;
 
         "@extrakto_grab_area")
-            echo $(get_tmux_option $option "full")
+            echo $(get_tmux_option $option "window full")
             ;;
 
         "@extrakto_clip_tool")

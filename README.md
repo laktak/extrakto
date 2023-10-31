@@ -76,7 +76,7 @@ Where `<option>` and `<value>` are one of the specified here below
 
 | Option                                | Default         | Description |
 | :---                                  | :---:           | :--- |
-| `@extrakto_grab_area`                 | `full`          | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's `recent` areas or all current window's `full` panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
+| `@extrakto_grab_area`                 | `window full`   | Whether you want extrakto to grab data from the `recent` area, the `full` pane, all current window's (`window recent`) areas or all current window's (`window full`) panes. You can also set this option to any number you want (or number preceded by "window ", e.g. "window 500"), this allows you to grab a smaller amount of data from the pane(s) than the pane's limit. For instance, you may have a really big limit for tmux history but using the same limit may end up on having slow performance on Extrakto. |
 | `@extrakto_filter_order`              | `word all line` | Filter modes order. The first listed mode will be the default when opening extrakto. You may use
 `word`, `line`, `path`, `url`, `quote`, `s-quote` or any of your own filters separated by a space. `all` applies all filters at the same time. |
 
