@@ -108,6 +108,7 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_popup_size`                | `90%`           | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
 | `@extrakto_split_direction`           | `a`             | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`                | `7`             | The size of the tmux split (for vertical/horizontal) |
+| `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 
 ### Examples
 
@@ -129,6 +130,13 @@ regex: ("[^"\n\r]+")
 ```
 
 To override an existing filter copy it to your file first.
+
+If you want to remove one of the alternate filters you can set it to `None`:
+
+```toml
+[quote]
+alt2: None
+```
 
 See [extrakto.conf](extrakto.conf) for syntax and predefined filters.
 
@@ -182,4 +190,3 @@ Thanks go to all contributors for their ideas and PRs!
 **If you make a PR, please keep it small so that it's easier to test and review. Try to create one PR per feature/bug.**
 
 Please run `black` if you change any python code and run `shfmt` if you change any bash files.
-
