@@ -169,14 +169,12 @@ capture() {
             "url")
                 capture_panes | $extrakto --warn-empty -r --urls
                 ;;
-            "quote")
-                capture_panes | $extrakto --warn-empty -ra quote
-                ;;
-            "s-quote")
-                capture_panes | $extrakto --warn-empty -ra s-quote
-                ;;
-            "word" | *)
+            "word")
                 capture_panes | $extrakto --warn-empty -r --words
+                ;;
+            *)
+                # custom filters
+                capture_panes | $extrakto --warn-empty -ra $mode
                 ;;
 
         esac
