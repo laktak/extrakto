@@ -93,6 +93,10 @@ get_option() {
         "@extrakto_filter_order")
             echo $(get_tmux_option $option "word all line")
             ;;
+
+        "@extrakto_fzf_unset_default_opts")
+            echo $(get_tmux_option $option "true")
+            ;;
     esac
 }
 
@@ -134,7 +138,13 @@ sanitize_modes_list() {
     # in case of further "first class" filter modes implemented in the future
     # add their names to the following default list and valid_modes set
     local -a default=("word" "all" "line")
-    local -A valid_modes=(["word"]=1 ["all"]=1 ["line"]=1)
+    local -A valid_modes=(["word"]=1
+        ["all"]=1
+        ["line"]=1
+        ["url"]=1
+        ["path"]=1
+        ["quote"]=1
+        ["s-quote"]=1)
 
     local invalid=false
     for mode in ${modes_list[@]}; do

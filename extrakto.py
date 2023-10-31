@@ -65,6 +65,8 @@ class Extrakto:
                 )
 
     def __getitem__(self, key):
+        if not key in self.fdict:
+            raise Exception(f"Unknown filter {key}")
         return self.fdict[key]
 
     def all(self):

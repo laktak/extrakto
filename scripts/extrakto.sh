@@ -44,9 +44,15 @@ edit_key=$(get_option "@extrakto_edit_key")
 grab_key=$(get_option "@extrakto_grab_key")
 help_key=$(get_option "@extrakto_help_key")
 fzf_layout=$(get_option "@extrakto_fzf_layout")
+fzf_unset_default_opts=$(get_option "@extrakto_fzf_unset_default_opts")
 
 capture_pane_start=$(get_capture_pane_start "$grab_area")
 original_grab_area=${grab_area} # keep this so we can cycle between alternatives on fzf
+
+# avoid side effects from FZF_DEFAULT_OPTS
+if [[ $fzf_unset_default_opts == "true" ]]; then
+    unset FZF_DEFAULT_OPTS
+fi
 
 if [[ "$clip_tool" == "auto" ]]; then
     case "$platform" in
@@ -150,13 +156,30 @@ capture() {
     header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
 
     get_cap() {
-        if [[ $mode == all ]]; then
-            capture_panes | $extrakto --warn-empty --alt --all --name -r
-        elif [[ $mode == line ]]; then
-            capture_panes | $extrakto --warn-empty -rl
-        else
-            capture_panes | $extrakto --warn-empty -rw
-        fi
+        case "$mode" in
+            "all")
+                capture_panes | $extrakto --warn-empty --alt --all --name -r
+                ;;
+            "line")
+                capture_panes | $extrakto --warn-empty -r --lines
+                ;;
+            "path")
+                capture_panes | $extrakto --warn-empty -r --paths
+                ;;
+            "url")
+                capture_panes | $extrakto --warn-empty -r --urls
+                ;;
+            "quote")
+                capture_panes | $extrakto --warn-empty -ra quote
+                ;;
+            "s-quote")
+                capture_panes | $extrakto --warn-empty -ra s-quote
+                ;;
+            "word" | *)
+                capture_panes | $extrakto --warn-empty -r --words
+                ;;
+
+        esac
     }
 
     while true; do
