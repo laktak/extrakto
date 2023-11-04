@@ -132,36 +132,6 @@ get_capture_pane_start() {
 declare -A next_mode
 declare -a modes_list
 
-# If there is a bogus filter mode name in the list,
-# fall back to the default list of "word all line"
-sanitize_modes_list() {
-    # in case of further "first class" filter modes implemented in the future
-    # add their names to the following default list and valid_modes set
-    local -a default=("word" "all" "line")
-    local -A valid_modes=(["word"]=1
-        ["all"]=1
-        ["line"]=1
-        ["url"]=1
-        ["path"]=1
-        ["quote"]=1
-        ["s-quote"]=1)
-
-    local invalid=false
-    for mode in ${modes_list[@]}; do
-        if [[ ${valid_modes[$mode]} -ne 1 ]]; then
-            invalid=true
-            break
-        fi
-    done
-
-    if [[ $invalid == true ]]; then
-        # change $modes_list to $default
-        for i in ${!default[@]}; do
-            modes_list[$i]=${default[$i]}
-        done
-    fi
-}
-
 # transform the modes_list acquired from @extrakto_filter_order into
 # the more usable form of associative array
 mk_next_mode_map() {
@@ -178,7 +148,6 @@ mk_next_mode_map() {
 modes_list_init() {
     readarray -td ' ' modes_list <<< "$(get_option @extrakto_filter_order) "
     unset 'modes_list[-1]'
-    sanitize_modes_list
     mk_next_mode_map
 }
 
