@@ -36,6 +36,7 @@ clip_tool=$(get_option "@extrakto_clip_tool")
 clip_tool_run=$(get_option "@extrakto_clip_tool_run")
 editor=$(get_option "@extrakto_editor")
 fzf_tool=$(get_option "@extrakto_fzf_tool")
+fzf_header=$(get_option "@extrakto_fzf_header")
 open_tool=$(get_option "@extrakto_open_tool")
 copy_key=$(get_option "@extrakto_copy_key")
 insert_key=$(get_option "@extrakto_insert_key")
@@ -146,13 +147,38 @@ capture() {
 
     mode=$(get_next_mode "initial")
 
-    header_tmpl="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
-    header_tmpl+=", ${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
-    [[ -n "$open_tool" ]] && header_tmpl+=", ${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
-    header_tmpl+=", ${COLORS[BOLD]}${edit_key}${COLORS[OFF]}=edit"
-    header_tmpl+=", ${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
-    header_tmpl+=", ${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
-    header_tmpl+=", ${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
+    header_tmpl=""
+    for o in $fzf_header; do
+        if [[ ! -z $header_tmpl ]]; then
+            header_tmpl+=", "
+        fi
+        case "$o" in
+            "i")
+                header_tmpl+="${COLORS[BOLD]}${insert_key}${COLORS[OFF]}=insert"
+                ;;
+            "c")
+                header_tmpl+="${COLORS[BOLD]}${copy_key}${COLORS[OFF]}=copy"
+                ;;
+            "o")
+                [[ -n "$open_tool" ]] && header_tmpl+="${COLORS[BOLD]}${open_key}${COLORS[OFF]}=open"
+                ;;
+            "e")
+                header_tmpl+="${COLORS[BOLD]}${edit_key}${COLORS[OFF]}=edit"
+                ;;
+            "f")
+                header_tmpl+="${COLORS[BOLD]}${filter_key}${COLORS[OFF]}=filter [${COLORS[YELLOW]}${COLORS[BOLD]}:filter:${COLORS[OFF]}]"
+                ;;
+            "g")
+                header_tmpl+="${COLORS[BOLD]}${grab_key}${COLORS[OFF]}=grab [${COLORS[YELLOW]}${COLORS[BOLD]}:ga:${COLORS[OFF]}]"
+                ;;
+            "h")
+                header_tmpl+="${COLORS[BOLD]}${help_key}${COLORS[OFF]}=help"
+                ;;
+            *)
+                header_tmpl+="(config error)"
+                ;;
+        esac
+    done
 
     get_cap() {
         case "$mode" in

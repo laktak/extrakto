@@ -42,6 +42,10 @@ get_option() {
             echo $(get_tmux_option $option "fzf")
             ;;
 
+        "@extrakto_fzf_header")
+            echo $(get_tmux_option $option "i c o e f g h")
+            ;;
+
         "@extrakto_open_tool")
             echo $(get_tmux_option $option "auto")
             ;;

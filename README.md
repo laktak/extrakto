@@ -102,6 +102,7 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 | `@extrakto_fzf_layout`                |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. |
+| `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab and help. You can reorder or omit information you don't need.|
 | `@extrakto_fzf_unset_default_opts`    | `true`          | Unsets custom FZF_DEFAULT_OPTS as it can potentially cause problems in extrakto operations |
 | `@extrakto_open_tool`                 | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_popup_position`            | `C`             | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |
@@ -117,6 +118,7 @@ set -g @extrakto_clip_tool "xsel --input --clipboard" # works better for nvim
 set -g @extrakto_copy_key "tab"      # use tab to copy to clipboard
 set -g @extrakto_insert_key "enter"  # use enter to insert selection
 set -g @extrakto_fzf_unset_default_opts "false"  # keep our custom FZF_DEFAULT_OPTS
+set -g @extrakto_fzf_header "i c f g" # for small screens shorten the fzf header
 ```
 
 ## Custom Filters
