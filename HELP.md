@@ -10,7 +10,7 @@ Extrakto uses fzf. You only need to type a few keys to find your selection with 
     You can define your own filters as well.
   - *line*, select full lines
 
-- Press *ctrl-g* to change the grab are (see *grab_key* and configuration)
+- Press *ctrl-g* to change the grab area (see *grab_key* and configuration)
   - *full*, everything from the current pane
   - *window full*, everything from all panes in this window
   - *recent*, everything visible with a few lines from the history (current pane)
