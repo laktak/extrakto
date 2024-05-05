@@ -8,6 +8,17 @@ extrakto="$current_dir/extrakto.sh"
 pane_id=$1
 split_direction=$(get_option "@extrakto_split_direction")
 
+filter="$2"
+if [[ -n "$filter" ]]; then
+    current_filter_order="$(get_option "@extrakto_filter_order")"
+    tmux set-option -g "@extrakto_filter_order" "$filter"
+    function restore_original() {
+        tmux set-option -g "@extrakto_filter_order" "$current_filter_order"
+    }
+
+    trap restore_original EXIT
+fi
+
 if [[ $split_direction == a ]]; then
     if [[ -n $(tmux list-commands popup) ]]; then
         split_direction=p
