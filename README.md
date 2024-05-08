@@ -21,14 +21,13 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 - [tmux](https://github.com/tmux/tmux) - popups require 3.2, otherwise extrakto will open in a split window.
 - [fzf](https://github.com/junegunn/fzf)
 - Python 3.6+
-- Bash (tested with 5.0+, on macOS please `brew install bash` first)
-  see the [Wiki for Bash 4 support](https://github.com/laktak/extrakto/wiki/Bash4)
+- a posix shell like Bash
 
 Supported clipboards:
 
 - Linux Xorg (xclip) and Wayland (wl-copy)
 - macOS (pbcopy)
-- WSL (aka "Bash on Windows")
+- WSL
 - *bring your own*, see the [Wiki](https://github.com/laktak/extrakto/wiki/) for examples (like termux)
 
 ## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
@@ -64,13 +63,13 @@ Add or look for special tips in our [wiki](https://github.com/laktak/extrakto/wi
 
 ## Options
 
-To set any of these options write on your `~/.tmux.conf` file:
+You can set any of these options by adding them to your `~/.tmux.conf` file:
 
 ```
 set -g <option> "<value>"
 ```
 
-Where `<option>` and `<value>` are one of the specified here below
+Where `<option>` and `<value>` correspond to one of the options specified below
 
 ### Common Options
 
@@ -190,4 +189,4 @@ Thanks go to all contributors for their ideas and PRs!
 
 **If you make a PR, please keep it small so that it's easier to test and review. Try to create one PR per feature/bug.**
 
-Please run `black` if you change any python code and run `shfmt` if you change any bash files.
+Please run `black` if you change any python code and run `shfmt -p` if you change any shell files.
