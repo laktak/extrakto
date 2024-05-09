@@ -1,5 +1,7 @@
 # extrakto for tmux
 
+**Please test the new [python-posix](https://github.com/laktak/extrakto/tree/python-posix) branch - it no longer requires Bash, which was requested for macOS:** `set -g @plugin 'laktak/extrakto#python-posix'`
+
 ![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
 
 **Output completions** - you can complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions.
@@ -22,7 +24,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 - [fzf](https://github.com/junegunn/fzf)
 - Python 3.6+
 - Bash (tested with 5.0+, on macOS please `brew install bash` first)
-  see the [Wiki for Bash 4 support](https://github.com/laktak/extrakto/wiki/Bash4)
+  or use the new python-posix branch without Bash
 
 Supported clipboards:
 
