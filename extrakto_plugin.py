@@ -257,7 +257,7 @@ class ExtraktoPlugin:
 
     def get_next_mode(self, next):
         if next == "initial":
-            return os.environ.get("extrakto_inital_mode", self.modes_list[0])
+            return os.environ.get("extrakto_inital_mode").strip() or self.modes_list[0]
         else:
             return self.next_mode[next]
 
@@ -313,7 +313,8 @@ class ExtraktoPlugin:
                     ],
                     get_cap(mode, self.capture_panes()),
                 )
-            except Exception as _:
+            except Exception as e:
+                print(e)
                 print("error: unable to extract - check/report errors above")
                 print("You can also set the fzf path in options (see readme).")
                 input()
