@@ -257,7 +257,7 @@ class ExtraktoPlugin:
 
     def get_next_mode(self, next):
         if next == "initial":
-            return self.modes_list[0]
+            return os.environ.get("extrakto_inital_mode", self.modes_list[0])
         else:
             return self.next_mode[next]
 
