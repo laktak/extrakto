@@ -8,6 +8,7 @@ extrakto="$current_dir/extrakto.sh"
 pane_id=$1
 split_direction=$(get_option "@extrakto_split_direction")
 
+extrakto_inital_mode="$2"
 if [[ $split_direction == a ]]; then
     if [[ -n $(tmux list-commands popup) ]]; then
         split_direction=p
@@ -26,11 +27,15 @@ if [[ $split_direction == p ]]; then
             -h ${popup_height:-$popup_width} \
             -x ${popup_x} \
             -y ${popup_y:-$popup_x} \
+            -e extrakto_inital_mode="${extrakto_inital_mode}" \
             -E "${extrakto} ${pane_id} popup"
         rc=$?
     done
     exit $rc
 else
     split_size=$(get_option "@extrakto_split_size")
-    tmux split-window -${split_direction} -l ${split_size} "tmux setw remain-on-exit off; ${extrakto} ${pane_id} split"
+    tmux split-window \
+        -${split_direction} \
+        -e extrakto_inital_mode="${extrakto_inital_mode}" \
+        -l ${split_size} "tmux setw remain-on-exit off; ${extrakto} ${pane_id} split"
 fi

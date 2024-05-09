@@ -163,7 +163,7 @@ get_next_mode() {
 
     local next=$1
     if [ $next == "initial" ]; then
-        echo ${modes_list[0]}
+        echo ${extrakto_inital_mode:-${modes_list[0]}}
     else
         echo ${next_mode[$next]}
     fi
