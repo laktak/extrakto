@@ -20,6 +20,8 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 
 ## Requirements
 
+<a href="https://github.com/laktak/tome"><img src="https://github.com/laktak/tome/wiki/assets/clippy_tome.gif" align="right" alt="clippy" width="265" height="349"></a>
+
 - [tmux](https://github.com/tmux/tmux) - popups require 3.2, otherwise extrakto will open in a split window.
 - [fzf](https://github.com/junegunn/fzf)
 - Python 3.6+
