@@ -142,7 +142,7 @@ class ExtraktoPlugin:
                     r"Microsoft|microsoft", open("/proc/sys/kernel/osrelease").read()
                 ):
                     self.clip_tool = "clip.exe"
-                elif os.environ.get("XDG_SESSION_TYPE") == "wayland":
+                elif os.environ.get("XDG_SESSION_TYPE", None) == "wayland":
                     self.clip_tool = "wl-copy"
                 else:
                     self.clip_tool = "xclip -i -selection clipboard >/dev/null"
@@ -257,7 +257,9 @@ class ExtraktoPlugin:
 
     def get_next_mode(self, next):
         if next == "initial":
-            return os.environ.get("extrakto_inital_mode").strip() or self.modes_list[0]
+            return (
+                os.environ.get("extrakto_inital_mode", "").strip() or self.modes_list[0]
+            )
         else:
             return self.next_mode[next]
 

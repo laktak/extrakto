@@ -19,7 +19,12 @@ if [ "$split_direction" = "a" ]; then
 	fi
 fi
 
-extrakto_inital_mode="$2"
+extra_options=""
+if [ -n "$2" ]; then
+	# requires tmux 3.3 * Add -e flag to set an environment variable for a popup.
+	extra_options="-e 'extrakto_inital_mode=$2'"
+fi
+
 if [ "$split_direction" = "p" ]; then
 	popup_size=$(get_option "@extrakto_popup_size" "90%")
 	popup_width=$(echo $popup_size | cut -d',' -f1)
@@ -36,7 +41,7 @@ if [ "$split_direction" = "p" ]; then
 			-h "${popup_height:-${popup_width}}" \
 			-x "${popup_x}" \
 			-y "${popup_y:-$popup_x}" \
-			-e extrakto_inital_mode="${extrakto_inital_mode}" \
+			$extra_options \
 			-E "${extrakto} ${pane_id} popup"
 		rc=$?
 	done
@@ -45,6 +50,6 @@ else
 	split_size=$(get_option "@extrakto_split_size" 7)
 	tmux split-window \
 		-${split_direction} \
-		-e extrakto_inital_mode="${extrakto_inital_mode}" \
+		$extra_options \
 		-l ${split_size} "tmux setw remain-on-exit off; ${extrakto} ${pane_id} split"
 fi
