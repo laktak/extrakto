@@ -1,12 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_dir=$(dirname "$0")
+script_dir=$(
+	cd "$script_dir"
+	pwd
+)
 
-source "$CURRENT_DIR/scripts/helpers.sh"
-extrakto_open="$CURRENT_DIR/scripts/open.sh"
+. "$script_dir/scripts/helpers.sh"
 
-extrakto_key=$(get_option "@extrakto_key")
+extrakto_open="$script_dir/scripts/open.sh"
+extrakto_key=$(get_option "@extrakto_key" "tab")
 
-if [[ $(echo $extrakto_key | tr [:upper:] [:lower:]) != none ]]; then
-    tmux bind-key ${extrakto_key} run-shell "\"$extrakto_open\" \"#{pane_id}\""
+lowercase_key=$(echo $extrakto_key | tr '[:upper:]' '[:lower:]')
+
+if [ "$lowercase_key" != "none" ]; then
+	tmux bind-key "${extrakto_key}" run-shell "\"$extrakto_open\" \"#{pane_id}\""
 fi
