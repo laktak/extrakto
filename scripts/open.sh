@@ -22,7 +22,7 @@ fi
 extra_options=""
 if [ -n "$2" ]; then
 	# requires tmux 3.3 * Add -e flag to set an environment variable for a popup.
-	extra_options="-e 'extrakto_inital_mode=$2'"
+	extra_options="-e extrakto_inital_mode=$2"
 fi
 
 if [ "$split_direction" = "p" ]; then
