@@ -38,7 +38,7 @@ Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
     set -g @plugin 'laktak/extrakto'
 
-Hit `prefix + I` to fetch the plugin and source it.
+Hit `prefix + I` to fetch the plugin and source it. You can use `prefix + U` to update all plugins.
 
 You should now have all `extrakto` key bindings defined.
 
