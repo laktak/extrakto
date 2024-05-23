@@ -5,14 +5,10 @@ import platform
 import re
 import subprocess
 import sys
+import traceback
 
 from collections import OrderedDict
 from extrakto import Extrakto, get_lines
-
-if len(sys.argv) < 3:
-    print("Usage: extrakto-plugin.py trigger_pane launch_mode")
-    sys.exit(1)
-
 
 PLATFORM = platform.system()
 PRJ_URL = "https://github.com/laktak/extrakto"
@@ -301,26 +297,37 @@ class ExtraktoPlugin:
 
             # for troubleshooting add `tee /tmp/stageN | ` between the commands
             try:
+                fzf_cmd = [
+                    self.fzf_tool,
+                    "--multi",
+                    "--print-query",
+                    f"--query={query}",
+                    f"--header={header}",
+                    f"--expect=ctrl-c,ctrl-g,esc",
+                    f"--expect={self.insert_key},{self.copy_key},{self.filter_key},{self.edit_key},{self.open_key},{self.grab_key},{self.help_key}",
+                    "--tiebreak=index",
+                    f"--layout={self.fzf_layout}",
+                    "--no-info",
+                ]
                 query, key, *selection = fzf_sel(
-                    [
-                        self.fzf_tool,
-                        "--multi",
-                        "--print-query",
-                        f"--query={query}",
-                        f"--header={header}",
-                        f"--expect={self.insert_key},{self.copy_key},{self.filter_key},{self.edit_key},{self.open_key},{self.grab_key},{self.help_key},ctrl-c,esc",
-                        "--tiebreak=index",
-                        f"--layout={self.fzf_layout}",
-                        "--no-info",
-                    ],
+                    fzf_cmd,
                     get_cap(mode, self.capture_panes()),
                 )
             except Exception as e:
-                print(e)
-                print("error: unable to extract - check/report errors above")
-                print("You can also set the fzf path in options (see readme).")
-                input()
-                sys.exit(1)
+                msg = (
+                    str(fzf_cmd)
+                    + "\n"
+                    + traceback.format_exc()
+                    + "\n"
+                    + "error: unable to extract - check/report errors above"
+                    + "\n"
+                    + "If fzf is not found you need to set the fzf path in options (see readme)."
+                )
+                print(msg)
+                confirm = input("Copy this message to the clipboard? [Y/n]")
+                if confirm != "n":
+                    self.copy(msg)
+                sys.exit(0)
 
             text = ""
             if mode == "all":
@@ -407,4 +414,8 @@ class ExtraktoPlugin:
 
 
 if __name__ == "__main__":
-    ExtraktoPlugin(sys.argv[1], sys.argv[2]).capture()
+    if len(sys.argv) < 3:
+        print("Usage: extrakto-plugin.py trigger_pane launch_mode")
+        sys.exit(1)
+    else:
+        ExtraktoPlugin(sys.argv[1], sys.argv[2]).capture()
