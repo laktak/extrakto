@@ -331,7 +331,9 @@ class ExtraktoPlugin:
 
             text = ""
             if mode == "all":
-                text = "\n".join(s[len(s) :] for s in selection)
+                text = "\n".join(
+                    next(iter(s.split(": ", 1)[1:2]), s) for s in selection
+                )
             elif mode == "line":
                 text = "\n".join(selection)
             else:
