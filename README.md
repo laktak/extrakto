@@ -16,6 +16,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
+
 ## Requirements
 
 <a href="https://github.com/laktak/tome"><img src="https://github.com/laktak/tome/wiki/assets/clippy_tome.gif" align="right" alt="clippy" width="265" height="349"></a>
@@ -32,6 +33,7 @@ Supported clipboards:
 - WSL
 - *bring your own*, see the [Wiki](https://github.com/laktak/extrakto/wiki/) for examples (like termux)
 
+
 ## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
@@ -41,6 +43,7 @@ Add the plugin to the list of TPM plugins in `.tmux.conf`:
 Hit `prefix + I` to fetch the plugin and source it. You can use `prefix + U` to update all plugins.
 
 You should now have all `extrakto` key bindings defined.
+
 
 ## Manual Installation
 
@@ -59,9 +62,11 @@ Reload the tmux environment:
 
 You should now have all `extrakto` key bindings defined.
 
+
 ## Wiki
 
 Add or look for special tips in our [wiki](https://github.com/laktak/extrakto/wiki).
+
 
 ## Options
 
@@ -84,7 +89,7 @@ Where `<option>` and `<value>` correspond to one of the options specified below
 
 | Option                                | Default         | Description |
 | :---                                  | :---:           | :--- |
-| `@extrakto_key`                       | `tab`           | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none' and define a binding in your `.tmux.conf`. See `extrakto.tmux` for a sample. |
+| `@extrakto_key`                       | `tab`           | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none'. See "Custom Tmux Keybindings". |
 | `@extrakto_copy_key`                  | `enter`         | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`                | `tab`           | Key to insert selection. |
 | `@extrakto_filter_key`                | `ctrl-f`        | Key to toggle filter mode. |
@@ -121,6 +126,21 @@ set -g @extrakto_insert_key "enter"  # use enter to insert selection
 set -g @extrakto_fzf_unset_default_opts "false"  # keep our custom FZF_DEFAULT_OPTS
 set -g @extrakto_fzf_header "i c f g" # for small screens shorten the fzf header
 ```
+
+### Custom Tmux Keybindings
+
+Instead of using `@extrakto_key` you can define your own key binding to start extrakto in your `.tmux.conf`:
+
+```
+tmux bind-key YOUR-KEY run-shell "~/.tmux/plugins/extrakto/scripts/open.sh \"#{pane_id}\""
+```
+
+If you wish you can also define different keys to start with a specific filter:
+
+```
+tmux bind-key YOUR-KEY run-shell "~/.tmux/plugins/extrakto/scripts/open.sh \"#{pane_id}\" FILTER-NAME"
+```
+
 
 ## Custom Filters
 
