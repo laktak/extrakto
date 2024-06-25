@@ -29,7 +29,7 @@ class ExtraktoException(Exception):
 
 
 class Extrakto:
-    def __init__(self, *, min_length=5, alt=False, prefix_name=False):
+    def __init__(self, *, alt=False, prefix_name=False):
         conf = ConfigParser(interpolation=None)
         default_conf = os.path.join(SCRIPT_DIR, "extrakto.conf")
         user_conf = os.path.join(
@@ -42,7 +42,6 @@ class Extrakto:
         if not "path" in sections or not "url" in sections:
             raise ExtraktoException("extrakto.conf incomplete, path and url must exist")
 
-        self.min_length = min_length
         self.alt = alt
         self.prefix_name = prefix_name
 
@@ -71,6 +70,7 @@ class Extrakto:
                     lstrip=sect.get("lstrip", ""),
                     rstrip=sect.get("rstrip", ""),
                     alt=alt,
+                    min_length=sect.getint("min_length", 5)
                 )
 
     def __getitem__(self, key):
@@ -86,7 +86,7 @@ class Extrakto:
 
 
 class FilterDef:
-    def __init__(self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt):
+    def __init__(self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt, min_length):
         self.extrakto = extrakto
         self.name = name
         self.regex = regex
@@ -94,6 +94,7 @@ class FilterDef:
         self.lstrip = lstrip
         self.rstrip = rstrip
         self.alt = alt
+        self.min_length = min_length
 
     def filter(self, text):
         res = list()
@@ -111,7 +112,7 @@ class FilterDef:
             if self.rstrip:
                 item = item.rstrip(self.rstrip)
 
-            if len(item) >= self.extrakto.min_length:
+            if len(item) >= self.min_length:
                 if not self.exclude or not re.search(self.exclude, item, re.I):
                     if self.extrakto.alt:
                         for i, altre in enumerate(self.alt):
@@ -152,7 +153,7 @@ def main(parser):
     # input from the terminal can cause UnicodeDecodeErrors in some instances, ignore for now
     text = sys.stdin.buffer.read().decode("utf-8", "ignore")
 
-    extrakto = Extrakto(min_length=args.min_length, alt=args.alt, prefix_name=args.name)
+    extrakto = Extrakto(alt=args.alt, prefix_name=args.name)
     if args.all:
         run_list = extrakto.all()
 
