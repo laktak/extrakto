@@ -23,6 +23,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # and whitespace ( \t\n\r)
 RE_WORD = "[^][(){}=$\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
 
+MIN_LENGTH_DEFAULT = 5
 
 class ExtraktoException(Exception):
     pass
@@ -70,7 +71,7 @@ class Extrakto:
                     lstrip=sect.get("lstrip", ""),
                     rstrip=sect.get("rstrip", ""),
                     alt=alt,
-                    min_length=sect.getint("min_length", 5)
+                    min_length=sect.getint("min_length", MIN_LENGTH_DEFAULT)
                 )
 
     def __getitem__(self, key):
@@ -123,7 +124,7 @@ class FilterDef:
         return res
 
 
-def get_lines(text, *, min_length=5, prefix_name=False):
+def get_lines(text, *, min_length=MIN_LENGTH_DEFAULT, prefix_name=False):
     lines = []
 
     for raw_line in text.splitlines():
@@ -211,7 +212,7 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
     parser.add_argument(
-        "-m", "--min-length", default=5, help="minimum token length", type=int
+        "-m", "--min-length", default=MIN_LENGTH_DEFAULT, help="minimum token length", type=int
     )
 
     parser.add_argument(
