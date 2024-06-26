@@ -25,6 +25,7 @@ RE_WORD = "[^][(){}=$\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
 
 MIN_LENGTH_DEFAULT = 5
 
+
 class ExtraktoException(Exception):
     pass
 
@@ -72,7 +73,7 @@ class Extrakto:
                     lstrip=sect.get("lstrip", ""),
                     rstrip=sect.get("rstrip", ""),
                     alt=alt,
-                    min_length=sect.getint("min_length", MIN_LENGTH_DEFAULT)
+                    min_length=sect.getint("min_length", MIN_LENGTH_DEFAULT),
                 )
 
     def __getitem__(self, key):
@@ -88,7 +89,9 @@ class Extrakto:
 
 
 class FilterDef:
-    def __init__(self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt, min_length):
+    def __init__(
+        self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt, min_length
+    ):
         self.extrakto = extrakto
         self.name = name
         self.regex = regex
@@ -115,7 +118,11 @@ class FilterDef:
                 item = item.rstrip(self.rstrip)
 
             # prefer global min_length, fallback to filter specific
-            if len(item) >= (self.extrakto.min_length if self.extrakto.min_length is not None else self.min_length):
+            if len(item) >= (
+                self.extrakto.min_length
+                if self.extrakto.min_length is not None
+                else self.min_length
+            ):
                 if not self.exclude or not re.search(self.exclude, item, re.I):
                     if self.extrakto.alt:
                         for i, altre in enumerate(self.alt):
@@ -213,9 +220,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
-    parser.add_argument(
-        "-m", "--min-length", help="minimum token length", type=int
-    )
+    parser.add_argument("-m", "--min-length", help="minimum token length", type=int)
 
     parser.add_argument(
         "--warn-empty", action="store_true", help="warn if result is empty"
