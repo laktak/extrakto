@@ -5,7 +5,7 @@ import unittest
 
 from extrakto import Extrakto
 
-get_words = Extrakto()["word"].filter
+get_words = Extrakto(min_length=5)["word"].filter
 
 
 class TestGetWords(unittest.TestCase):

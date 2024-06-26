@@ -30,7 +30,7 @@ class ExtraktoException(Exception):
 
 
 class Extrakto:
-    def __init__(self, *, alt=False, prefix_name=False):
+    def __init__(self, *, min_length=None, alt=False, prefix_name=False):
         conf = ConfigParser(interpolation=None)
         default_conf = os.path.join(SCRIPT_DIR, "extrakto.conf")
         user_conf = os.path.join(
@@ -43,6 +43,7 @@ class Extrakto:
         if not "path" in sections or not "url" in sections:
             raise ExtraktoException("extrakto.conf incomplete, path and url must exist")
 
+        self.min_length = min_length
         self.alt = alt
         self.prefix_name = prefix_name
 
@@ -113,7 +114,8 @@ class FilterDef:
             if self.rstrip:
                 item = item.rstrip(self.rstrip)
 
-            if len(item) >= self.min_length:
+            # prefer global min_length, fallback to filter specific
+            if len(item) >= (self.extrakto.min_length if self.extrakto.min_length is not None else self.min_length):
                 if not self.exclude or not re.search(self.exclude, item, re.I):
                     if self.extrakto.alt:
                         for i, altre in enumerate(self.alt):
@@ -154,7 +156,7 @@ def main(parser):
     # input from the terminal can cause UnicodeDecodeErrors in some instances, ignore for now
     text = sys.stdin.buffer.read().decode("utf-8", "ignore")
 
-    extrakto = Extrakto(alt=args.alt, prefix_name=args.name)
+    extrakto = Extrakto(min_length=args.min_length, alt=args.alt, prefix_name=args.name)
     if args.all:
         run_list = extrakto.all()
 
@@ -212,7 +214,7 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
     parser.add_argument(
-        "-m", "--min-length", default=MIN_LENGTH_DEFAULT, help="minimum token length", type=int
+        "-m", "--min-length", help="minimum token length", type=int
     )
 
     parser.add_argument(

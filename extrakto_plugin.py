@@ -78,12 +78,12 @@ def get_cap(mode, data):
     run_list = []
 
     if mode == "all":
-        extrakto = Extrakto(alt=True, prefix_name=True)
+        extrakto = Extrakto(min_length=5, alt=True, prefix_name=True)
         run_list = extrakto.all()
     elif mode == "line":
         res += get_lines(data)
     else:
-        extrakto = Extrakto()
+        extrakto = Extrakto(min_length=5)
         run_list = [mode]
 
     for name in run_list:
