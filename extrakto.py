@@ -73,7 +73,12 @@ class Extrakto:
                     lstrip=sect.get("lstrip", ""),
                     rstrip=sect.get("rstrip", ""),
                     alt=alt,
-                    min_length=sect.getint("min_length", MIN_LENGTH_DEFAULT),
+                    # prefer global min_length, fallback to filter specific
+                    min_length=(
+                        self.min_length
+                        if self.min_length is not None
+                        else sect.getint("min_length", MIN_LENGTH_DEFAULT)
+                    ),
                 )
 
     def __getitem__(self, key):
@@ -126,12 +131,7 @@ class FilterDef:
             if self.rstrip:
                 item = item.rstrip(self.rstrip)
 
-            # prefer global min_length, fallback to filter specific
-            if len(item) >= (
-                self.extrakto.min_length
-                if self.extrakto.min_length is not None
-                else self.min_length
-            ):
+            if len(item) >= self.min_length:
                 if not self.exclude or not re.search(self.exclude, item, re.I):
                     if self.extrakto.alt:
                         for i, altre in enumerate(self.alt):
