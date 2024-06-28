@@ -90,7 +90,16 @@ class Extrakto:
 
 class FilterDef:
     def __init__(
-        self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt, min_length
+        self,
+        extrakto,
+        name,
+        *,
+        regex,
+        exclude,
+        lstrip,
+        rstrip,
+        alt,
+        min_length=MIN_LENGTH_DEFAULT,
     ):
         self.extrakto = extrakto
         self.name = name
