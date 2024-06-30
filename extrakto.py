@@ -23,13 +23,15 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # and whitespace ( \t\n\r)
 RE_WORD = "[^][(){}=$\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
 
+MIN_LENGTH_DEFAULT = 5
+
 
 class ExtraktoException(Exception):
     pass
 
 
 class Extrakto:
-    def __init__(self, *, min_length=5, alt=False, prefix_name=False):
+    def __init__(self, *, min_length=None, alt=False, prefix_name=False):
         conf = ConfigParser(interpolation=None)
         default_conf = os.path.join(SCRIPT_DIR, "extrakto.conf")
         user_conf = os.path.join(
@@ -71,6 +73,12 @@ class Extrakto:
                     lstrip=sect.get("lstrip", ""),
                     rstrip=sect.get("rstrip", ""),
                     alt=alt,
+                    # prefer global min_length, fallback to filter specific
+                    min_length=(
+                        self.min_length
+                        if self.min_length is not None
+                        else sect.getint("min_length", MIN_LENGTH_DEFAULT)
+                    ),
                 )
 
     def __getitem__(self, key):
@@ -86,7 +94,18 @@ class Extrakto:
 
 
 class FilterDef:
-    def __init__(self, extrakto, name, *, regex, exclude, lstrip, rstrip, alt):
+    def __init__(
+        self,
+        extrakto,
+        name,
+        *,
+        regex,
+        exclude,
+        lstrip,
+        rstrip,
+        alt,
+        min_length=MIN_LENGTH_DEFAULT,
+    ):
         self.extrakto = extrakto
         self.name = name
         self.regex = regex
@@ -94,6 +113,7 @@ class FilterDef:
         self.lstrip = lstrip
         self.rstrip = rstrip
         self.alt = alt
+        self.min_length = min_length
 
     def filter(self, text):
         res = list()
@@ -111,7 +131,7 @@ class FilterDef:
             if self.rstrip:
                 item = item.rstrip(self.rstrip)
 
-            if len(item) >= self.extrakto.min_length:
+            if len(item) >= self.min_length:
                 if not self.exclude or not re.search(self.exclude, item, re.I):
                     if self.extrakto.alt:
                         for i, altre in enumerate(self.alt):
@@ -122,7 +142,7 @@ class FilterDef:
         return res
 
 
-def get_lines(text, *, min_length=5, prefix_name=False):
+def get_lines(text, *, min_length=MIN_LENGTH_DEFAULT, prefix_name=False):
     lines = []
 
     for raw_line in text.splitlines():
@@ -209,9 +229,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-r", "--reverse", action="store_true", help="reverse output")
 
-    parser.add_argument(
-        "-m", "--min-length", default=5, help="minimum token length", type=int
-    )
+    parser.add_argument("-m", "--min-length", help="minimum token length", type=int)
 
     parser.add_argument(
         "--warn-empty", action="store_true", help="warn if result is empty"

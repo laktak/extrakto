@@ -5,7 +5,7 @@ You can give feedback or star extrakto at https://github.com/laktak/extrakto
 Extrakto uses fzf. You only need to type a few keys to find your selection with a fuzzy match.
 
 - Press *ctrl-f* to change to the next filter mode (*filter_key*)
-  - *word*, the default filter allows you to select words (min length=5)
+  - *word*, the default filter allows you to select words (default min length=5)
   - *all*, runs all filters and allows you select quotes, url, paths, etc. \
     You can define your own filters as well.
   - *line*, select full lines
