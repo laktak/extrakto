@@ -137,7 +137,7 @@ class ExtraktoPlugin:
                 if re.search(
                     r"Microsoft|microsoft", open("/proc/sys/kernel/osrelease").read()
                 ):
-                    self.clip_tool = "clip.exe"
+                    self.clip_tool = "/mnt/c/Windows/System32/clip.exe"
                 elif os.environ.get("XDG_SESSION_TYPE", None) == "wayland":
                     self.clip_tool = "wl-copy"
                 else:
