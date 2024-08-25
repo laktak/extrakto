@@ -414,12 +414,12 @@ class ExtraktoPlugin:
                     self.copy(PRJ_URL)
             else:
                 return 0
+
     @staticmethod
     def _get_wsl_clip_executable():
-        if shutil.which('clip.exe') is None:
-            return '/mnt/c/Windows/System32/clip.exe'
-        return 'clip.exe'
-
+        if shutil.which("clip.exe") is None:
+            return "/mnt/c/Windows/System32/clip.exe"
+        return "clip.exe"
 
 
 if __name__ == "__main__":
