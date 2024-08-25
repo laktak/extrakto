@@ -4,6 +4,7 @@ import os
 import platform
 import re
 import subprocess
+import shutil
 import sys
 import traceback
 
@@ -137,7 +138,7 @@ class ExtraktoPlugin:
                 if re.search(
                     r"Microsoft|microsoft", open("/proc/sys/kernel/osrelease").read()
                 ):
-                    self.clip_tool = "clip.exe"
+                    self.clip_tool = ExtraktoPlugin._get_wsl_clip_executable()
                 elif os.environ.get("XDG_SESSION_TYPE", None) == "wayland":
                     self.clip_tool = "wl-copy"
                 else:
@@ -413,6 +414,12 @@ class ExtraktoPlugin:
                     self.copy(PRJ_URL)
             else:
                 return 0
+    @staticmethod
+    def _get_wsl_clip_executable():
+        if shutil.which('clip.exe') is None:
+            return '/mnt/c/Windows/System32/clip.exe'
+        return 'clip.exe'
+
 
 
 if __name__ == "__main__":
