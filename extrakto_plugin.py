@@ -238,6 +238,7 @@ class ExtraktoPlugin:
                 self.trigger_pane,
             ],
             universal_newlines=True,
+            encoding="utf-8",
         )
         return captured
 
