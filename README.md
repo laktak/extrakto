@@ -17,6 +17,26 @@ You can **fuzzy find your text** instead of selecting it by hand:
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
 
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Using Tmux Plugin Manager](#using-tmux-plugin-manager)
+  - [Manual Method](#manual-method)
+- [Wiki](#wiki)
+- [Options](#options)
+  - [Common Options](#common-options)
+  - [Keys](#keys)
+  - [Advanced Options](#advanced-options)
+  - [Using skim instead of fzf](#using-skim-instead-of-fzf)
+  - [Examples](#examples)
+  - [Custom Tmux Keybindings](#custom-tmux-keybindings)
+- [Custom Filters](#custom-filters)
+- [](#)
+- [CLI tool](#cli-tool)
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Contributions](#contributions)
+
+
 ## Requirements
 
 <a href="https://github.com/laktak/tome"><img src="https://github.com/laktak/tome/wiki/assets/clippy_tome.gif" align="right" alt="clippy" width="265" height="349"></a>
@@ -25,6 +45,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 - [fzf](https://github.com/junegunn/fzf) or [skim](https://github.com/skim-rs/skim) (see below)
 - Python 3.6+
 - a posix shell like Bash
+- optionally [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Supported clipboards:
 
@@ -36,7 +57,7 @@ Supported clipboards:
 
 ## Installation
 
-### Using [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+### Using Tmux Plugin Manager
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -171,11 +192,11 @@ See [extrakto.conf](extrakto.conf) for syntax and predefined filters.
 
 ---
 
-# CLI
+## CLI tool
 
 You can also use extrakto as a standalone tool to extract tokens from text.
 
-## Installation
+### Installation
 
 For now simply clone the repository and link to the tool somewhere in your path:
 
@@ -188,7 +209,7 @@ ln -s $PWD/extrakto.py ~/.local/bin/extrakto
 
 Requires Python 3.6+.
 
-## CLI Usage
+### Usage
 
 ```
 usage: extrakto.py [-h] [--name] [-w] [-l] [--all] [-a ADD] [-p] [-u] [--alt] [-r] [-m MIN_LENGTH] [--warn-empty]
@@ -211,10 +232,11 @@ optional arguments:
   --warn-empty          warn if result is empty
 ```
 
-# Contributions
+## Contributions
 
 Thanks go to all contributors for their ideas and PRs!
 
 **If you make a PR, please keep it small so that it's easier to test and review. Try to create one PR per feature/bug.**
 
 Please run `black` if you change any python code and run `shfmt -p` if you change any shell files.
+
