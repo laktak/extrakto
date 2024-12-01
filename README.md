@@ -22,7 +22,7 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
 <a href="https://github.com/laktak/tome"><img src="https://github.com/laktak/tome/wiki/assets/clippy_tome.gif" align="right" alt="clippy" width="265" height="349"></a>
 
 - [tmux](https://github.com/tmux/tmux) - popups require 3.2, otherwise extrakto will open in a split window.
-- [fzf](https://github.com/junegunn/fzf)
+- [fzf](https://github.com/junegunn/fzf) or [skim](https://github.com/skim-rs/skim) (see below)
 - Python 3.6+
 - a posix shell like Bash
 
@@ -34,7 +34,9 @@ Supported clipboards:
 - *bring your own*, see the [Wiki](https://github.com/laktak/extrakto/wiki/) for examples (like termux)
 
 
-## Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
+## Installation
+
+### Using [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 
 Add the plugin to the list of TPM plugins in `.tmux.conf`:
 
@@ -45,7 +47,7 @@ Hit `prefix + I` to fetch the plugin and source it. You can use `prefix + U` to 
 You should now have all `extrakto` key bindings defined.
 
 
-## Manual Installation
+### Manual Method
 
 Clone the repo:
 
@@ -65,7 +67,7 @@ You should now have all `extrakto` key bindings defined.
 
 ## Wiki
 
-Add or look for special tips in our [wiki](https://github.com/laktak/extrakto/wiki).
+Add or look for special requirements and tips in our [wiki](https://github.com/laktak/extrakto/wiki).
 
 
 ## Options
@@ -107,7 +109,7 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_clip_tool`                 | `auto`          | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 | `@extrakto_fzf_layout`                |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
-| `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. |
+| `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. If you prefer skim you need to set this option to `sk` or its full path. |
 | `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab and help. You can reorder or omit information you don't need.|
 | `@extrakto_fzf_unset_default_opts`    | `true`          | Unsets custom FZF_DEFAULT_OPTS as it can potentially cause problems in extrakto operations |
 | `@extrakto_open_tool`                 | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
@@ -115,6 +117,10 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_popup_size`                | `90%`           | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
 | `@extrakto_split_direction`           | `a`             | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`                | `7`             | The size of the tmux split (for vertical/horizontal) |
+
+### Using skim instead of fzf
+
+If you prefer skim you need to set the `@extrakto_fzf_tool` option to `sk` or its full path. Skim should be compatible with fzf but let us know if you run into any issues.
 
 ### Examples
 
