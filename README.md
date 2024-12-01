@@ -30,7 +30,6 @@ Use it for paths, URLs, options from a man page, git hashes, docker container na
   - [Examples](#examples)
   - [Custom Tmux Keybindings](#custom-tmux-keybindings)
 - [Custom Filters](#custom-filters)
-- [](#)
 - [CLI tool](#cli-tool)
   - [Installation](#installation)
   - [Usage](#usage)
