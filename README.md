@@ -1,6 +1,6 @@
 # extrakto for tmux
 
-![intro](https://github.com/laktak/extrakto/wiki/assets/intro1.gif)
+![intro](https://github.com/laktak/extrakto/wiki/assets/intro2.gif)
 
 **Output completions** - you can complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions.
 
