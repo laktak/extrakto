@@ -6,8 +6,9 @@ Extrakto uses fzf. You only need to type a few keys to find your selection with 
 
 - Press *ctrl-f* to change to the next filter mode (*filter_key*)
   - *word*, the default filter allows you to select words (default min length=5)
-  - *all*, runs all filters and allows you select quotes, url, paths, etc. \
-    You can define your own filters as well.
+  - *all*, runs all(*) filters and allows you select quotes, url, paths, etc. \
+    You can define your own filters as well as selecting which are included in \
+    the all selection (see extrakto.conf).
   - *line*, select full lines
 
 - Press *ctrl-g* to change the grab area (see *grab_key* and configuration)
