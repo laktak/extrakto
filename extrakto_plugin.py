@@ -337,12 +337,14 @@ class ExtraktoPlugin:
                     self.copy(msg)
                 sys.exit(0)
 
+            # selection will be without or with the filter name prefixing the entry
+            # "example quoted text here"
+            # quote: "example quoted text here"
             text = ""
-            if mode == "all":
-                text = "\n".join(
-                    next(iter(s.split(": ", 1)[1:2]), s) for s in selection
-                )
-            elif mode == "line":
+            if self.prefix_name == "true" or mode == "all":
+                selection = [next(iter(s.split(": ", 1)[1:2]), s) for s in selection]
+
+            if mode in ("all", "line"):
                 text = "\n".join(selection)
             else:
                 text = " ".join(selection)
