@@ -46,6 +46,8 @@ DEFAULT_OPTIONS = {
     "@extrakto_insert_key": "tab",
     "@extrakto_open_key": "ctrl-o",
     "@extrakto_open_tool": "auto",
+    "@extrakto_alt": "false",
+    "@extrakto_prefix_name": "false",
 }
 
 
@@ -77,6 +79,8 @@ def get_cap(mode, data):
     extrakto = None
     res = []
     run_list = []
+    alt = True if get_option("@extrakto_alt") == "true" else False
+    prefix_name = True if get_option("@extrakto_prefix_name") == "true" else False
 
     if mode == "all":
         extrakto = Extrakto(alt=True, prefix_name=True)
@@ -84,7 +88,7 @@ def get_cap(mode, data):
     elif mode == "line":
         res += get_lines(data)
     else:
-        extrakto = Extrakto()
+        extrakto = Extrakto(alt=alt, prefix_name=prefix_name)
         run_list = [mode]
 
     for name in run_list:
@@ -118,6 +122,8 @@ class ExtraktoPlugin:
         self.insert_key = get_option("@extrakto_insert_key")
         self.open_key = get_option("@extrakto_open_key")
         self.open_tool = get_option("@extrakto_open_tool")
+        self.alt = get_option("@extrakto_alt")
+        self.prefix_name = get_option("@extrakto_prefix_name")
 
         self.original_grab_area = self.grab_area
 

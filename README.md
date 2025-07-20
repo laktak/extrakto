@@ -137,6 +137,8 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_popup_size`                | `90%`           | Set width and height of the tmux popup window. Set this to `w,h` to set the width to `w` and height to `h`. |
 | `@extrakto_split_direction`           | `a`             | Whether the tmux split will be `a`uto, `p`opup, `v`ertical or `h`orizontal |
 | `@extrakto_split_size`                | `7`             | The size of the tmux split (for vertical/horizontal) |
+| `@extrakto_alt`                       | `false`         | Set this is you want to show alternatives on all filters and not just for `all` |
+| `@extrakto_prefix_name`               | `false`         | Set this is you want to prefix the results with the filter name |
 
 ### Using skim instead of fzf
 
