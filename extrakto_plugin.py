@@ -46,8 +46,8 @@ DEFAULT_OPTIONS = {
     "@extrakto_insert_key": "tab",
     "@extrakto_open_key": "ctrl-o",
     "@extrakto_open_tool": "auto",
-    "@extrakto_alt": "false",
-    "@extrakto_prefix_name": "false",
+    "@extrakto_alt": "all",
+    "@extrakto_prefix_name": "all",
 }
 
 
@@ -79,16 +79,22 @@ def get_cap(mode, data):
     extrakto = None
     res = []
     run_list = []
-    alt = True if get_option("@extrakto_alt") == "true" else False
-    prefix_name = True if get_option("@extrakto_prefix_name") == "true" else False
+    alt = get_option("@extrakto_alt")
+    prefix_name = get_option("@extrakto_prefix_name")
 
     if mode == "all":
-        extrakto = Extrakto(alt=True, prefix_name=True)
+        extrakto = Extrakto(
+            alt=(True if alt != "none" else False),
+            prefix_name=(True if prefix_name != "none" else False),
+        )
         run_list = extrakto.all()
     elif mode == "line":
         res += get_lines(data)
     else:
-        extrakto = Extrakto(alt=alt, prefix_name=prefix_name)
+        extrakto = Extrakto(
+            alt=(True if alt == "any" else False),
+            prefix_name=(True if prefix_name == "any" else False),
+        )
         run_list = [mode]
 
     for name in run_list:
@@ -341,7 +347,9 @@ class ExtraktoPlugin:
             # "example quoted text here"
             # quote: "example quoted text here"
             text = ""
-            if self.prefix_name == "true" or mode == "all":
+            if (
+                self.prefix_name == "all" and mode == "all"
+            ) or self.prefix_name == "any":
                 selection = [next(iter(s.split(": ", 1)[1:2]), s) for s in selection]
 
             if mode in ("all", "line"):
