@@ -46,6 +46,8 @@ DEFAULT_OPTIONS = {
     "@extrakto_insert_key": "tab",
     "@extrakto_open_key": "ctrl-o",
     "@extrakto_open_tool": "auto",
+    "@extrakto_alt": "all",
+    "@extrakto_prefix_name": "all",
 }
 
 
@@ -77,14 +79,22 @@ def get_cap(mode, data):
     extrakto = None
     res = []
     run_list = []
+    alt = get_option("@extrakto_alt")
+    prefix_name = get_option("@extrakto_prefix_name")
 
     if mode == "all":
-        extrakto = Extrakto(alt=True, prefix_name=True)
+        extrakto = Extrakto(
+            alt=(True if alt != "none" else False),
+            prefix_name=(True if prefix_name != "none" else False),
+        )
         run_list = extrakto.all()
     elif mode == "line":
         res += get_lines(data)
     else:
-        extrakto = Extrakto()
+        extrakto = Extrakto(
+            alt=(True if alt == "any" else False),
+            prefix_name=(True if prefix_name == "any" else False),
+        )
         run_list = [mode]
 
     for name in run_list:
@@ -118,6 +128,8 @@ class ExtraktoPlugin:
         self.insert_key = get_option("@extrakto_insert_key")
         self.open_key = get_option("@extrakto_open_key")
         self.open_tool = get_option("@extrakto_open_tool")
+        self.alt = get_option("@extrakto_alt")
+        self.prefix_name = get_option("@extrakto_prefix_name")
 
         self.original_grab_area = self.grab_area
 
@@ -331,12 +343,16 @@ class ExtraktoPlugin:
                     self.copy(msg)
                 sys.exit(0)
 
+            # selection will be without or with the filter name prefixing the entry
+            # "example quoted text here"
+            # quote: "example quoted text here"
             text = ""
-            if mode == "all":
-                text = "\n".join(
-                    next(iter(s.split(": ", 1)[1:2]), s) for s in selection
-                )
-            elif mode == "line":
+            if (
+                self.prefix_name == "all" and mode == "all"
+            ) or self.prefix_name == "any":
+                selection = [next(iter(s.split(": ", 1)[1:2]), s) for s in selection]
+
+            if mode in ("all", "line"):
                 text = "\n".join(selection)
             else:
                 text = " ".join(selection)

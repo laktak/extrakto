@@ -21,7 +21,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # - Dingbats
 # unicode range E000-F8FF (private use/Powerline)
 # and whitespace ( \t\n\r)
-RE_WORD = "[^][(){}=$\u2500-\u27BF\uE000-\uF8FF \\t\\n\\r]+"
+RE_WORD = "[^][(){}=$\u2500-\u27bf\ue000-\uf8ff \\t\\n\\r]+"
 
 MIN_LENGTH_DEFAULT = 5
 
