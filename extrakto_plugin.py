@@ -41,7 +41,7 @@ DEFAULT_OPTIONS = {
     "@extrakto_fzf_unset_default_opts": "true",
     "@extrakto_grab_area": "window full",
     "@extrakto_grab_key": "ctrl-g",
-    "@extrakto_help_key": "ctrl-h",
+    "@extrakto_help_key": "ctrl-l",
     "@extrakto_history_limit": "2000",
     "@extrakto_insert_key": "tab",
     "@extrakto_open_key": "ctrl-o",

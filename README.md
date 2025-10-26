@@ -14,7 +14,7 @@ You can **fuzzy find your text** instead of selecting it by hand:
 - press
   - `tab` to insert it to the current pane,
   - `enter` to copy it to the clipboard,
-- see other features in [HELP](HELP.md) (press `ctrl-h` in extrakto)
+- see other features in [HELP](HELP.md) (press `ctrl-l` in extrakto)
 
 Use it for paths, URLs, options from a man page, git hashes, docker container names, ...
 
