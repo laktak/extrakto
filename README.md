@@ -120,6 +120,7 @@ Where `<option>` and `<value>` correspond to one of the options specified below
 | `@extrakto_grab_key`                  | `ctrl-g`        | Key to toggle grab mode. |
 | `@extrakto_edit_key`                  | `ctrl-e`        | Key to run the editor. |
 | `@extrakto_open_key`                  | `ctrl-o`        | Key to run the open command. |
+| `@extrakto_clip_toggle_key`           | `ctrl-s`        | Key to cycle clipboard mode between `buffer` (tmux buffer only), your configured `@extrakto_clip_tool_run` value, and `tmux_osc52`. Useful when you don't want to pollute your clipboard history. |
 
 All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 
@@ -127,12 +128,13 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 
 | Option                                | Default         | Description |
 | :---                                  | :---:           | :--- |
-| `@extrakto_clip_tool_run`             | `bg`            | Set this to `tmux_osc52` to enable [remote clipboard support](https://github.com/laktak/extrakto/wiki/Remote-Copy-via-OSC52) or `fg`/`bg` to have your clipboard tool run in a foreground/background shell. |
+| `@extrakto_clip_tool_run`             | `bg`            | Set this to `tmux_osc52` to enable [remote clipboard support](https://github.com/laktak/extrakto/wiki/Remote-Copy-via-OSC52), `fg`/`bg` to have your clipboard tool run in a foreground/background shell, or `buffer` to only save to tmux buffer without copying to clipboard. Note: if `@extrakto_clip_tool_run_order` is set, the first value in that list is used as default instead. |
+| `@extrakto_clip_tool_run_order`       | `bg tmux_osc52 buffer` | Order of clipboard modes to cycle through with `@extrakto_clip_toggle_key`. The first mode becomes the default. Omit modes you don't want in the cycle. Valid modes: `bg`, `fg`, `tmux_osc52`, `buffer`. |
 | `@extrakto_clip_tool`                 | `auto`          | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 | `@extrakto_fzf_layout`                |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. If you prefer skim you need to set this option to `sk` or its full path. |
-| `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab and help. You can reorder or omit information you don't need.|
+| `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab, clip (s) and help. You can reorder or omit information you don't need.|
 | `@extrakto_fzf_unset_default_opts`    | `true`          | Unsets custom FZF_DEFAULT_OPTS as it can potentially cause problems in extrakto operations |
 | `@extrakto_open_tool`                 | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_popup_position`            | `C`             | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |

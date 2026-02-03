@@ -31,6 +31,8 @@ COLORS = {
 DEFAULT_OPTIONS = {
     "@extrakto_clip_tool": "auto",
     "@extrakto_clip_tool_run": "bg",
+    "@extrakto_clip_tool_run_order": "bg tmux_osc52 buffer",
+    "@extrakto_clip_toggle_key": "ctrl-s",
     "@extrakto_copy_key": "enter",
     "@extrakto_edit_key": "ctrl-e",
     "@extrakto_filter_key": "ctrl-f",
@@ -115,6 +117,7 @@ class ExtraktoPlugin:
         # options; note some of the values can be overwritten by capture()
         self.clip_tool = get_option("@extrakto_clip_tool")
         self.clip_tool_run = get_option("@extrakto_clip_tool_run")
+        self.clip_toggle_key = get_option("@extrakto_clip_toggle_key")
         self.copy_key = get_option("@extrakto_copy_key")
         self.edit_key = get_option("@extrakto_edit_key")
         self.editor = get_option("@extrakto_editor")
@@ -140,6 +143,18 @@ class ExtraktoPlugin:
                 self.next_mode[self.modes_list[i]] = self.modes_list[0]
             else:
                 self.next_mode[self.modes_list[i]] = self.modes_list[i + 1]
+
+        # clip tool run order (for cycling with clip_toggle_key)
+        self.clip_modes_list = get_option("@extrakto_clip_tool_run_order").split(" ")
+        self.next_clip_mode = {}
+        for i in range(len(self.clip_modes_list)):
+            if i == len(self.clip_modes_list) - 1:
+                self.next_clip_mode[self.clip_modes_list[i]] = self.clip_modes_list[0]
+            else:
+                self.next_clip_mode[self.clip_modes_list[i]] = self.clip_modes_list[i + 1]
+        # use first in order as default, or fall back to configured value
+        if self.clip_modes_list:
+            self.clip_tool_run = self.clip_modes_list[0]
 
         # avoid side effects from FZF_DEFAULT_OPTS
         if get_option("@extrakto_fzf_unset_default_opts") == "true":
@@ -183,6 +198,9 @@ class ExtraktoPlugin:
         elif self.clip_tool_run == "tmux_osc52":
             # use native tmux 3.2 OSC 52 functionality
             subprocess.run(["tmux", "set-buffer", "-w", "--", text], check=True)
+        elif self.clip_tool_run == "buffer":
+            # only save to tmux buffer, no clipboard
+            subprocess.run(["tmux", "set-buffer", "--", text], check=True)
         else:
             # run in background as xclip won't work otherwise
             subprocess.run(["tmux", "set-buffer", "--", text], check=True)
@@ -298,6 +316,8 @@ class ExtraktoPlugin:
                 header_tmpl += f"{COLORS['BOLD']}{self.grab_key}{COLORS['OFF']}=grab [{COLORS['YELLOW']}{COLORS['BOLD']}:ga:{COLORS['OFF']}]"
             elif o == "h":
                 header_tmpl += f"{COLORS['BOLD']}{self.help_key}{COLORS['OFF']}=help"
+            elif o == "s":
+                header_tmpl += f"{COLORS['BOLD']}{self.clip_toggle_key}{COLORS['OFF']}=clip [{COLORS['YELLOW']}{COLORS['BOLD']}:clip:{COLORS['OFF']}]"
             else:
                 header_tmpl += "(config error)"
 
@@ -306,6 +326,7 @@ class ExtraktoPlugin:
             header = (
                 header_tmpl.replace(":ga:", self.grab_area)
                 .replace(":filter:", mode)
+                .replace(":clip:", self.clip_tool_run)
                 .replace("ctrl-", "^")
             )
 
@@ -318,7 +339,7 @@ class ExtraktoPlugin:
                     f"--query={query}",
                     f"--header={header}",
                     f"--expect=ctrl-c,ctrl-g,esc",
-                    f"--expect={self.insert_key},{self.copy_key},{self.filter_key},{self.edit_key},{self.open_key},{self.grab_key},{self.help_key}",
+                    f"--expect={self.insert_key},{self.copy_key},{self.filter_key},{self.edit_key},{self.open_key},{self.grab_key},{self.help_key},{self.clip_toggle_key}",
                     "--tiebreak=index",
                     f"--layout={self.fzf_layout}",
                     "--no-info",
@@ -429,6 +450,13 @@ class ExtraktoPlugin:
                     self.open(PRJ_URL)
                 elif confirm == "c":
                     self.copy(PRJ_URL)
+            elif key == self.clip_toggle_key:
+                # cycle through clip modes based on configured order
+                if self.clip_tool_run in self.next_clip_mode:
+                    self.clip_tool_run = self.next_clip_mode[self.clip_tool_run]
+                else:
+                    # fallback to first in list if current mode not in cycle
+                    self.clip_tool_run = self.clip_modes_list[0]
             else:
                 return 0
 
