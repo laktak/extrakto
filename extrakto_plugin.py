@@ -403,6 +403,13 @@ class ExtraktoPlugin:
                 subprocess.run(
                     [
                         "tmux",
+                        "if-shell",
+                        "-t",
+                        self.trigger_pane,
+                        "-F",
+                        "#{pane_in_mode}",
+                        f"send-keys -t {self.trigger_pane} -X cancel",
+                        ";",
                         "send-keys",
                         "-t",
                         self.trigger_pane,
