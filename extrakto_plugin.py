@@ -225,34 +225,58 @@ class ExtraktoPlugin:
                 # in popup mode the active and tigger panes are the same
                 # todo: split by :
                 if pane.startswith("0:") and pane[:2] != self.trigger_pane:
-                    captured += (
-                        subprocess.check_output(
-                            [
-                                "tmux",
-                                "capture-pane",
-                                "-pJS",
-                                capture_pane_start,
-                                "-t",
-                                pane[2:],
-                            ],
-                            universal_newlines=True,
-                        )
-                        + "\n"
-                    )
+                    captured += self.capture_pane(pane[2:], capture_pane_start) + "\n"
 
-        captured += subprocess.check_output(
-            [
-                "tmux",
-                "capture-pane",
-                "-pJS",
-                capture_pane_start,
-                "-t",
-                self.trigger_pane,
-            ],
+        captured += self.capture_pane(self.trigger_pane, capture_pane_start)
+        return captured
+
+    def capture_pane(self, pane, capture_pane_start):
+        command = ["tmux", "capture-pane", "-pJ", "-S", capture_pane_start, "-t", pane]
+
+        if self.grab_area in ("recent", "window recent"):
+            try:
+                pane_in_mode, scroll_position, pane_height = [
+                    int(n)
+                    for n in subprocess.check_output(
+                        [
+                            "tmux",
+                            "display-message",
+                            "-p",
+                            "-t",
+                            pane,
+                            "#{pane_in_mode}\t#{scroll_position}\t#{pane_height}",
+                        ],
+                        universal_newlines=True,
+                        encoding="utf-8",
+                    )
+                    .strip()
+                    .split("\t")
+                ]
+
+                if pane_in_mode == 1:
+                    # In copy-mode, "recent" should follow the currently visible viewport.
+                    start = int(capture_pane_start) - scroll_position
+                    end = (pane_height - 1) - scroll_position
+                    command = [
+                        "tmux",
+                        "capture-pane",
+                        "-pJ",
+                        "-S",
+                        str(start),
+                        "-E",
+                        str(end),
+                        "-t",
+                        pane,
+                    ]
+            except (ValueError, subprocess.CalledProcessError):
+                # If formats are unavailable, fall back to regular recent capture.
+                pass
+
+        return subprocess.check_output(
+            command,
             universal_newlines=True,
             encoding="utf-8",
         )
-        return captured
 
     def has_single_pane(self):
         num_panes = len(
