@@ -144,6 +144,7 @@ class ExtraktoPlugin:
         # avoid side effects from FZF_DEFAULT_OPTS
         if get_option("@extrakto_fzf_unset_default_opts") == "true":
             os.environ.pop("FZF_DEFAULT_OPTS", None)
+            os.environ.pop("FZF_DEFAULT_OPTS_FILE", None)
 
         if self.clip_tool == "auto":
             if PLATFORM == "Linux":
