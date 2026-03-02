@@ -17,6 +17,11 @@ Extrakto uses fzf. You only need to type a few keys to find your selection with 
   - *recent*, everything visible with a few lines from the history (current pane)
   - *window recent*, everything visible with a few lines from the history (window)
 
+- Press *ctrl-t* to change to the next clipboard mode (*clip_mode_key*)
+  - *bg/fg*: copy to system clipboard using your configured clipboard tool
+  - *buffer*: only save to tmux buffer (paste with prefix + ])
+  - *tmux_osc52*: copy to remote clipboard (useful over SSH)
+
 - Press *esc* or *ctrl-c* to cancel
 
 - Use *shift-tab* to select multiple entries.

@@ -116,10 +116,11 @@ Where `<option>` and `<value>` correspond to one of the options specified below
 | `@extrakto_key`                       | `tab`           | The key binding to start. If you have any special requirements (like a custom key table) set this to 'none'. See "Custom Tmux Keybindings". |
 | `@extrakto_copy_key`                  | `enter`         | Key to copy selection to clipboard. |
 | `@extrakto_insert_key`                | `tab`           | Key to insert selection. |
-| `@extrakto_filter_key`                | `ctrl-f`        | Key to toggle filter mode. |
+| `@extrakto_filter_key`                | `ctrl-f`        | Key to toggle filter mode (see `@extrakto_filter_order`). |
 | `@extrakto_grab_key`                  | `ctrl-g`        | Key to toggle grab mode. |
 | `@extrakto_edit_key`                  | `ctrl-e`        | Key to run the editor. |
 | `@extrakto_open_key`                  | `ctrl-o`        | Key to run the open command. |
+| `@extrakto_clip_mode_key`             | `ctrl-t`        | Key to cycle clipboard mode (see `@extrakto_clip_mode_order`). |
 
 All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 
@@ -127,12 +128,13 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 
 | Option                                | Default         | Description |
 | :---                                  | :---:           | :--- |
-| `@extrakto_clip_tool_run`             | `bg`            | Set this to `tmux_osc52` to enable [remote clipboard support](https://github.com/laktak/extrakto/wiki/Remote-Copy-via-OSC52) or `fg`/`bg` to have your clipboard tool run in a foreground/background shell. |
+| `@extrakto_clip_mode`                 | `bg`            | Set this to `tmux_osc52` to enable [remote clipboard support](https://github.com/laktak/extrakto/wiki/Remote-Copy-via-OSC52), `fg`/`bg` to have your clipboard tool run in a foreground/background shell, or `buffer` to only save to tmux buffer without copying to the clipboard. |
+| `@extrakto_clip_mode_order`           | `bg buffer`     | Order of clipboard modes to cycle through with `@extrakto_clip_toggle_key`. Omit modes you don't want in the cycle. Specify any mode of `@extrakto_clip_mode`. |
 | `@extrakto_clip_tool`                 | `auto`          | Set this to whatever clipboard tool you would like extrakto to use to copy data into your clipboard. `auto` will try to choose the correct clipboard for your platform. |
 | `@extrakto_editor`                    |                 | This defaults to `$EDITOR` if not set. |
 | `@extrakto_fzf_layout`                |`default`        | Control the fzf layout which is "bottom-up" by default. If you prefer "top-down" layout instead set this to `reverse`. In fact, this value is passed to the fzf `--layout` parameter. Possible values are: `default`, `reverse` and `reverse-list` |
 | `@extrakto_fzf_tool`                  | `fzf`           | Set this to path of fzf if it can't be found in your `PATH`. If you prefer skim you need to set this option to `sk` or its full path. |
-| `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab and help. You can reorder or omit information you don't need.|
+| `@extrakto_fzf_header`                | `i c o e f g h` | Define the fzf header to show keys for insert, copy, open, edit, filter, grab and help. Not shown by default: m=clip mode. You can add, reorder or omit information you don't need.|
 | `@extrakto_fzf_unset_default_opts`    | `true`          | Unsets custom FZF_DEFAULT_OPTS as it can potentially cause problems in extrakto operations |
 | `@extrakto_open_tool`                 | `auto`          | Set this to path of your own tool or `auto` to use your platforms *open* implementation. |
 | `@extrakto_popup_position`            | `C`             | Set position of the tmux popup window. Possible values are in the `display-popup` entry in `man tmux`. Set this to `x,y` to set the x and y positions to `x` and `y` respectively. |
@@ -141,6 +143,12 @@ All but `@extrakto_key` are controlled by fzf and must follow its conventions.
 | `@extrakto_split_size`                | `7`             | The size of the tmux split (for vertical/horizontal) |
 | `@extrakto_alt`                       | `all`           | Show alternative filters. Possible values are: `all` to only show them for the all filter, `any` for any filter and `none` for never. |
 | `@extrakto_prefix_name`               | `all`           | Prefix the results with the filter name. Possible values are: `all` to only show the prefix for the all filter, `any` for any filter and `none` for never. |
+
+### Legacy Options
+
+| Option                                | Replaced by |
+| :---                                  | :--- |
+| `@extrakto_clip_tool_run`             | `@extrakto_clip_mode`, since 2026-03 |
 
 ### Using skim instead of fzf
 
