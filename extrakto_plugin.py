@@ -74,7 +74,7 @@ def fzf_sel(command, data):
     return res[:-1]
 
 
-def get_cap(mode, data):
+def get_cap(sel_filter, data):
 
     extrakto = None
     res = []
@@ -82,20 +82,20 @@ def get_cap(mode, data):
     alt = get_option("@extrakto_alt")
     prefix_name = get_option("@extrakto_prefix_name")
 
-    if mode == "all":
+    if sel_filter == "all":
         extrakto = Extrakto(
             alt=(True if alt != "none" else False),
             prefix_name=(True if prefix_name != "none" else False),
         )
         run_list = extrakto.all()
-    elif mode == "line":
+    elif sel_filter == "line":
         res += get_lines(data)
     else:
         extrakto = Extrakto(
             alt=(True if alt == "any" else False),
             prefix_name=(True if prefix_name == "any" else False),
         )
-        run_list = [mode]
+        run_list = [sel_filter]
 
     for name in run_list:
         res += extrakto[name].filter(data)
@@ -133,13 +133,12 @@ class ExtraktoPlugin:
 
         self.original_grab_area = self.grab_area
 
-        self.modes_list = get_option("@extrakto_filter_order").split(" ")
-        self.next_mode = {}
-        for i in range(len(self.modes_list)):
-            if i == len(self.modes_list) - 1:
-                self.next_mode[self.modes_list[i]] = self.modes_list[0]
-            else:
-                self.next_mode[self.modes_list[i]] = self.modes_list[i + 1]
+        filter_order = get_option("@extrakto_filter_order").split(" ")
+        self.next_filter = self.prep_cycle(filter_order)
+        # get initial mode passed from cli
+        self.next_filter["initial"] = (
+            os.environ.get("extrakto_inital_mode", "").strip() or filter_order[0]
+        )
 
         # avoid side effects from FZF_DEFAULT_OPTS
         if get_option("@extrakto_fzf_unset_default_opts") == "true":
@@ -173,6 +172,13 @@ class ExtraktoPlugin:
             lines = int(subprocess.check_output("tput lines", shell=True))
             if lines < 7:
                 subprocess.run("tmux resize-pane -Z", shell=True)
+
+    def prep_cycle(self, keys):
+        res = {}
+        l = len(keys)
+        for i in range(l):
+            res[keys[i]] = keys[(i + 1) % l]
+        return res
 
     def copy(self, text):
         if self.clip_tool_run == "fg":
@@ -290,16 +296,8 @@ class ExtraktoPlugin:
         else:
             return num_panes == 2
 
-    def get_next_mode(self, next):
-        if next == "initial":
-            return (
-                os.environ.get("extrakto_inital_mode", "").strip() or self.modes_list[0]
-            )
-        else:
-            return self.next_mode[next]
-
     def capture(self):
-        mode = self.get_next_mode("initial")
+        sel_filter = self.next_filter["initial"]
         header_tmpl = ""
         for o in self.fzf_header.split(" "):
             if header_tmpl:
@@ -330,7 +328,7 @@ class ExtraktoPlugin:
         while True:
             header = (
                 header_tmpl.replace(":ga:", self.grab_area)
-                .replace(":filter:", mode)
+                .replace(":filter:", sel_filter)
                 .replace("ctrl-", "^")
             )
 
@@ -350,7 +348,7 @@ class ExtraktoPlugin:
                 ]
                 query, key, *selection = fzf_sel(
                     fzf_cmd,
-                    get_cap(mode, self.capture_panes()),
+                    get_cap(sel_filter, self.capture_panes()),
                 )
             except Exception as e:
                 msg = (
@@ -373,11 +371,11 @@ class ExtraktoPlugin:
             # quote: "example quoted text here"
             text = ""
             if (
-                self.prefix_name == "all" and mode == "all"
+                self.prefix_name == "all" and sel_filter == "all"
             ) or self.prefix_name == "any":
                 selection = [next(iter(s.split(": ", 1)[1:2]), s) for s in selection]
 
-            if mode in ("all", "line"):
+            if sel_filter in ("all", "line"):
                 text = "\n".join(selection)
             else:
                 text = " ".join(selection)
@@ -392,7 +390,7 @@ class ExtraktoPlugin:
                 )
                 return 0
             elif key == self.filter_key:
-                mode = self.get_next_mode(mode)
+                sel_filter = self.next_filter[sel_filter]
             elif key == self.grab_key:
                 # cycle between options like this:
                 # recent -> full -> window recent -> window full -> custom (if any) -> recent ...
